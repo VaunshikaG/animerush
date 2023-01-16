@@ -57,7 +57,7 @@ class _BottomBarState extends State<BottomBar> {
                 icon: Icon(
                   (_selectedTab == 0) ? CupertinoIcons.house_fill : CupertinoIcons.house,
                 ),
-                unselectedColor: Colors.white,
+                unselectedColor: Colors.white70,
                 selectedColor: CustomTheme.themeColor1,
               ),
 
@@ -65,7 +65,7 @@ class _BottomBarState extends State<BottomBar> {
                 icon: const Icon(
                   CupertinoIcons.search,
                 ),
-                unselectedColor: Colors.white,
+                unselectedColor: Colors.white70,
                 selectedColor: CustomTheme.themeColor1,
               ),
 
@@ -73,7 +73,7 @@ class _BottomBarState extends State<BottomBar> {
                 icon: Icon(
                   (_selectedTab == 2) ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark,
                 ),
-                unselectedColor: Colors.white,
+                unselectedColor: Colors.white70,
                 selectedColor: CustomTheme.themeColor1,
               ),
 
@@ -81,7 +81,7 @@ class _BottomBarState extends State<BottomBar> {
                 icon: Icon(
                   (_selectedTab == 3) ? CupertinoIcons.person_fill : CupertinoIcons.person,
                 ),
-                unselectedColor: Colors.white,
+                unselectedColor: Colors.white70,
                 selectedColor: CustomTheme.themeColor1,
               ),
 

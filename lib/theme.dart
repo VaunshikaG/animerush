@@ -10,4 +10,5 @@ class CustomTheme
   static const Color themeColor1 = Color(0xfff8b745);
   static const Color themeColor2 = Color(0xff202125);
 
+
 }
