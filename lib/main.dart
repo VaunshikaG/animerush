@@ -1,8 +1,12 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:animerush/screens/BottomBar.dart';
 import 'package:animerush/theme.dart';
+import 'package:animerush/widgets/AppBar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sliver_header_delegate/sliver_header_delegate.dart';
 
 import 'widgets/CustomScreenRoute.dart';
 
@@ -24,7 +28,8 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: const Splash(),
+      home: const BottomBar(currentIndex: 0),
+      // home: const Splash(),
     );
   }
 }
@@ -116,7 +121,8 @@ class _SplashState extends State<Splash> {
                   ),
                   onPressed: () {
                     Navigator.push(
-                        context, CustomScreenRoute(child: const MyHomePage(title: 'Anime Rush'), direction: AxisDirection.up));
+                        context, CustomScreenRoute(child: const BottomBar(currentIndex: 0), direction:
+                    AxisDirection.up));
                   },
                 ),
               ),
@@ -124,59 +130,6 @@ class _SplashState extends State<Splash> {
           ),
         ),
       ),
-    );
-  }
-}
-
-
-class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});
-
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
