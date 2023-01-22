@@ -56,7 +56,7 @@ class _SplashState extends State<Splash> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           width: size.width,
           height: size.height,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.black,
             image: DecorationImage(
               image: AssetImage('assets/img/c.png'),
@@ -80,7 +80,7 @@ class _SplashState extends State<Splash> {
               FadeInUp(
                 duration: duration,
                 delay: const Duration(milliseconds: 1000),
-                child: const Text(
+                child: Text(
                   "Welcome !",
                   style: TextStyle(
                       color: CustomTheme.themeColor1,
@@ -93,7 +93,7 @@ class _SplashState extends State<Splash> {
                 delay: const Duration(milliseconds: 1500),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10, bottom: 200),
-                  child: const Text(
+                  child: Text(
                     "AnimeRush.in - The best platform to watch anime online for Free",
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -109,12 +109,12 @@ class _SplashState extends State<Splash> {
                 delay: const Duration(milliseconds: 2000),
                 child: FloatingActionButton.extended(
                   extendedPadding: const EdgeInsets.symmetric(horizontal: 30),
-                  label: const Text(
+                  label: Text(
                     'Continue',
                     style: TextStyle(color: CustomTheme.themeColor1),
                   ),
                   backgroundColor: CustomTheme.themeColor2,
-                  icon: const Icon(
+                  icon: Icon(
                     CupertinoIcons.arrowtriangle_right_fill,
                     size: 24,
                     color: CustomTheme.themeColor1,

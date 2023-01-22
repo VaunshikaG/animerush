@@ -15,7 +15,7 @@ class CustomAppBar extends StatelessWidget {
         leading: FittedBox(
           fit: BoxFit.contain,
           child: ElevatedButton(
-            child: const Text(
+            child: Text(
               "   <  Back",
               style: TextStyle(fontSize: 16, color: CustomTheme.themeColor1),
             ),
@@ -37,7 +37,7 @@ class CustomAppBar extends StatelessWidget {
           FlexibleTextItem(
             text: title,
             textAlign: TextAlign.center,
-            expandedStyle: const TextStyle(
+            expandedStyle: TextStyle(
                 fontSize: 18,
                 color: CustomTheme.themeColor1,
                 fontWeight: FontWeight.bold,

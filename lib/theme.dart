@@ -7,8 +7,13 @@ class CustomTheme
   // f8b745 orange
   // 202125  black
 
-  static const Color themeColor1 = Color(0xfff8b745);
-  static const Color themeColor2 = Color(0xff202125);
+  static Color themeColor1 = CupertinoColors.activeOrange.darkColor;
+  static Color themeColor2 = CupertinoColors.black;
+
+  static Color white = CupertinoColors.white;
+  static Color blur = CupertinoColors.systemGrey3.darkColor;
+  static Color blur2 = CupertinoColors.systemGrey3.darkHighContrastColor;
+  static Color transparent = Color(0x3C000000);
 
 
 }

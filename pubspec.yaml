@@ -19,6 +19,7 @@ dependencies:
   animate_do: any
   sliver_header_delegate: ^0.0.5
   dot_navigation_bar: ^1.0.1+4
+  carousel_slider: ^4.2.1
 
 
 

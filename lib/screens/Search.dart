@@ -51,15 +51,15 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
                         onChanged: (text) {},
-                        style: const TextStyle(fontSize: 16, color: Colors.white70),
+                        style: TextStyle(fontSize: 16, color: CustomTheme.white),
                         decoration: InputDecoration(
-                          suffixIcon: const Icon(
+                          suffixIcon: Icon(
                             CupertinoIcons.search,
                             size: 26,
-                            color: Colors.white70,
+                            color: CustomTheme.white,
                           ),
                           hintText: 'Search',
-                          hintStyle: const TextStyle(fontSize: 16, color: Colors.white70),
+                          hintStyle: TextStyle(fontSize: 16, color: CustomTheme.white),
                           filled: true,
                           fillColor: Colors.white24,
                           contentPadding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
@@ -104,7 +104,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
               controller: _controller,
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
-              unselectedLabelColor: Colors.white70,
+              unselectedLabelColor: CustomTheme.white,
               labelColor: CustomTheme.themeColor2,
               indicatorSize: TabBarIndicatorSize.label,
               indicator: BoxDecoration(
