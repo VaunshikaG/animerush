@@ -1,13 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:animerush/screens/BottomBar.dart';
 import 'package:animerush/theme.dart';
-import 'package:animerush/widgets/AppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sliver_header_delegate/sliver_header_delegate.dart';
-
 import 'widgets/CustomScreenRoute.dart';
 
 void main() {
@@ -61,7 +58,7 @@ class _SplashState extends State<Splash> {
             image: DecorationImage(
               image: AssetImage('assets/img/c.png'),
               fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(CustomTheme.themeColor1, BlendMode.darken),
+              colorFilter: ColorFilter.mode(CustomTheme.themeColor1, BlendMode.softLight),
             ),
           ),
           child: Column(

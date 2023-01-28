@@ -1,7 +1,10 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import '../theme.dart';
 import 'Home.dart';
 import 'HomeDrawer.dart';
@@ -26,6 +29,7 @@ class _BottomBarState extends State<BottomBar> {
     const Account()
   ];
   int _selectedTab = 0;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -56,56 +60,45 @@ class _BottomBarState extends State<BottomBar> {
       drawerScrimColor: Colors.transparent,
       drawer: const HomeDrawer(),
       body: _tabs[_selectedTab],
-      bottomNavigationBar: DotNavigationBar(
-        itemPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        paddingR: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-        // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-        curve: Curves.easeInCirc,
-        borderRadius: 15,
-        backgroundColor: CustomTheme.blur,
-        currentIndex: _selectedTab,
-        dotIndicatorColor: Colors.transparent,
-        onTap: (index) {
-          setState(() {
-            _selectedTab = index;
-          });
-        },
-        items: [
-          DotNavigationBarItem(
-            icon: Icon(
-              (_selectedTab == 0)
-                  ? CupertinoIcons.house_fill
-                  : CupertinoIcons.house,
+      bottomNavigationBar: Container(
+        color: CustomTheme.themeColor2,
+        padding: const EdgeInsets.all(8),
+        child: GNav(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          duration: const Duration(milliseconds: 400),
+          haptic: true,
+          color: CustomTheme.white,
+          activeColor: CustomTheme.themeColor1,
+          hoverColor: Colors.blueGrey[50]!,
+          gap: 8,
+          iconSize: 22,
+          backgroundColor: CustomTheme.themeColor2,
+          tabBackgroundColor: CustomTheme.blur2,
+          tabs: const [
+            GButton(
+              icon: CupertinoIcons.house,
+              text: 'Home',
             ),
-            unselectedColor: CustomTheme.white,
-            selectedColor: CustomTheme.themeColor1,
-          ),
-          DotNavigationBarItem(
-            icon: const Icon(
-              CupertinoIcons.search,
+            GButton(
+              icon: CupertinoIcons.search,
+              text: 'Search',
             ),
-            unselectedColor: CustomTheme.white,
-            selectedColor: CustomTheme.themeColor1,
-          ),
-          DotNavigationBarItem(
-            icon: Icon(
-              (_selectedTab == 2)
-                  ? CupertinoIcons.bookmark_fill
-                  : CupertinoIcons.bookmark,
+            GButton(
+              icon: CupertinoIcons.bookmark,
+              text: 'WatchList',
             ),
-            unselectedColor: CustomTheme.white,
-            selectedColor: CustomTheme.themeColor1,
-          ),
-          DotNavigationBarItem(
-            icon: Icon(
-              (_selectedTab == 3)
-                  ? CupertinoIcons.person_fill
-                  : CupertinoIcons.person,
+            GButton(
+              icon: CupertinoIcons.person,
+              text: 'Account',
             ),
-            unselectedColor: CustomTheme.white,
-            selectedColor: CustomTheme.themeColor1,
-          ),
-        ],
+          ],
+          selectedIndex: _selectedTab,
+          onTabChange: (index) {
+            setState(() {
+              _selectedTab = index;
+            });
+          },
+        ),
       ),
     );
   }

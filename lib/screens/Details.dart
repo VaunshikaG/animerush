@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
-import '../widgets/AppBar.dart';
+import '../widgets/CustomAppBar.dart';
 
 class Details extends StatefulWidget {
   const Details({Key? key}) : super(key: key);
