@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:animerush/screens/BottomBar.dart';
+import 'package:animerush/screens/HomeDrawer.dart';
 import 'package:animerush/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.orange,
-        textTheme: GoogleFonts.montserratTextTheme(
+        textTheme: GoogleFonts.quicksandTextTheme(
           Theme.of(context).textTheme,
         ),
       ),
@@ -56,7 +57,7 @@ class _SplashState extends State<Splash> {
           decoration: BoxDecoration(
             color: Colors.black,
             image: DecorationImage(
-              image: AssetImage('assets/img/c.png'),
+              image: const AssetImage('assets/img/c.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(CustomTheme.themeColor1, BlendMode.softLight),
             ),

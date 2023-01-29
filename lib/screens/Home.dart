@@ -179,7 +179,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     padding: EdgeInsets.zero,
                                     decoration: BoxDecoration(
                                       color: (index % 2 == 0)
-                                          ? CustomTheme.blur
+                                          ? CustomTheme.grey1
                                           : Colors.white.withOpacity(0.0),
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
@@ -254,7 +254,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                             height: 25,
                                             child: CupertinoButton(
                                               onPressed: () {},
-                                              color: CustomTheme.blur3,
+                                              color: CustomTheme.grey3,
                                               padding: const EdgeInsets.symmetric(
                                                   vertical: 0, horizontal: 10),
                                               disabledColor: CustomTheme.white,
@@ -278,6 +278,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       style: TextStyle(
                                                         color: CustomTheme.white,
                                                         fontSize: 12,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: "Quicksand",
                                                       ),
                                                     ),
                                                   ],
@@ -316,6 +318,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                         color: CustomTheme
                                                             .themeColor2,
                                                         fontSize: 13,
+                                                        fontWeight: FontWeight.bold,
+                                                        fontFamily: "Quicksand",
                                                       ),
                                                     ),
                                                   ],
@@ -354,7 +358,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 dotHeight: 8,
                                 dotWidth: 15,
                                 activeDotColor: CustomTheme.themeColor1,
-                                dotColor: CustomTheme.blur2,
+                                dotColor: CustomTheme.grey2,
                               ),
                             ),
                           ],
@@ -395,7 +399,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
                                       margin: EdgeInsets.zero,
-                                      color: CustomTheme.blur,
+                                      color: CustomTheme.grey1,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -457,7 +461,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
                         //  types
                         Container(
-                          color: CustomTheme.blur2,
+                          color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                           alignment: Alignment.centerLeft,
@@ -513,13 +517,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.blur : CustomTheme.blur2,
+                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
                                 contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                               );
                             }),
                         ),
                         Container(
-                          color: CustomTheme.blur2,
+                          color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 15),
@@ -580,14 +584,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.blur : CustomTheme.blur2,
+                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
                                 contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                               );
                             },
                           ),
                         ),
                         Container(
-                          color: CustomTheme.blur2,
+                          color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 15),
@@ -648,14 +652,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.blur : CustomTheme.blur2,
+                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
                                 contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                               );
                             },
                           ),
                         ),
                         Container(
-                          color: CustomTheme.blur2,
+                          color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                           padding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 15),
@@ -716,7 +720,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ),
                                 ),
                                 dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.blur : CustomTheme.blur2,
+                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
                                 contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                               );
                             },

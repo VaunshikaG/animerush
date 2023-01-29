@@ -47,17 +47,9 @@ class _BottomBarState extends State<BottomBar> {
         elevation: 0,
         iconTheme: IconThemeData(color: CustomTheme.white),
         backgroundColor: CustomTheme.themeColor2,
-        actions: [
-          CupertinoButton(
-              child: Icon(
-                CupertinoIcons.bookmark,
-                color: CustomTheme.white,
-              ),
-              onPressed: () {}),
-        ],
       ),
       drawerEdgeDragWidth: 50,
-      drawerScrimColor: Colors.transparent,
+      // drawerScrimColor: Colors.transparent,
       drawer: const HomeDrawer(),
       body: _tabs[_selectedTab],
       bottomNavigationBar: Container(
@@ -73,7 +65,7 @@ class _BottomBarState extends State<BottomBar> {
           gap: 8,
           iconSize: 22,
           backgroundColor: CustomTheme.themeColor2,
-          tabBackgroundColor: CustomTheme.blur2,
+          tabBackgroundColor: CustomTheme.grey2,
           tabs: const [
             GButton(
               icon: CupertinoIcons.house,
