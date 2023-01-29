@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:animerush/screens/BottomBar.dart';
+import 'package:animerush/screens/Details.dart';
 import 'package:animerush/screens/HomeDrawer.dart';
 import 'package:animerush/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const BottomBar(currentIndex: 0),
+      // home: Details(
+      //   title: 'abc',
+      //   img: "assets/img/flowers.jpg",
+      // ),
       // home: const Splash(),
     );
   }

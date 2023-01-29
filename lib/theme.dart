@@ -14,6 +14,7 @@ class CustomTheme {
   static Color grey2 = CupertinoColors.systemGrey5.darkHighContrastColor;
   static Color grey3 = CupertinoColors.systemGrey5.darkColor;
   static Color transparent = Color(0x3C000000);
+  static Color blue = CupertinoColors.systemTeal;
 }
 
 List<Color> ColorList = [

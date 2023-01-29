@@ -173,7 +173,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             child: TabBarView(
               controller: _controller,
               children: [
-                const Details(), const Search(), const Wishlist(), const Account(),
+                const Wishlist(), const Search(), const Wishlist(), const Account(),
               ],
             ),
           ),

@@ -53,115 +53,66 @@ class CustomAppBar extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  Widget _build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      delegate: FlexibleHeaderDelegate(
-        backgroundColor: CustomTheme.themeColor2,
-        actions: [
-          FittedBox(
-            fit: BoxFit.contain,
-            child: IconButton(
-              icon: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  backgroundBlendMode: BlendMode.softLight,
-                ),
-                child: const Icon(
-                  CupertinoIcons.bookmark,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ],
-        leading: FittedBox(
-          fit: BoxFit.contain,
-          child: IconButton(
-            icon: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                backgroundBlendMode: BlendMode.softLight,
-              ),
-              child: const Icon(
-                CupertinoIcons.left_chevron,
-                color: Colors.white,
-                size: 18,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-        statusBarHeight: MediaQuery.of(context).padding.top,
-        expandedHeight: 60,
-      ),
-    );
-  }
 }
 
-class CustomAppBar2 extends StatelessWidget {
+class CustomAppBar2 extends StatefulWidget {
+  // final String img;
+  const CustomAppBar2({Key? key, }) : super(key: key);
 
   @override
+  State<CustomAppBar2> createState() => _CustomAppBar2State();
+}
+
+class _CustomAppBar2State extends State<CustomAppBar2> {
+  @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      delegate: FlexibleHeaderDelegate(
-        backgroundColor: CustomTheme.themeColor2,
-        actions: [
-          FittedBox(
-            fit: BoxFit.contain,
-            child: IconButton(
-              icon: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  backgroundBlendMode: BlendMode.softLight,
-                ),
-                child: const Icon(
-                  CupertinoIcons.bookmark,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {},
+    return AppBar(
+      elevation: 0,
+      backgroundColor: CustomTheme.white.withOpacity(0),
+      leading: FittedBox(
+        fit: BoxFit.contain,
+        child: IconButton(
+          icon: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 7),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: CustomTheme.grey3,
+              // backgroundBlendMode: BlendMode.softLight,
+            ),
+            child: Icon(
+              CupertinoIcons.left_chevron,
+              color: CustomTheme.white,
+              size: 18,
             ),
           ),
-        ],
-        leading: FittedBox(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      actions: [
+        FittedBox(
           fit: BoxFit.contain,
           child: IconButton(
             icon: Container(
-              padding: const EdgeInsets.all(5),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.fromLTRB(6, 3, 6, 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                backgroundBlendMode: BlendMode.softLight,
+                color: CustomTheme.grey3,
+                // backgroundBlendMode: BlendMode.softLight,
               ),
-              child: const Icon(
-                CupertinoIcons.left_chevron,
-                color: Colors.white,
+              child: Icon(
+                CupertinoIcons.bookmark,
                 size: 18,
+                color: CustomTheme.white,
               ),
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () {},
           ),
         ),
-        statusBarHeight: MediaQuery.of(context).padding.top,
-        expandedHeight: 60,
-      ),
+      ],
     );
   }
 }

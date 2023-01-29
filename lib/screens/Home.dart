@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../theme.dart';
+import '../widgets/CustomScreenRoute.dart';
+import 'Details.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,8 +19,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int activeindex = 0;
 
   List<String> images = [
-    "https://animerush.in/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg",
     "https://animerush.in/media/thumbnails/one-piece-web.jpg",
+    "https://animerush.in/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg",
   ];
   List<String> title = [
     "One Piece",
@@ -165,203 +167,225 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   SliverToBoxAdapter(
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 1.092,
-                              margin: const EdgeInsets.only(right: 5),
-                              child: CarouselSlider.builder(
-                                itemCount: images.length,
-                                itemBuilder:
-                                    (BuildContext context, int index, _) {
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.zero,
-                                    decoration: BoxDecoration(
-                                      color: (index % 2 == 0)
-                                          ? CustomTheme.grey1
-                                          : Colors.white.withOpacity(0.0),
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          images[index],
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 10),
+                        FittedBox(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width / 1.092,
+                                margin: const EdgeInsets.only(right: 5),
+                                child: CarouselSlider.builder(
+                                  itemCount: images.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index, _) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.zero,
                                       decoration: BoxDecoration(
-                                        color: Colors.white24.withOpacity(0.5),
+                                        color: (index % 2 == 0)
+                                            ? CustomTheme.grey1
+                                            : Colors.white.withOpacity(0.0),
                                         borderRadius: BorderRadius.circular(10),
-                                        gradient: LinearGradient(
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
-                                          tileMode: TileMode.mirror,
-                                          colors: (index % 2 == 0)
-                                              ? [
-                                                  Colors.white38,
-                                                  Colors.white10,
-                                                  CustomTheme.transparent,
-                                                  CustomTheme.transparent,
-                                                ]
-                                              : [
-                                                  Colors.black87,
-                                                  Colors.black54,
-                                                  Colors.black38,
-                                                  Colors.black12,
-                                                  Colors.black12,
-                                                ],
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                            images[index],
+                                          ),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(bottom: 10),
-                                            child: Text(
-                                              "#${index + 1} Spotlight",
-                                              style: TextStyle(
-                                                color: (index % 2 == 0)
-                                                    ? CustomTheme.themeColor2
-                                                    : CustomTheme.white,
-                                                // color: CustomTheme.themeColor2,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15, horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white24.withOpacity(0.5),
+                                          borderRadius: BorderRadius.circular(10),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            tileMode: TileMode.mirror,
+                                            colors: (index % 2 == 0)
+                                                ? [
+                                                    Colors.black87,
+                                                    Colors.black54,
+                                                    Colors.black38,
+                                                    Colors.black12,
+                                                    Colors.black12,
+                                                  ]
+                                                : [
+                                                    Colors.white38,
+                                                    Colors.white10,
+                                                    CustomTheme.transparent,
+                                                    CustomTheme.transparent,
+                                                  ],
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              margin:
+                                                  const EdgeInsets.only(bottom: 10),
+                                              child: Text(
+                                                "#${index + 1} Spotlight",
+                                                style: TextStyle(
+                                                  color: (index % 2 == 0)
+                                                      ? CustomTheme.white
+                                                      : CustomTheme.themeColor2,
+                                                  // color: CustomTheme.themeColor2,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(bottom: 20),
-                                            child: Text(
-                                              title[index],
-                                              style: TextStyle(
-                                                color: (index % 2 == 0)
-                                                    ? CustomTheme.themeColor2
-                                                    : CustomTheme.white,
-                                                // color: CustomTheme.themeColor2,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
+                                            Container(
+                                              margin:
+                                                  const EdgeInsets.only(bottom: 20),
+                                              child: Text(
+                                                title[index],
+                                                style: TextStyle(
+                                                  color: (index % 2 == 0)
+                                                      ? CustomTheme.white
+                                                      : CustomTheme.themeColor2,
+                                                  // color: CustomTheme.themeColor2,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: 25,
-                                            child: CupertinoButton(
-                                              onPressed: () {},
-                                              color: CustomTheme.grey3,
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 0, horizontal: 10),
-                                              disabledColor: CustomTheme.white,
-                                              pressedOpacity: 0.6,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(5)),
-                                              child: SizedBox(
-                                                width: 55,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      CupertinoIcons
-                                                          .info_circle_fill,
-                                                      size: 14,
-                                                      color: CustomTheme.white,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      "Details",
-                                                      style: TextStyle(
+                                            SizedBox(
+                                              height: 25,
+                                              child: CupertinoButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      CustomScreenRoute(
+                                                          child: Details(
+                                                            title: title[index],
+                                                            img: images[index],
+                                                          ),
+                                                          direction: AxisDirection.up,
+                                                      ));
+                                                },
+                                                color: CustomTheme.grey3,
+                                                padding: const EdgeInsets.symmetric(
+                                                    vertical: 0, horizontal: 10),
+                                                disabledColor: CustomTheme.white,
+                                                pressedOpacity: 0.6,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(5)),
+                                                child: SizedBox(
+                                                  width: 55,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        CupertinoIcons
+                                                            .info_circle_fill,
+                                                        size: 14,
                                                         color: CustomTheme.white,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.bold,
-                                                        fontFamily: "Quicksand",
                                                       ),
-                                                    ),
-                                                  ],
+                                                      const SizedBox(width: 5),
+                                                      Text(
+                                                        "Details",
+                                                        style: TextStyle(
+                                                          color: CustomTheme.white,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontFamily: "Quicksand",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          SizedBox(
-                                            height: 30,
-                                            child: CupertinoButton(
-                                              onPressed: () {},
-                                              color: CustomTheme.themeColor1,
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 0, horizontal: 10),
-                                              disabledColor: CustomTheme.white,
-                                              pressedOpacity: 0.6,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(5)),
-                                              child: SizedBox(
-                                                width: 90,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      CupertinoIcons
-                                                          .play_circle_fill,
-                                                      size: 15,
-                                                      color:
-                                                          CustomTheme.themeColor2,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      "Watch Now",
-                                                      style: TextStyle(
-                                                        color: CustomTheme
-                                                            .themeColor2,
-                                                        fontSize: 13,
-                                                        fontWeight: FontWeight.bold,
-                                                        fontFamily: "Quicksand",
+                                            const SizedBox(height: 15),
+                                            SizedBox(
+                                              height: 30,
+                                              child: CupertinoButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      CustomScreenRoute(
+                                                        child: Details(
+                                                          title: title[index],
+                                                          img: images[index],
+                                                        ),
+                                                        direction: AxisDirection.up,
+                                                      ));
+                                                },
+                                                color: CustomTheme.themeColor1,
+                                                padding: const EdgeInsets.symmetric(
+                                                    vertical: 0, horizontal: 10),
+                                                disabledColor: CustomTheme.white,
+                                                pressedOpacity: 0.6,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(5)),
+                                                child: SizedBox(
+                                                  width: 90,
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        CupertinoIcons
+                                                            .play_circle_fill,
+                                                        size: 15,
+                                                        color:
+                                                            CustomTheme.themeColor2,
                                                       ),
-                                                    ),
-                                                  ],
+                                                      const SizedBox(width: 5),
+                                                      Text(
+                                                        "Watch Now",
+                                                        style: TextStyle(
+                                                          color: CustomTheme
+                                                              .themeColor2,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontFamily: "Quicksand",
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                options: CarouselOptions(
-                                  onPageChanged: (index, _) {
-                                    setState(() => activeindex = index);
+                                    );
                                   },
-                                  height: 200,
-                                  autoPlay: true,
-                                  pageSnapping: true,
-                                  enlargeCenterPage: true,
-                                  enableInfiniteScroll: true,
-                                  aspectRatio: 12 / 12,
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  autoPlayAnimationDuration:
-                                      const Duration(milliseconds: 800),
-                                  viewportFraction: 0.9,
+                                  options: CarouselOptions(
+                                    onPageChanged: (index, _) {
+                                      setState(() => activeindex = index);
+                                    },
+                                    height: 200,
+                                    autoPlay: true,
+                                    pageSnapping: true,
+                                    enlargeCenterPage: true,
+                                    enableInfiniteScroll: true,
+                                    aspectRatio: 12 / 12,
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    autoPlayAnimationDuration:
+                                        const Duration(milliseconds: 800),
+                                    viewportFraction: 0.9,
+                                  ),
                                 ),
                               ),
-                            ),
-                            AnimatedSmoothIndicator(
-                              curve: Curves.easeInOut,
-                              activeIndex: activeindex,
-                              axisDirection: Axis.vertical,
-                              count: images.length,
-                              effect: ExpandingDotsEffect(
-                                dotHeight: 8,
-                                dotWidth: 15,
-                                activeDotColor: CustomTheme.themeColor1,
-                                dotColor: CustomTheme.grey2,
+                              AnimatedSmoothIndicator(
+                                curve: Curves.easeInOut,
+                                activeIndex: activeindex,
+                                axisDirection: Axis.vertical,
+                                count: images.length,
+                                effect: ExpandingDotsEffect(
+                                  dotHeight: 8,
+                                  dotWidth: 15,
+                                  activeDotColor: CustomTheme.themeColor1,
+                                  dotColor: CustomTheme.grey2,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
 
                         //  trending
@@ -386,73 +410,86 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             scrollDirection: Axis.horizontal,
                             physics: const ClampingScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                padding: const EdgeInsets.symmetric(vertical: 0),
-                                height: 150,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 190,
-                                      width: 40,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      margin: EdgeInsets.zero,
-                                      color: CustomTheme.grey1,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                WidgetSpan(
-                                                  child: RotatedBox(
-                                                    quarterTurns: -1,
-                                                    child: SizedBox(
-                                                      width: 120,
-                                                      child: Text(
-                                                        title[index],
-                                                        softWrap: true,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                          color: CustomTheme.white,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      CustomScreenRoute(
+                                        child: Details(
+                                          title: title[index],
+                                          img: titleImgs[index],
+                                        ),
+                                        direction: AxisDirection.up,
+                                      ));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(vertical: 0),
+                                  height: 150,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 190,
+                                        width: 40,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        margin: EdgeInsets.zero,
+                                        color: CustomTheme.grey1,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  WidgetSpan(
+                                                    child: RotatedBox(
+                                                      quarterTurns: -1,
+                                                      child: SizedBox(
+                                                        width: 120,
+                                                        child: Text(
+                                                          title[index],
+                                                          softWrap: true,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                            color: CustomTheme.white,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            (index + 1).toString(),
-                                            style: TextStyle(
-                                              color: CustomTheme.themeColor1,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
+                                            const SizedBox(height: 10),
+                                            Text(
+                                              (index + 1).toString(),
+                                              style: TextStyle(
+                                                color: CustomTheme.themeColor1,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 190,
-                                      width: 130,
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Image.network(
-                                          titleImgs[index],
-                                          fit: BoxFit.contain,
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        height: 190,
+                                        width: 130,
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: Image.network(
+                                            titleImgs[index],
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -522,6 +559,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               );
                             }),
                         ),
+
                         Container(
                           color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -590,6 +628,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             },
                           ),
                         ),
+
                         Container(
                           color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
@@ -658,6 +697,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             },
                           ),
                         ),
+
                         Container(
                           color: CustomTheme.grey2,
                           margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
