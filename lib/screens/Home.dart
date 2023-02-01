@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../Constants.dart';
 import '../theme.dart';
 import '../widgets/CustomScreenRoute.dart';
 import 'Details.dart';
@@ -71,22 +72,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   List<String> splImg = [
-    "https://cdnimg.xyz/cover/fujiko-fujio-a-no-mumako.png",
-    "https://cdnimg.xyz/cover/seikai-no-danshou-tanjou-dub.png",
-    "https://cdnimg.xyz/images/upload/177225.jpg",
-    "https://cdnimg.xyz/cover/utawarerumono-ova-picture-drama.png",
+    "https://cdnimg.xyz/cover/ring-of-gundam.png",
+    "https://cdnimg.xyz/cover/shadowverse-special.png",
+    "https://cdnimg.xyz/cover/beywarriors-cyborg-special.png",
+    "https://cdnimg.xyz/cover/pokemon-2019-natsuyasumi-chokuzen-1-jikan-special.png",
   ];
   List<String> splTitle = [
-    "Fujiko Fujio A No Mumako",
-    "Seikai No Danshou: Tanjou (Dub)",
-    "Owari no Seraph: Nagoya Kessen-hen - Owaranai Seraph - Nagoya Kessen-hen",
-    "Utawarerumono Ova Picture Drama",
+    "Ring Of Gunda",
+    "Shadowverse Special",
+    "Beywarriors: Cyborg Special",
+    "Pokemon (2019): Natsuyasumi Chokuzen 1-Jikan Special",
   ];
   List<String> splStatus = [
-    "Special  Complected  1990",
-    "Special  Complected  2000",
-    "Special  Complected  2016",
     "Special  Complected  2009",
+    "Special  Complected  2020",
+    "Special  Complected  2015",
+    "Special  Complected  2021",
   ];
 
   List<String> movieImg = [
@@ -160,616 +161,676 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 overscroll.disallowGlow();
                 return false;
               },
-              child: CustomScrollView(
-                scrollDirection: Axis.vertical,
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width / 1.092,
-                                margin: const EdgeInsets.only(right: 5),
-                                child: CarouselSlider.builder(
-                                  itemCount: images.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index, _) {
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        color: (index % 2 == 0)
-                                            ? CustomTheme.grey1
-                                            : Colors.white.withOpacity(0.0),
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            images[index],
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
+              child: Container(
+                height: double.infinity,
+                child: ListView(
+                  children: [
+                    FittedBox(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width / 1.092,
+                            margin: const EdgeInsets.only(right: 5),
+                            child: CarouselSlider.builder(
+                              itemCount: images.length,
+                              itemBuilder:
+                                  (BuildContext context, int index, _) {
+                                return Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  padding: EdgeInsets.zero,
+                                  decoration: BoxDecoration(
+                                    color: (index % 2 == 0)
+                                        ? CustomTheme.grey1
+                                        : Colors.white.withOpacity(0.0),
+                                    borderRadius: BorderRadius.circular(
+                                        10),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        images[index],
                                       ),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white24.withOpacity(0.5),
-                                          borderRadius: BorderRadius.circular(10),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            tileMode: TileMode.mirror,
-                                            colors: (index % 2 == 0)
-                                                ? [
-                                                    Colors.black87,
-                                                    Colors.black54,
-                                                    Colors.black38,
-                                                    Colors.black12,
-                                                    Colors.black12,
-                                                  ]
-                                                : [
-                                                    Colors.white38,
-                                                    Colors.white10,
-                                                    CustomTheme.transparent,
-                                                    CustomTheme.transparent,
-                                                  ],
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.only(bottom: 10),
-                                              child: Text(
-                                                "#${index + 1} Spotlight",
-                                                style: TextStyle(
-                                                  color: (index % 2 == 0)
-                                                      ? CustomTheme.white
-                                                      : CustomTheme.themeColor2,
-                                                  // color: CustomTheme.themeColor2,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.only(bottom: 20),
-                                              child: Text(
-                                                title[index],
-                                                style: TextStyle(
-                                                  color: (index % 2 == 0)
-                                                      ? CustomTheme.white
-                                                      : CustomTheme.themeColor2,
-                                                  // color: CustomTheme.themeColor2,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 25,
-                                              child: CupertinoButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      CustomScreenRoute(
-                                                          child: Details(
-                                                            title: title[index],
-                                                            img: images[index],
-                                                          ),
-                                                          direction: AxisDirection.up,
-                                                      ));
-                                                },
-                                                color: CustomTheme.grey3,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 10),
-                                                disabledColor: CustomTheme.white,
-                                                pressedOpacity: 0.6,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(5)),
-                                                child: SizedBox(
-                                                  width: 55,
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        CupertinoIcons
-                                                            .info_circle_fill,
-                                                        size: 14,
-                                                        color: CustomTheme.white,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        "Details",
-                                                        style: TextStyle(
-                                                          color: CustomTheme.white,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold,
-                                                          fontFamily: "Quicksand",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            SizedBox(
-                                              height: 30,
-                                              child: CupertinoButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      CustomScreenRoute(
-                                                        child: Details(
-                                                          title: title[index],
-                                                          img: images[index],
-                                                        ),
-                                                        direction: AxisDirection.up,
-                                                      ));
-                                                },
-                                                color: CustomTheme.themeColor1,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 10),
-                                                disabledColor: CustomTheme.white,
-                                                pressedOpacity: 0.6,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(5)),
-                                                child: SizedBox(
-                                                  width: 90,
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        CupertinoIcons
-                                                            .play_circle_fill,
-                                                        size: 15,
-                                                        color:
-                                                            CustomTheme.themeColor2,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        "Watch Now",
-                                                        style: TextStyle(
-                                                          color: CustomTheme
-                                                              .themeColor2,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.bold,
-                                                          fontFamily: "Quicksand",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  options: CarouselOptions(
-                                    onPageChanged: (index, _) {
-                                      setState(() => activeindex = index);
-                                    },
-                                    height: 200,
-                                    autoPlay: true,
-                                    pageSnapping: true,
-                                    enlargeCenterPage: true,
-                                    enableInfiniteScroll: true,
-                                    aspectRatio: 12 / 12,
-                                    autoPlayCurve: Curves.fastOutSlowIn,
-                                    autoPlayAnimationDuration:
-                                        const Duration(milliseconds: 800),
-                                    viewportFraction: 0.9,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              AnimatedSmoothIndicator(
-                                curve: Curves.easeInOut,
-                                activeIndex: activeindex,
-                                axisDirection: Axis.vertical,
-                                count: images.length,
-                                effect: ExpandingDotsEffect(
-                                  dotHeight: 8,
-                                  dotWidth: 15,
-                                  activeDotColor: CustomTheme.themeColor1,
-                                  dotColor: CustomTheme.grey2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        //  trending
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Trending",
-                            style: TextStyle(
-                              color: CustomTheme.themeColor1,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 200,
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: ListView.builder(
-                            itemCount: title.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            physics: const ClampingScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      CustomScreenRoute(
-                                        child: Details(
-                                          title: title[index],
-                                          img: titleImgs[index],
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white24.withOpacity(
+                                          0.5),
+                                      borderRadius: BorderRadius
+                                          .circular(10),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        tileMode: TileMode.mirror,
+                                        colors: (index % 2 == 0)
+                                            ? [
+                                          Colors.black87,
+                                          Colors.black54,
+                                          Colors.black38,
+                                          Colors.black12,
+                                          Colors.black12,
+                                        ]
+                                            : [
+                                          Colors.white38,
+                                          Colors.white10,
+                                          CustomTheme.transparent,
+                                          CustomTheme.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .end,
+                                      children: [
+                                        Container(
+                                          margin:
+                                          const EdgeInsets.only(
+                                              bottom: 10),
+                                          child: Text(
+                                            "#${index + 1} Spotlight",
+                                            style: TextStyle(
+                                              color: (index % 2 == 0)
+                                                  ? CustomTheme.white
+                                                  : CustomTheme
+                                                  .themeColor2,
+                                              // color: CustomTheme.themeColor2,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight
+                                                  .bold,
+                                            ),
+                                          ),
                                         ),
-                                        direction: AxisDirection.up,
-                                      ));
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                                  padding: const EdgeInsets.symmetric(vertical: 0),
-                                  height: 150,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        height: 190,
-                                        width: 40,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        margin: EdgeInsets.zero,
-                                        color: CustomTheme.grey1,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            RichText(
-                                              text: TextSpan(
+                                        Container(
+                                          margin:
+                                          const EdgeInsets.only(
+                                              bottom: 20),
+                                          child: Text(
+                                            title[index],
+                                            style: TextStyle(
+                                              color: (index % 2 == 0)
+                                                  ? CustomTheme.white
+                                                  : CustomTheme
+                                                  .themeColor2,
+                                              // color: CustomTheme.themeColor2,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight
+                                                  .bold,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 25,
+                                          child: CupertinoButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  CustomScreenRoute(
+                                                    child: Details(
+                                                      title: title[index],
+                                                      img: images[index],
+                                                    ),
+                                                    direction: AxisDirection
+                                                        .up,
+                                                  ));
+                                            },
+                                            color: CustomTheme.grey3,
+                                            padding: const EdgeInsets
+                                                .symmetric(
+                                                vertical: 0,
+                                                horizontal: 10),
+                                            disabledColor: CustomTheme
+                                                .white,
+                                            pressedOpacity: 0.6,
+                                            borderRadius:
+                                            const BorderRadius.all(
+                                                Radius.circular(5)),
+                                            child: SizedBox(
+                                              width: 55,
+                                              child: Row(
                                                 children: [
-                                                  WidgetSpan(
-                                                    child: RotatedBox(
-                                                      quarterTurns: -1,
-                                                      child: SizedBox(
-                                                        width: 120,
-                                                        child: Text(
-                                                          title[index],
-                                                          softWrap: true,
-                                                          overflow:
-                                                              TextOverflow.ellipsis,
-                                                          style: TextStyle(
-                                                            color: CustomTheme.white,
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
+                                                  Icon(
+                                                    CupertinoIcons
+                                                        .info_circle_fill,
+                                                    size: 14,
+                                                    color: CustomTheme
+                                                        .white,
+                                                  ),
+                                                  const SizedBox(
+                                                      width: 5),
+                                                  Text(
+                                                    "Details",
+                                                    style: TextStyle(
+                                                      color: CustomTheme
+                                                          .white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight
+                                                          .bold,
+                                                      fontFamily: "Quicksand",
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                            const SizedBox(height: 10),
-                                            Text(
-                                              (index + 1).toString(),
-                                              style: TextStyle(
-                                                color: CustomTheme.themeColor1,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 190,
-                                        width: 130,
-                                        child: FittedBox(
-                                          fit: BoxFit.fill,
-                                          child: Image.network(
-                                            titleImgs[index],
-                                            fit: BoxFit.contain,
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 15),
+                                        SizedBox(
+                                          height: 30,
+                                          child: CupertinoButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  CustomScreenRoute(
+                                                    child: Details(
+                                                      title: title[index],
+                                                      img: images[index],
+                                                    ),
+                                                    direction: AxisDirection
+                                                        .up,
+                                                  ));
+                                            },
+                                            color: CustomTheme
+                                                .themeColor1,
+                                            padding: const EdgeInsets
+                                                .symmetric(
+                                                vertical: 0,
+                                                horizontal: 10),
+                                            disabledColor: CustomTheme
+                                                .white,
+                                            pressedOpacity: 0.6,
+                                            borderRadius:
+                                            const BorderRadius.all(
+                                                Radius.circular(5)),
+                                            child: SizedBox(
+                                              width: 90,
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    CupertinoIcons
+                                                        .play_circle_fill,
+                                                    size: 15,
+                                                    color:
+                                                    CustomTheme
+                                                        .themeColor2,
+                                                  ),
+                                                  const SizedBox(
+                                                      width: 5),
+                                                  Text(
+                                                    "Watch Now",
+                                                    style: TextStyle(
+                                                      color: CustomTheme
+                                                          .themeColor2,
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight
+                                                          .bold,
+                                                      fontFamily: "Quicksand",
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-
-                        //  types
-                        Container(
-                          color: CustomTheme.grey2,
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Special",
-                            style: TextStyle(
-                              color: CustomTheme.themeColor1,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                                );
+                              },
+                              options: CarouselOptions(
+                                onPageChanged: (index, _) {
+                                  setState(() => activeindex = index);
+                                },
+                                height: 200,
+                                autoPlay: true,
+                                pageSnapping: true,
+                                enlargeCenterPage: true,
+                                enableInfiniteScroll: true,
+                                aspectRatio: 12 / 12,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                autoPlayAnimationDuration:
+                                const Duration(milliseconds: 800),
+                                viewportFraction: 0.9,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: splImg.length,
-                            itemBuilder: (BuildContext listCtx, int index) {
-                              return ListTile(
-                                leading: FadeInImage.assetNetwork(
-                                  placeholder: "assets/img/icon1.png",
-                                  image: splImg[index],
-                                  imageErrorBuilder:
-                                      (context, error, stackTrace) {
-                                    return Image.asset(
-                                      "assets/img/icon1.png",
-                                      fit: BoxFit.contain,
-                                    );
-                                  },
-                                  fit: BoxFit.contain,
-                                ),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    splTitle[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    splStatus[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                                dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              );
-                            }),
-                        ),
-
-                        Container(
-                          color: CustomTheme.grey2,
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 15),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Movies",
-                            style: TextStyle(
-                              color: CustomTheme.themeColor1,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          AnimatedSmoothIndicator(
+                            curve: Curves.easeInOut,
+                            activeIndex: activeindex,
+                            axisDirection: Axis.vertical,
+                            count: images.length,
+                            effect: ExpandingDotsEffect(
+                              dotHeight: 8,
+                              dotWidth: 15,
+                              activeDotColor: CustomTheme.themeColor1,
+                              dotColor: CustomTheme.grey2,
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: movieImg.length,
-                            itemBuilder: (BuildContext listCtx, int index) {
-                              return ListTile(
-                                leading: SizedBox(
-                                  height: 100,
-                                  width: 50,
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: "assets/img/icon1.png",
-                                    image: movieImg[index],
-                                    imageErrorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/img/icon1.png",
-                                        fit: BoxFit.contain,
-                                      );
-                                    },
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    movieTitle[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    movieStatus[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                                dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              );
-                            },
-                          ),
-                        ),
-
-                        Container(
-                          color: CustomTheme.grey2,
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 15),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "ONA",
-                            style: TextStyle(
-                              color: CustomTheme.themeColor1,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: onaImg.length,
-                            itemBuilder: (BuildContext listCtx, int index) {
-                              return ListTile(
-                                leading: SizedBox(
-                                  height: 100,
-                                  width: 50,
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: "assets/img/icon1.png",
-                                    image: onaImg[index],
-                                    imageErrorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/img/icon1.png",
-                                        fit: BoxFit.contain,
-                                      );
-                                    },
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    onaTitle[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    onaStatus[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                                dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              );
-                            },
-                          ),
-                        ),
-
-                        Container(
-                          color: CustomTheme.grey2,
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 15),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "OVA",
-                            style: TextStyle(
-                              color: CustomTheme.themeColor1,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: ovaImg.length,
-                            itemBuilder: (BuildContext listCtx, int index) {
-                              return ListTile(
-                                leading: SizedBox(
-                                  height: 100,
-                                  width: 50,
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder: "assets/img/icon1.png",
-                                    image: ovaImg[index],
-                                    imageErrorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(
-                                        "assets/img/icon1.png",
-                                        fit: BoxFit.contain,
-                                      );
-                                    },
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                title: Padding(
-                                  padding: const EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    ovaTitle[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 5),
-                                  child: Text(
-                                    ovaStatus[index],
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                                dense: true,
-                                tileColor: (index % 2 == 0) ? CustomTheme.grey1 : CustomTheme.grey2,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+
+                    //  trending
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Trending",
+                        style: TextStyle(
+                          color: CustomTheme.themeColor1,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 200,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: ListView.builder(
+                        itemCount: title.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const ClampingScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  CustomScreenRoute(
+                                    child: Details(
+                                      title: title[index],
+                                      img: titleImgs[index],
+                                    ),
+                                    direction: AxisDirection.up,
+                                  ));
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 0),
+                              height: 150,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center,
+                                children: [
+                                  Container(
+                                    height: 180,
+                                    width: 40,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    margin: EdgeInsets.zero,
+                                    color: CustomTheme.grey1,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              WidgetSpan(
+                                                child: RotatedBox(
+                                                  quarterTurns: -1,
+                                                  child: SizedBox(
+                                                    width: 120,
+                                                    child: Text(
+                                                      title[index],
+                                                      softWrap: true,
+                                                      overflow:
+                                                      TextOverflow
+                                                          .ellipsis,
+                                                      style: TextStyle(
+                                                        color: CustomTheme
+                                                            .white,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                            color: CustomTheme
+                                                .themeColor1,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 180,
+                                    width: 130,
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: Image.network(
+                                        titleImgs[index],
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    //  types
+                    Container(
+                      color: CustomTheme.grey2,
+                      margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 15),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Special",
+                        style: TextStyle(
+                          color: CustomTheme.themeColor1,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: splImg.length,
+                        itemBuilder: (BuildContext listCtx, int index) {
+                          return ListTile(
+                            leading: SizedBox(
+                              height: 100,
+                              width: 50,
+                              child: FadeInImage.assetNetwork(
+                                placeholder: "assets/img/icon1.png",
+                                image: splImg[index],
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    "assets/img/icon1.png",
+                                    fit: BoxFit.contain,
+                                  );
+                                },
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                splTitle[index],
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                splStatus[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            dense: true,
+                            tileColor: (index % 2 == 0)
+                                ? CustomTheme.grey1
+                                : CustomTheme.grey2,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          );
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      color: CustomTheme.grey2,
+                      margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 15),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Movies",
+                        style: TextStyle(
+                          color: CustomTheme.themeColor1,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: movieImg.length,
+                        itemBuilder: (BuildContext listCtx, int index) {
+                          return ListTile(
+                            leading: SizedBox(
+                              height: 100,
+                              width: 50,
+                              child: FadeInImage.assetNetwork(
+                                placeholder: "assets/img/icon1.png",
+                                image: movieImg[index],
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    "assets/img/icon1.png",
+                                    fit: BoxFit.contain,
+                                  );
+                                },
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                movieTitle[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                movieStatus[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            dense: true,
+                            tileColor: (index % 2 == 0) ? CustomTheme
+                                .grey1 : CustomTheme.grey2,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          );
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      color: CustomTheme.grey2,
+                      margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 15),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "ONA",
+                        style: TextStyle(
+                          color: CustomTheme.themeColor1,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: onaImg.length,
+                        itemBuilder: (BuildContext listCtx, int index) {
+                          return ListTile(
+                            leading: SizedBox(
+                              height: 100,
+                              width: 50,
+                              child: FadeInImage.assetNetwork(
+                                placeholder: "assets/img/icon1.png",
+                                image: onaImg[index],
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    "assets/img/icon1.png",
+                                    fit: BoxFit.contain,
+                                  );
+                                },
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                onaTitle[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                onaStatus[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            dense: true,
+                            tileColor: (index % 2 == 0) ? CustomTheme
+                                .grey1 : CustomTheme.grey2,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          );
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      color: CustomTheme.grey2,
+                      margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 15),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "OVA",
+                        style: TextStyle(
+                          color: CustomTheme.themeColor1,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 15),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: ovaImg.length,
+                        itemBuilder: (BuildContext listCtx, int index) {
+                          return ListTile(
+                            leading: SizedBox(
+                              height: 100,
+                              width: 50,
+                              child: FadeInImage.assetNetwork(
+                                placeholder: "assets/img/icon1.png",
+                                image: ovaImg[index],
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return Image.asset(
+                                    "assets/img/icon1.png",
+                                    fit: BoxFit.contain,
+                                  );
+                                },
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                ovaTitle[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                ovaStatus[index],
+                                style: TextStyle(
+                                  color: CustomTheme.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                            dense: true,
+                            tileColor: (index % 2 == 0) ? CustomTheme
+                                .grey1 : CustomTheme.grey2,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
