@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../Constants.dart';
+import '../CommonStyle.dart';
 import '../theme.dart';
 import '../widgets/CustomScreenRoute.dart';
 import 'Details.dart';
@@ -20,7 +22,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int activeindex = 0;
 
   List<String> images = [
-    "https://animerush.in/media/thumbnails/one-piece-web.jpg",
+    "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
+    // "https://animerush.in/media/thumbnails/one-piece-web.jpg",
     "https://animerush.in/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg",
   ];
   List<String> title = [
@@ -54,7 +57,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    print(this.runtimeType);
+    log(runtimeType.toString());
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 275),
@@ -524,8 +527,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     width: 130,
                                     child: FittedBox(
                                       fit: BoxFit.fill,
-                                      child: Image.network(
-                                        titleImgs[index],
+                                      child: FadeInImage.assetNetwork(
+                                        placeholder: "assets/img/icon1.png",
+                                        image: titleImgs[index],
+                                        imageErrorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            "assets/img/icon1.png",
+                                            fit: BoxFit.contain,
+                                          );
+                                        },
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -563,6 +574,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         itemCount: splImg.length,
                         itemBuilder: (BuildContext listCtx, int index) {
                           return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  CustomScreenRoute(
+                                    child: Details(
+                                      title: splTitle[index],
+                                      img: splImg[index],
+                                    ),
+                                    direction: AxisDirection.up,
+                                  ));
+                            },
                             leading: SizedBox(
                               height: 100,
                               width: 50,
@@ -639,6 +661,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         itemCount: movieImg.length,
                         itemBuilder: (BuildContext listCtx, int index) {
                           return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  CustomScreenRoute(
+                                    child: Details(
+                                      title: movieTitle[index],
+                                      img: movieImg[index],
+                                    ),
+                                    direction: AxisDirection.up,
+                                  ));
+                            },
                             leading: SizedBox(
                               height: 100,
                               width: 50,
@@ -711,6 +744,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         itemCount: onaImg.length,
                         itemBuilder: (BuildContext listCtx, int index) {
                           return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  CustomScreenRoute(
+                                    child: Details(
+                                      title: onaTitle[index],
+                                      img: onaImg[index],
+                                    ),
+                                    direction: AxisDirection.up,
+                                  ));
+                            },
                             leading: SizedBox(
                               height: 100,
                               width: 50,
@@ -783,6 +827,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         itemCount: ovaImg.length,
                         itemBuilder: (BuildContext listCtx, int index) {
                           return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  CustomScreenRoute(
+                                    child: Details(
+                                      title: ovaTitle[index],
+                                      img: ovaImg[index],
+                                    ),
+                                    direction: AxisDirection.up,
+                                  ));
+                            },
                             leading: SizedBox(
                               height: 100,
                               width: 50,
@@ -842,47 +897,4 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
-  AnimatedContainer slider(images, pagePosition, active) {
-    double margin = active ? 10 : 20;
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOutCubic,
-      margin: EdgeInsets.all(margin),
-      decoration: BoxDecoration(
-          image: DecorationImage(image: NetworkImage(images[pagePosition]))),
-    );
-  }
-
-  imageAnimation(PageController animation, images, pagePosition) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (context, widget) {
-        print(pagePosition);
-
-        return SizedBox(
-          width: 200,
-          height: 200,
-          child: widget,
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        child: Image.network(images[pagePosition]),
-      ),
-    );
-  }
-
-  List<Widget> indicators(imagesLength, currentIndex) {
-    return List<Widget>.generate(imagesLength, (index) {
-      return Container(
-        margin: const EdgeInsets.all(3),
-        width: 10,
-        height: 10,
-        decoration: BoxDecoration(
-            color: currentIndex == index ? Colors.black : Colors.black26,
-            shape: BoxShape.circle),
-      );
-    });
-  }
 }

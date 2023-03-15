@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomTheme {
   const CustomTheme();
@@ -14,7 +15,8 @@ class CustomTheme {
   static Color grey2 = CupertinoColors.systemGrey5.darkHighContrastColor;
   static Color grey3 = CupertinoColors.systemGrey5.darkColor;
   static Color transparent = Color(0x3C000000);
-  static Color blue = CupertinoColors.systemTeal;
+  static Color blue = CupertinoColors.link;
+  static Color img_blur = Color(0xB0000000);
 }
 
 List<Color> ColorList = [

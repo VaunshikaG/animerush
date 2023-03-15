@@ -1,9 +1,6 @@
-import 'package:anim_search_bar/anim_search_bar.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import '../theme.dart';
 import 'Home.dart';
@@ -47,10 +44,19 @@ class _BottomBarState extends State<BottomBar> {
         elevation: 0,
         iconTheme: IconThemeData(color: CustomTheme.white),
         backgroundColor: CustomTheme.themeColor2,
+        titleSpacing: 5,
+        title: FittedBox(
+          fit: BoxFit.contain,
+          child: Image.asset(
+            height: 45,
+            "assets/img/white_logo.png",
+            fit: BoxFit.fitHeight,
+            width: 100,
+          ),
+        ),
       ),
       drawerEdgeDragWidth: 50,
-      // drawerScrimColor: Colors.transparent,
-      drawer: const HomeDrawer(),
+      endDrawer: const HomeDrawer(),
       body: _tabs[_selectedTab],
       bottomNavigationBar: Container(
         color: CustomTheme.themeColor2,

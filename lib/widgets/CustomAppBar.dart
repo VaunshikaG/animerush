@@ -1,118 +1,223 @@
 import 'package:animerush/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sliver_header_delegate/sliver_header_delegate.dart';
 
-class CustomAppBar extends StatelessWidget {
-  final String title;
-  const CustomAppBar(this.title);
-  @override
-  Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      delegate: FlexibleHeaderDelegate(
-        backgroundColor: CustomTheme.themeColor2,
-        leading: FittedBox(
-          fit: BoxFit.contain,
-          child: ElevatedButton(
-            child: Text(
-              "   <  Back",
-              style: TextStyle(fontSize: 16, color: CustomTheme.themeColor1),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: CustomTheme.themeColor2,
-              foregroundColor: Colors.grey[350],
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-              padding: EdgeInsets.zero,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+//  details pg
+Widget CustomAppBar({
+  required String title,
+  required String img,
+  required void Function() backBtn,
+  required void Function() wishlist,
+}) {
+  var top = 0.0;
+
+  return SliverAppBar(
+    pinned: true,
+    elevation: 4,
+    expandedHeight: 300,
+    backgroundColor: CustomTheme.themeColor2,
+    leading: FittedBox(
+      fit: BoxFit.contain,
+      child: IconButton(
+        icon: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: CustomTheme.grey3,
+            // backgroundBlendMode: BlendMode.softLight,
+          ),
+          child: Icon(
+            CupertinoIcons.left_chevron,
+            color: CustomTheme.white,
+            size: 18,
           ),
         ),
-        statusBarHeight: MediaQuery.of(context).padding.top,
-        expandedHeight: 80,
-        children: [
-          FlexibleTextItem(
-            text: title,
-            textAlign: TextAlign.center,
-            expandedStyle: TextStyle(
-                fontSize: 18,
-                color: CustomTheme.themeColor1,
-                fontWeight: FontWeight.bold,
-                wordSpacing: 3
-            ),
-            collapsedStyle:
-            const TextStyle(fontSize: 16, color: Colors.black),
-            expandedAlignment: Alignment.bottomLeft,
-            collapsedAlignment: Alignment.center,
-            expandedPadding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
-          ),
-        ],
+        onPressed: () {
+          backBtn();
+        },
       ),
-    );
-  }
-}
-
-class CustomAppBar2 extends StatefulWidget {
-  // final String img;
-  const CustomAppBar2({Key? key, }) : super(key: key);
-
-  @override
-  State<CustomAppBar2> createState() => _CustomAppBar2State();
-}
-
-class _CustomAppBar2State extends State<CustomAppBar2> {
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: CustomTheme.white.withOpacity(0),
-      leading: FittedBox(
+    ),
+    actions: [
+      FittedBox(
         fit: BoxFit.contain,
         child: IconButton(
           icon: Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 7),
+            padding: const EdgeInsets.all(7),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: CustomTheme.grey3,
               // backgroundBlendMode: BlendMode.softLight,
             ),
             child: Icon(
-              CupertinoIcons.left_chevron,
+              CupertinoIcons.bookmark,
+              size: 19,
               color: CustomTheme.white,
-              size: 18,
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            wishlist();
           },
         ),
       ),
-      actions: [
-        FittedBox(
-          fit: BoxFit.contain,
-          child: IconButton(
-            icon: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.fromLTRB(6, 3, 6, 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: CustomTheme.grey3,
-                // backgroundBlendMode: BlendMode.softLight,
-              ),
-              child: Icon(
-                CupertinoIcons.bookmark,
-                size: 18,
+    ],
+    scrolledUnderElevation: 10,
+    flexibleSpace: LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        top = constraints.biggest.height;
+        return FlexibleSpaceBar(
+          centerTitle: true,
+          expandedTitleScale: 1.3,
+          title: Visibility(
+            visible: (top == 88.0) ? true : false,
+            // visible: true,
+            child: Text(
+              // top.toString(),
+              title,
+              style: TextStyle(
+                fontSize: 14,
                 color: CustomTheme.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Quicksand',
               ),
             ),
-            onPressed: () {},
+          ),
+          background: Image.network(
+            img,
+            width: double.infinity,
+            height: 400,
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+          ),
+        );
+      },
+    ),
+  );
+}
+
+
+//  details pg - blur_img
+Widget CustomAppBar2({
+  required void Function() backBtn,
+  required void Function() wishlist,
+}) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: CustomTheme.white.withOpacity(0),
+    leading: FittedBox(
+      fit: BoxFit.contain,
+      child: IconButton(
+        icon: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: CustomTheme.grey3,
+            // backgroundBlendMode: BlendMode.softLight,
+          ),
+          child: Icon(
+            CupertinoIcons.left_chevron,
+            color: CustomTheme.white,
+            size: 18,
           ),
         ),
-      ],
-    );
-  }
+        onPressed: () {
+          backBtn();
+        },
+      ),
+    ),
+    actions: [
+      FittedBox(
+        fit: BoxFit.contain,
+        child: IconButton(
+          icon: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: CustomTheme.grey3,
+              // backgroundBlendMode: BlendMode.softLight,
+            ),
+            child: Icon(
+              CupertinoIcons.bookmark,
+              size: 19,
+              color: CustomTheme.white,
+            ),
+          ),
+          onPressed: () {
+            wishlist();
+          },
+        ),
+      ),
+    ],
+  );
+}
+
+
+//  episode pg
+Widget CustomAppBar3({
+  required String title,
+  required void Function() backBtn,
+  required void Function() wishlist,
+}) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: CustomTheme.themeColor2,
+    leading: FittedBox(
+      fit: BoxFit.contain,
+      child: IconButton(
+        icon: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: CustomTheme.grey3,
+            // backgroundBlendMode: BlendMode.softLight,
+          ),
+          child: Icon(
+            CupertinoIcons.left_chevron,
+            color: CustomTheme.white,
+            size: 18,
+          ),
+        ),
+        onPressed: () {
+          backBtn();
+        },
+      ),
+    ),
+    title: Text(
+      title,
+      softWrap: true,
+      maxLines: 2,
+      style: TextStyle(
+        fontSize: 14,
+        color: CustomTheme.white,
+      ),
+    ),
+    actions: [
+      FittedBox(
+        fit: BoxFit.contain,
+        child: IconButton(
+          icon: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: CustomTheme.grey3,
+              // backgroundBlendMode: BlendMode.softLight,
+            ),
+            child: Icon(
+              CupertinoIcons.bookmark,
+              size: 19,
+              color: CustomTheme.white,
+            ),
+          ),
+          onPressed: () {
+            wishlist();
+          },
+        ),
+      ),
+    ],
+  );
 }
