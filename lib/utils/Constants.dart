@@ -1,4 +1,13 @@
-class Constants {
+class AppConst {
+
+  static const String KEY = "lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc";
+  static const String app_url = "https://animerush.in/api";
+  static const String home = "$app_url/home-details/";
+
+
+
+
+
 
   static const String placeHolderImg = "https://animerush.in/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg";
   static const Map<String, String> exampleResolutionsUrls = {

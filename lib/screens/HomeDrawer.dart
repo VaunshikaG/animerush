@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../utils/theme.dart';
 import '../widgets/CustomScreenRoute.dart';
 import 'Home.dart';
 

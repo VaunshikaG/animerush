@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:animerush/Constants.dart';
+import 'package:animerush/utils/Constants.dart';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import '../theme.dart';
+import '../utils/theme.dart';
 
 class Player extends StatefulWidget {
   final String url;
@@ -34,12 +34,12 @@ class _PlayerState extends State<Player> {
         'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
       },
-      resolutions: Constants.exampleResolutionsUrls,
+      resolutions: AppConst.exampleResolutionsUrls,
       notificationConfiguration: const BetterPlayerNotificationConfiguration(
         showNotification: true,
         title: "Chainsaw Man",
         author: "animerush.in",
-        imageUrl: Constants.placeHolderImg,
+        imageUrl: AppConst.placeHolderImg,
       ),
     );
 
@@ -52,7 +52,7 @@ class _PlayerState extends State<Player> {
         autoPlay: false,
         placeholderOnTop: true,
         placeholder: Image.network(
-          Constants.placeHolderImg,
+          AppConst.placeHolderImg,
           fit: BoxFit.contain,
         ),
         controlsConfiguration: BetterPlayerControlsConfiguration(

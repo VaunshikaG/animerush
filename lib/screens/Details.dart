@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import '../CommonStyle.dart';
-import '../theme.dart';
+import '../utils/CommonStyle.dart';
+import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomScreenRoute.dart';
 
@@ -152,9 +152,11 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                   SliverToBoxAdapter(
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      margin: const EdgeInsets.only(bottom: 100),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          //  title
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
@@ -177,6 +179,8 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
+
+                          //  desc
                           RichTextView(
                             text:
                             "Denji has a simple dream—to live a happy and peaceful life, spending time with a girl he likes. This is a far cry from reality, however, as Denji is forced by the yakuza into killing devils in order to pay off his crushing debts. Using his pet devil Pochita as a weapon, he is ready to do anything for a bit of cash.Unfortunately, he has outlived his usefulness and is murdered by a devil in contract with the yakuza. However, in an unexpected turn of events, Pochita merges with Denji's dead body and grants him the powers of a chainsaw devil. Now able to transform parts of his body into chainsaws, a revived Denji uses his new abilities to quickly and brutally dispatch his enemies. Catching the eye of the official devil hunters who arrive at the scene, he is offered work at the Public Safety Bureau as one of them. Now with the means to face even the toughest of enemies, Denji will stop at nothing to achieve his simple teenage dreams.",
@@ -197,6 +201,8 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                             ),
                             supportedTypes: const [],
                           ),
+
+                          //  btns
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Row(
@@ -257,6 +263,8 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
+
+                          //  info
                           ListView.builder(
                             itemCount: detailTitle.length,
                             shrinkWrap: true,
@@ -270,12 +278,27 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                               );
                             },
                           ),
+
+                          //  similar list
+                          Container(
+                            margin: const EdgeInsets.only(left: 15, bottom: 10),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Similar Anime",
+                              style: TextStyle(
+                                color: CustomTheme.themeColor1,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          similarList(),
+
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: similarList(),
                   ),
                 ],
               ),
@@ -287,172 +310,111 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
   }
 
   Widget similarList() {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 15),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Similar Anime",
-            style: TextStyle(
-              color: CustomTheme.themeColor1,
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
-        ),
-        Container(
-          color: CustomTheme.themeColor2,
-          margin: const EdgeInsets.only(bottom: 30),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: 35,
-              crossAxisCount: 2,
-            ),
-            itemCount: title.length,
-            itemBuilder: (BuildContext ctx, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      CustomScreenRoute(
-                        child: Details(
-                          title: title[index],
-                          img: titleImgs[index],
-                        ),
-                        direction: AxisDirection.up,
-                      ));
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 150,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: CustomTheme.grey2,
-                        // borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage(titleImgs[index]),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 125,
+      ),
+      // itemCount: 4,
+      itemCount: title.length,
+      itemBuilder: (BuildContext ctx, index) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                CustomScreenRoute(
+                  child: Details(
+                    title: title[index],
+                    img: titleImgs[index],
+                  ),
+                  direction: AxisDirection.up,
+                ));
+          },
+          child: Container(
+            // height: 220,
+            width: 200,
+            child: Wrap(
+              children: [
+                Container(
+                  height: 220,
+                  width: 170,
+                  margin: const EdgeInsets.only(left: 6),
+                  child: FadeInImage.assetNetwork(
+                    alignment: Alignment.center,
+                    placeholder: "assets/img/icon1.png",
+                    image: titleImgs[index],
+                    fit: BoxFit.fill,
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/img/icon1.png",
+                        fit: BoxFit.contain,
+                      );
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    // height: 90,
+                    width: 170,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    alignment: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.grey2,
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 100,
-                        // width: 160,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        alignment: Alignment.bottomCenter,
-                        decoration: BoxDecoration(
-                          color: CustomTheme.grey2,
-                          gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              tileMode: TileMode.mirror,
-                              colors: [
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.black12,
-                                // Colors.black38,
-                                Colors.black54,
-                                Colors.black54,
-                                Colors.black87,
-                                Colors.black87,
-                                Colors.black87,
-                                Colors.black87,
-                                Colors.black87,
-                              ]),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 7),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: CustomTheme.blue,
-                                    minimumSize: Size.zero,
-                                    padding: const EdgeInsets.all(5),
-                                  ),
-                                  child: Text(
-                                    "SUB",
-                                    style: TextStyle(
-                                      color: CustomTheme.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: CustomTheme.white,
-                                      minimumSize: Size.zero,
-                                      padding: const EdgeInsets.all(5),
-                                    ),
-                                    child: Text(
-                                      "EP 52",
-                                      style: TextStyle(
-                                        color: CustomTheme.themeColor2,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 3),
-                              child: Text(
-                                title[index],
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: CustomTheme.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            Text(
+                              "SUB",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: CustomTheme.white,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 3, top: 5),
-                              child: Text(
-                                titleStatus[index],
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: CustomTheme.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "EP 1090",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: CustomTheme.white,
                               ),
                             ),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 7),
+                        SizedBox(
+                          height: 30,
+                          child: Text(
+                            title[index],
+                            softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: CustomTheme.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 

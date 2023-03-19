@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../theme.dart';
+import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import 'Player.dart';
 
@@ -264,7 +264,7 @@ class _EpisodeState extends State<Episode> {
     return Container(
       alignment: Alignment.topCenter,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: 200,
+      height: 550,
       child: Scrollbar(
         child: GridView.builder(
           physics: const BouncingScrollPhysics(),

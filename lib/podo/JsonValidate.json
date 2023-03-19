@@ -1,0 +1,948 @@
+{
+  "st": 200,
+  "msg": "data fetch successfully",
+  "is_spotlight_data": [
+    {
+      "id": 34,
+      "name": "One Piece",
+      "japanese_name": "ONE PIECE",
+      "english_name": "ONE PIECE",
+      "thumbnail": "/media/thumbnails/one-piece-web.jpg",
+      "image": "/media/https%3A/cdnimg.xyz/images/anime/One-piece.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/anime/One-piece.jpg",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21-tXMN3Y20PIL9.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "O",
+      "active": true,
+      "episodes": "1053",
+      "episodes_till_now": "1054",
+      "rating_age": "87",
+      "duration": "24",
+      "description": "Gold Roger was known as the Pirate King, the strongest and most infamous being to have sailed the Grand Line. The capture and death of Roger by the World Government brought a change throughout the world. His last words before his death revealed the location of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece (which promises an unlimited amount of riches and fame), and quite possibly the most coveted of titles for the person who found it, the title of the Pirate King.<br><br>\nEnter Monkey D. Luffy, a 17-year-old boy that defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate who ransacks villages for fun, Luffy’s reason for being a pirate is one of pure wonder; the thought of an exciting adventure and meeting new and intriguing people, along with finding One Piece, are his reasons of becoming a pirate. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach One Piece.<br><br>\n<b>*This includes following special episodes:</b><br>\n- Chopperman to the Rescue! Protect the TV Station by the Shore! (Episode 336)<br>\n- The Strongest Tag-Team! Luffy and Toriko's Hard Struggle! (Episode 492)<br>\n- Team Formation! Save Chopper (Episode 542)<br>\n- History's Strongest Collaboration vs. Glutton of the Sea (Episode 590)<br>\n- 20th Anniversary! Special Romance Dawn (Episode 907)",
+      "aired_year": "1999",
+      "premiered": null,
+      "views": 2879,
+      "categories": [
+        {
+          "anime": 34,
+          "category": 132,
+          "category_name": "Super Power",
+          "category_name_val": "super-power"
+        },
+        {
+          "anime": 34,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 34,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 34,
+          "category": 122,
+          "category_name": "Comedy",
+          "category_name_val": "comedy"
+        },
+        {
+          "anime": 34,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 34,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 34,
+          "studio": 1,
+          "name": "Toei Animation",
+          "name_val": "toei-animation"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {
+        "name": "One Piece",
+        "day": "Sunday",
+        "date": "26 Mar",
+        "time": "12:30 AM",
+        "is_show": true
+      }
+    },
+    {
+      "id": 115,
+      "name": "Chainsaw Man",
+      "japanese_name": "Chainsaw Man",
+      "english_name": "Chainsaw Man",
+      "thumbnail": "/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg",
+      "image": "/media/https%3A/cdnimg.xyz/cover/chainsaw-man-1664388043.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/chainsaw-man-1664388043.png",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-FlochcFsyoF4.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/127230-o8IRwCGVr9KW.jpg",
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "C",
+      "active": true,
+      "episodes": "12",
+      "episodes_till_now": "12",
+      "rating_age": "86",
+      "duration": "25",
+      "description": "Denji is a teenage boy living with a Chainsaw Devil named Pochita. Due to the debt his father left behind, he has been living a rock-bottom life while repaying his debt by harvesting devil corpses with Pochita.<br><br>\nOne day, Denji is betrayed and killed. As his consciousness fades, he makes a contract with Pochita and gets revived as \"Chainsaw Man\" — a man with a devil's heart.<br>\n<br>\n(Source: Crunchyroll)",
+      "aired_year": "2022",
+      "premiered": "2022",
+      "views": 1093,
+      "categories": [
+        {
+          "anime": 115,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 115,
+          "category": 165,
+          "category_name": "Gore",
+          "category_name_val": "gore"
+        },
+        {
+          "anime": 115,
+          "category": 147,
+          "category_name": "Demons",
+          "category_name_val": "demons"
+        },
+        {
+          "anime": 115,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 115,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 115,
+          "studio": 53,
+          "name": "MAPPA",
+          "name_val": "mappa"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "top_10_data": [
+    {
+      "id": 34,
+      "name": "One Piece",
+      "japanese_name": "ONE PIECE",
+      "english_name": "ONE PIECE",
+      "thumbnail": "/media/thumbnails/one-piece-web.jpg",
+      "image": "/media/https%3A/cdnimg.xyz/images/anime/One-piece.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/anime/One-piece.jpg",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21-tXMN3Y20PIL9.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "O",
+      "active": true,
+      "episodes": "1053",
+      "episodes_till_now": "1054",
+      "rating_age": "87",
+      "duration": "24",
+      "description": "Gold Roger was known as the Pirate King, the strongest and most infamous being to have sailed the Grand Line. The capture and death of Roger by the World Government brought a change throughout the world. His last words before his death revealed the location of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece (which promises an unlimited amount of riches and fame), and quite possibly the most coveted of titles for the person who found it, the title of the Pirate King.<br><br>\nEnter Monkey D. Luffy, a 17-year-old boy that defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate who ransacks villages for fun, Luffy’s reason for being a pirate is one of pure wonder; the thought of an exciting adventure and meeting new and intriguing people, along with finding One Piece, are his reasons of becoming a pirate. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach One Piece.<br><br>\n<b>*This includes following special episodes:</b><br>\n- Chopperman to the Rescue! Protect the TV Station by the Shore! (Episode 336)<br>\n- The Strongest Tag-Team! Luffy and Toriko's Hard Struggle! (Episode 492)<br>\n- Team Formation! Save Chopper (Episode 542)<br>\n- History's Strongest Collaboration vs. Glutton of the Sea (Episode 590)<br>\n- 20th Anniversary! Special Romance Dawn (Episode 907)",
+      "aired_year": "1999",
+      "premiered": null,
+      "views": 2879,
+      "categories": [
+        {
+          "anime": 34,
+          "category": 132,
+          "category_name": "Super Power",
+          "category_name_val": "super-power"
+        },
+        {
+          "anime": 34,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 34,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 34,
+          "category": 122,
+          "category_name": "Comedy",
+          "category_name_val": "comedy"
+        },
+        {
+          "anime": 34,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 34,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 34,
+          "studio": 1,
+          "name": "Toei Animation",
+          "name_val": "toei-animation"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {
+        "name": "One Piece",
+        "day": "Sunday",
+        "date": "26 Mar",
+        "time": "12:30 AM",
+        "is_show": true
+      }
+    },
+    {
+      "id": 115,
+      "name": "Chainsaw Man",
+      "japanese_name": "Chainsaw Man",
+      "english_name": "Chainsaw Man",
+      "thumbnail": "/media/thumbnails/63fd43c52feed34e8aa90e4d0ce5cb2f_MPOypso.jpg",
+      "image": "/media/https%3A/cdnimg.xyz/cover/chainsaw-man-1664388043.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/chainsaw-man-1664388043.png",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-FlochcFsyoF4.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/127230-o8IRwCGVr9KW.jpg",
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "C",
+      "active": true,
+      "episodes": "12",
+      "episodes_till_now": "12",
+      "rating_age": "86",
+      "duration": "25",
+      "description": "Denji is a teenage boy living with a Chainsaw Devil named Pochita. Due to the debt his father left behind, he has been living a rock-bottom life while repaying his debt by harvesting devil corpses with Pochita.<br><br>\nOne day, Denji is betrayed and killed. As his consciousness fades, he makes a contract with Pochita and gets revived as \"Chainsaw Man\" — a man with a devil's heart.<br>\n<br>\n(Source: Crunchyroll)",
+      "aired_year": "2022",
+      "premiered": "2022",
+      "views": 1093,
+      "categories": [
+        {
+          "anime": 115,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 115,
+          "category": 165,
+          "category_name": "Gore",
+          "category_name_val": "gore"
+        },
+        {
+          "anime": 115,
+          "category": 147,
+          "category_name": "Demons",
+          "category_name_val": "demons"
+        },
+        {
+          "anime": 115,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 115,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 115,
+          "studio": 53,
+          "name": "MAPPA",
+          "name_val": "mappa"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "latest_movies_data": [
+    {
+      "id": 7189,
+      "name": "Shoka",
+      "japanese_name": "Shoka",
+      "english_name": null,
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/images/anime/S/Shoka.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/anime/S/Shoka.jpg",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/8337.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/8337.jpg",
+      "type": "S",
+      "anime_watch_type": "M",
+      "status": "C",
+      "active": true,
+      "episodes": "1",
+      "episodes_till_now": "1",
+      "rating_age": "53",
+      "duration": "24",
+      "description": "The story is set during the turbulent years of the shogunate, as dark forces try to undermine the shogun's power in Edo-era Tokyo. Shirou Sumiya is the leader of the \"Way of the Paper Drawing\" clan which captures the chaos of the struggles with rapid brush strokes. Sumiya is summoned to Edo, and his disciples, who have extraordinary powers in their secret drawing techniques, become part of the ensuring battles with giant drawn creatures.\n<br><br>\n(Source: Anime News Network)",
+      "aired_year": "2010",
+      "premiered": "2010",
+      "views": 3,
+      "categories": [
+        {
+          "anime": 7189,
+          "category": 151,
+          "category_name": "Historical",
+          "category_name_val": "historical"
+        },
+        {
+          "anime": 7189,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 7189,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 12367,
+      "name": "Arata naru Sekai: Mirai-hen",
+      "japanese_name": " アラタなるセカイ WORLD'S/START/LOAD/END",
+      "english_name": "Arata naru Sekai: World's/Start/Load/End",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/images/1.123.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/1.123.jpg",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/14373.jpg",
+      "banner": null,
+      "type": "S",
+      "anime_watch_type": "M",
+      "status": "C",
+      "active": true,
+      "episodes": "1",
+      "episodes_till_now": "1",
+      "rating_age": null,
+      "duration": null,
+      "description": " Arata-naru Sekai is a mixed-media project of Iruma Hitoma. He is not only writing the novel version, but also creating the story for the manga version, scripting the anime version, and penning the lyrics for the music.The story follows a time researcher and a group of children in a depopulated world that finds itself stuck in time. In order to save humanity, some of the characters are chosen to travel to the future (depicted in the anime), and others to the past (depicted in the manga), while those who are deemed unsuitable for the technology stay in the present (depicted in the novel)",
+      "aired_year": "2012",
+      "premiered": null,
+      "views": 3,
+      "categories": [
+        {
+          "anime": 12367,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "latest_special_data": [
+    {
+      "id": 10714,
+      "name": "Renmei Kuugun Koukuu Mahou Ongakutai Luminous Witches Recap",
+      "japanese_name": " 連盟空軍航空魔法音楽隊 ルミナスウィッチーズ 第1話~第6話総集編",
+      "english_name": "League of Nations Air Force Aviation Magic Band Luminous Witches Recap",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/renmei-kuugun-koukuu-mahou-ongakutai-luminous-witches-recap.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/renmei-kuugun-koukuu-mahou-ongakutai-luminous-witches-recap.png",
+      "ani_image": null,
+      "banner": null,
+      "type": "S",
+      "anime_watch_type": "SP",
+      "status": "C",
+      "active": true,
+      "episodes": "1",
+      "episodes_till_now": "1",
+      "rating_age": null,
+      "duration": null,
+      "description": "A commentary recap episode of the first 6 episodes.",
+      "aired_year": "2022",
+      "premiered": null,
+      "views": 4,
+      "categories": [
+        {
+          "anime": 10714,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 5032,
+      "name": "Queen’S Blade: Rurou No Senshi Ova",
+      "japanese_name": "クイーンズブレイド 流浪の戦士",
+      "english_name": "Queen’S Blade: Rurou No Senshi Ova",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/images/anime/Q/queens-blade-rurou-no-senshi.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/anime/Q/queens-blade-rurou-no-senshi.jpg",
+      "ani_image": null,
+      "banner": null,
+      "type": "S",
+      "anime_watch_type": "SP",
+      "status": "C",
+      "active": true,
+      "episodes": "6",
+      "episodes_till_now": "6",
+      "rating_age": null,
+      "duration": null,
+      "description": "In 4 years time the competition that will decide who the next Queen shall be will start. The strongest warrior will continue to rule the country according to tradition and expand it. The contestants need only be older than 12 years. They need not be human, intelligent or even of that country. The rules for the tournament are simple: murder is allowed. Any weapon can be chosen. The winner is decided when one of the participants flees or can’t move anymore. Such event is broadcasted trough a crystal sphere by the court’s magic teacher to all population to see and enjoy. ",
+      "aired_year": "2009",
+      "premiered": null,
+      "views": 33,
+      "categories": [
+        {
+          "anime": 5032,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 5032,
+          "category": 148,
+          "category_name": "Ecchi",
+          "category_name_val": "ecchi"
+        },
+        {
+          "anime": 5032,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 5032,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "latest_onas_data": [
+    {
+      "id": 10675,
+      "name": "Miru Tights",
+      "japanese_name": "みるタイツ",
+      "english_name": "Miru Tights",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/miru-tights.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/miru-tights.png",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx106967-hG1SSeB44Ve5.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/106967-u8AEDAZgtWXX.jpg",
+      "type": "S",
+      "anime_watch_type": "ON",
+      "status": "C",
+      "active": true,
+      "episodes": "12",
+      "episodes_till_now": "12",
+      "rating_age": null,
+      "duration": null,
+      "description": "A rainy morning in April. Cherry blossoms are struck by the rain and floats in the puddle. High school students enter the school gate, carrying various colors of umbrellas.\"Good morning, Ren,\" Yua greeted Ren, wearing wet tights in front of the shoe cupboard. When Ren faced her glumly, Homi, who was drenched, joined them as if she is jumping. The girls discuss the new semester.The girls live their irreplaceable school life as the seasons change.",
+      "aired_year": "2019",
+      "premiered": null,
+      "views": 30,
+      "categories": [
+        {
+          "anime": 10675,
+          "category": 125,
+          "category_name": "School",
+          "category_name_val": "school"
+        },
+        {
+          "anime": 10675,
+          "category": 148,
+          "category_name": "Ecchi",
+          "category_name_val": "ecchi"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 12648,
+      "name": "Already Invincible at the Beginning",
+      "japanese_name": " Off to an Invincible Start",
+      "english_name": "Off to an Invincible Start",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/already-invincible-at-the-beginning.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/already-invincible-at-the-beginning.png",
+      "ani_image": null,
+      "banner": null,
+      "type": "S",
+      "anime_watch_type": "ON",
+      "status": "O",
+      "active": true,
+      "episodes": null,
+      "episodes_till_now": "11",
+      "rating_age": null,
+      "duration": null,
+      "description": "“Ding! The host has activated the Field of Invincibility! You will be unbeatable as long as you remain within the field!” A shut-in by the name of Chen Chang’an was transported into a fantasy world, and he swore not to leave the Field of Invincibility until he became an immortal after being endlessly pursued by countless demons and monsters. In the meantime, while he was bored, he took in a few cute and adorable disciples. He accidentally turned them into big shots of the cultivation world and turned it upside down.",
+      "aired_year": "2023",
+      "premiered": null,
+      "views": 44,
+      "categories": [
+        {
+          "anime": 12648,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 12648,
+          "category": 152,
+          "category_name": "Martial Arts",
+          "category_name_val": "martial-arts"
+        },
+        {
+          "anime": 12648,
+          "category": 123,
+          "category_name": "Harem",
+          "category_name_val": "harem"
+        },
+        {
+          "anime": 12648,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 12648,
+          "category": 140,
+          "category_name": "Drama",
+          "category_name_val": "drama"
+        },
+        {
+          "anime": 12648,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 12648,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "latest_ovas_data": [
+    {
+      "id": 8864,
+      "name": "Dirty Pair Ova (Dub)",
+      "japanese_name": "Dirty Pair (OVA)",
+      "english_name": null,
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/dirty-pair-ova-dub.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/dirty-pair-ova-dub.png",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx4200-9x7l994VJk2N.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/n4200-8AVzxiWXzKxE.jpg",
+      "type": "D",
+      "anime_watch_type": "OV",
+      "status": "C",
+      "active": true,
+      "episodes": "10",
+      "episodes_till_now": "10",
+      "rating_age": "67",
+      "duration": "25",
+      "description": "Set in the future Kei and Yuri are Trouble Consultants for The 3WA. Code Named \"Lovely Angels\", but, they are known throughout the galaxy as The Dirty Pair. They always solve their case, but, not without causing collateral damage and mayhem.\n<br><br>\n(Source: Anime News Network)",
+      "aired_year": "1987",
+      "premiered": "1988",
+      "views": 21,
+      "categories": [
+        {
+          "anime": 8864,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        },
+        {
+          "anime": 8864,
+          "category": 136,
+          "category_name": "Police",
+          "category_name_val": "police"
+        },
+        {
+          "anime": 8864,
+          "category": 122,
+          "category_name": "Comedy",
+          "category_name_val": "comedy"
+        },
+        {
+          "anime": 8864,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 8864,
+          "studio": 64,
+          "name": "Sunrise",
+          "name_val": "sunrise"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 3152,
+      "name": "Bakuretsu Hunters Ova",
+      "japanese_name": "Ganso Bakuretsu Hunters",
+      "english_name": "Sorcerer Hunters OVA - Chocolate Springs & Other Hot Things!",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/bakuretsu-hunters-ova.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/bakuretsu-hunters-ova.png",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/808.jpg",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/808.jpg",
+      "type": "S",
+      "anime_watch_type": "OV",
+      "status": "C",
+      "active": true,
+      "episodes": "3",
+      "episodes_till_now": "3",
+      "rating_age": "57",
+      "duration": "30",
+      "description": "Take two gorgeous women with whips, add a magician and a body builder, tie it all together with an amorous young man willing to put the moves on anything that moves, and what do you get? Simple: the funniest, sexiest adventure series around! That's right, Chocolate, Tira, Carrot and the rest of the cast of Sorcerer Hunters are back in three titillating episodes.<br>\n<br>\nWhen Carrot tries to seduce a lovely older woman (while Chocolate is trying to seduce Carrot), a steamy hot springs vacation gets steamier... and funnier. Then our heroes leap into battle with the Death Master, an evil necromancer who's transformed an entire town into his willing zombie slaves! Finally, an ancient tree with legendary romantic powers turns a relaxing picnic into a love-crazed free-for-all! Can even the Sorcerer Hunters handle this kind of heat?<br>\n<br>\n(Source: ADV Films)",
+      "aired_year": "1996",
+      "premiered": "1997",
+      "views": 13,
+      "categories": [
+        {
+          "anime": 3152,
+          "category": 132,
+          "category_name": "Super Power",
+          "category_name_val": "super-power"
+        },
+        {
+          "anime": 3152,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 3152,
+          "category": 146,
+          "category_name": "Magic",
+          "category_name_val": "magic"
+        },
+        {
+          "anime": 3152,
+          "category": 123,
+          "category_name": "Harem",
+          "category_name_val": "harem"
+        },
+        {
+          "anime": 3152,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 3152,
+          "category": 148,
+          "category_name": "Ecchi",
+          "category_name_val": "ecchi"
+        },
+        {
+          "anime": 3152,
+          "category": 122,
+          "category_name": "Comedy",
+          "category_name_val": "comedy"
+        },
+        {
+          "anime": 3152,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 3152,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [
+        {
+          "anime": 3152,
+          "studio": 322,
+          "name": "Xebec",
+          "name_val": "xebec"
+        }
+      ],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "recently_added_sub_data": [
+    {
+      "id": 11449,
+      "name": "Fist of the North Star",
+      "japanese_name": " 北斗の拳",
+      "english_name": "Seikimatsu Kyuseishu Densetsu: Hokuto no Ken",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/images/anime/F/fist-of-the-north-star.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/anime/F/fist-of-the-north-star.jpg",
+      "ani_image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/n967-84jNBaInec98.png",
+      "banner": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/n967-3NFZ7XmuHhGf.jpg",
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "C",
+      "active": true,
+      "episodes": "152",
+      "episodes_till_now": "152",
+      "rating_age": null,
+      "duration": null,
+      "description": "In a post-nuclear future, human race has made many steps. Normal people have become slaves, while genetically modified giants rule the world. Gunpowder is a distant memory and martial arts is the only weapon a man can count on. Two schools face each other in the battle for dominion: Hokuto and Nanto. Kenshiro is the rightful successor of Hokuto school, while Shin is Nanto’s. Shin stole Ken’s girlfriend Julia and Ken is looking for her.Kenshiro travels the barren wasterland of post-apocalyptic Earth as seeks to rescue Julia. As the series progresses, we are introduced to the six Grand Masters of the Nanto Seiken school, as well as Kenshiro’s three adoptive brothers, also trained in the art of Hokuto Shinken. Eventually, Kenshiro’s ultimate rival becomes none other than his eldest brother, Raoh, a would-be conqueror who does not recognize Kenshiro as a worthy succcessor.",
+      "aired_year": "1984",
+      "premiered": null,
+      "views": 171,
+      "categories": [
+        {
+          "anime": 11449,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 11449,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        },
+        {
+          "anime": 11449,
+          "category": 152,
+          "category_name": "Martial Arts",
+          "category_name_val": "martial-arts"
+        },
+        {
+          "anime": 11449,
+          "category": 140,
+          "category_name": "Drama",
+          "category_name_val": "drama"
+        },
+        {
+          "anime": 11449,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 11447,
+      "name": "Shingeki no Kyojin Specials",
+      "japanese_name": " 「進撃の巨人」ちみキャラ劇場\"とんでけ! 訓練兵団\"",
+      "english_name": "Shingeki no Kyojin Picture Drama",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/images/shingeki-no-kyojin-specials.jpg",
+      "image_high_quality": "https://cdnimg.xyz/images/shingeki-no-kyojin-specials.jpg",
+      "ani_image": null,
+      "banner": null,
+      "type": "S",
+      "anime_watch_type": "S",
+      "status": "C",
+      "active": true,
+      "episodes": "8",
+      "episodes_till_now": "6",
+      "rating_age": null,
+      "duration": null,
+      "description": "Shingeki no Kyojin: Chimi Kyara Gekijou – Tondeke! Kunren Heidan Specials included in BD/DVD.",
+      "aired_year": "2013",
+      "premiered": null,
+      "views": 32,
+      "categories": [
+        {
+          "anime": 11447,
+          "category": 132,
+          "category_name": "Super Power",
+          "category_name_val": "super-power"
+        },
+        {
+          "anime": 11447,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 11447,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 11447,
+          "category": 140,
+          "category_name": "Drama",
+          "category_name_val": "drama"
+        },
+        {
+          "anime": 11447,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ],
+  "recently_added_dub_data": [
+    {
+      "id": 12804,
+      "name": "NieR:Automata Ver1.1a (Dub)",
+      "japanese_name": "",
+      "english_name": "NieR:Automata Ver1.1a (Dub)",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/nierautomata-ver1-1a-dub.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/nierautomata-ver1-1a-dub.png",
+      "ani_image": null,
+      "banner": null,
+      "type": "D",
+      "anime_watch_type": "S",
+      "status": "O",
+      "active": true,
+      "episodes": null,
+      "episodes_till_now": "1",
+      "rating_age": null,
+      "duration": null,
+      "description": "In a post-apocalyptic world overrun by alien-crafted \"Machine Lifeforms,\" humanity is preparing for its last stand. Forced to retreat to the Moon for safety, humans are pinning their hopes on a group of man-made androids known as YoRHa soldiers. Led by the all-purpose battle android YoRHa 2-gou B-gata \"2B,\" the group will fight to take control of the Earth back from its invaders.As war against the machines rages on, the YoRHa slowly begin to see the first shards of truth underlying the brutal conflict. Facing the harsh reality before her, the unwavering warrior 2B starts to question her very existence and just how much she must sacrifice for the sake of humanity.",
+      "aired_year": "2023",
+      "premiered": null,
+      "views": null,
+      "categories": [
+        {
+          "anime": 12804,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        },
+        {
+          "anime": 12804,
+          "category": 128,
+          "category_name": "Fantasy",
+          "category_name_val": "fantasy"
+        },
+        {
+          "anime": 12804,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    },
+    {
+      "id": 12795,
+      "name": "Cyborg 009: Call of Justice 2 (Dub)",
+      "japanese_name": "",
+      "english_name": "Cyborg 009: Call of Justice 2 (Dub)",
+      "thumbnail": null,
+      "image": "/media/https%3A/cdnimg.xyz/cover/cyborg-009-call-of-justice-2-dub.png",
+      "image_high_quality": "https://cdnimg.xyz/cover/cyborg-009-call-of-justice-2-dub.png",
+      "ani_image": null,
+      "banner": null,
+      "type": "D",
+      "anime_watch_type": "M",
+      "status": "C",
+      "active": true,
+      "episodes": "4",
+      "episodes_till_now": "4",
+      "rating_age": null,
+      "duration": null,
+      "description": "The story will depict Joe Shimamura and the other cyborgs' struggle with the Bresudo, a group of people who possess superhuman powers and intellect, and have manipulated human history since ancient times. Their goals are unknown, and they cast a dark shadow over the world. Though few people believe in the Bresdo's existence, one American journalist named Lucie Davenport heads to Texas to contact a certain family, and she meets the cyborgs. The cyborgs themselves have been freed from their duty of protecting humanity ever since the establishment of the UN Guardian troops, and they now live quiet lives of peace.",
+      "aired_year": "2016",
+      "premiered": null,
+      "views": null,
+      "categories": [
+        {
+          "anime": 12795,
+          "category": 131,
+          "category_name": "Shounen",
+          "category_name_val": "shounen"
+        },
+        {
+          "anime": 12795,
+          "category": 138,
+          "category_name": "Sci-Fi",
+          "category_name_val": "scifi"
+        },
+        {
+          "anime": 12795,
+          "category": 135,
+          "category_name": "Mecha",
+          "category_name_val": "mecha"
+        },
+        {
+          "anime": 12795,
+          "category": 149,
+          "category_name": "Adventure",
+          "category_name_val": "adventure"
+        },
+        {
+          "anime": 12795,
+          "category": 127,
+          "category_name": "Action",
+          "category_name_val": "action"
+        }
+      ],
+      "studios": [],
+      "producers": [],
+      "schedule_ep": {}
+    }
+  ]
+}

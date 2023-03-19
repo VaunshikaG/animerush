@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../CommonStyle.dart';
-import '../theme.dart';
+import '../utils/CommonStyle.dart';
+import '../utils/theme.dart';
 import '../widgets/CustomScreenRoute.dart';
 import 'Details.dart';
 
@@ -63,10 +63,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 275),
       vsync: this,
     );
-    _animation = Tween(begin: 1.0, end: 1.2)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
-    padding = Tween(begin: 0.0, end: -25.0)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.ease,reverseCurve: Curves.easeIn));
+    _animation = Tween(begin: 1.0, end: 1.2).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
+    padding = Tween(begin: 0.0, end: -25.0).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.ease, reverseCurve: Curves.easeIn));
     _controller.addListener(() {
       setState(() {});
     });
@@ -158,7 +158,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            // margin: const EdgeInsets.symmetric(horizontal: 10),
             child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (overscroll) {
                 overscroll.disallowGlow();
@@ -172,27 +172,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       child: Row(
                         children: [
                           Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width / 1.092,
-                            margin: const EdgeInsets.only(right: 5),
+                            width: MediaQuery.of(context).size.width,
+                            // width: MediaQuery.of(context).size.width / 1.092,
+                            // margin: const EdgeInsets.only(right: 5),
                             child: CarouselSlider.builder(
                               itemCount: images.length,
                               itemBuilder:
                                   (BuildContext context, int index, _) {
                                 return Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
+                                  width: MediaQuery.of(context).size.width,
                                   padding: EdgeInsets.zero,
                                   decoration: BoxDecoration(
                                     color: (index % 2 == 0)
                                         ? CustomTheme.grey1
                                         : Colors.white.withOpacity(0.0),
-                                    borderRadius: BorderRadius.circular(
-                                        10),
+                                    // borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(
                                       image: NetworkImage(
                                         images[index],
@@ -204,69 +198,60 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 10),
                                     decoration: BoxDecoration(
-                                      color: Colors.white24.withOpacity(
-                                          0.5),
-                                      borderRadius: BorderRadius
-                                          .circular(10),
+                                      color: Colors.white24.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(10),
                                       gradient: LinearGradient(
                                         begin: Alignment.centerLeft,
                                         end: Alignment.centerRight,
                                         tileMode: TileMode.mirror,
                                         colors: (index % 2 == 0)
                                             ? [
-                                          Colors.black87,
-                                          Colors.black54,
-                                          Colors.black38,
-                                          Colors.black12,
-                                          Colors.black12,
-                                        ]
+                                                Colors.black87,
+                                                Colors.black54,
+                                                Colors.black38,
+                                                Colors.black12,
+                                                Colors.black12,
+                                              ]
                                             : [
-                                          Colors.white38,
-                                          Colors.white10,
-                                          CustomTheme.transparent,
-                                          CustomTheme.transparent,
-                                        ],
+                                                Colors.white38,
+                                                Colors.white10,
+                                                CustomTheme.transparent,
+                                                CustomTheme.transparent,
+                                              ],
                                       ),
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .end,
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Container(
                                           margin:
-                                          const EdgeInsets.only(
-                                              bottom: 10),
+                                              const EdgeInsets.only(bottom: 10),
                                           child: Text(
                                             "#${index + 1} Spotlight",
                                             style: TextStyle(
                                               color: (index % 2 == 0)
                                                   ? CustomTheme.white
-                                                  : CustomTheme
-                                                  .themeColor2,
+                                                  : CustomTheme.themeColor2,
                                               // color: CustomTheme.themeColor2,
                                               fontSize: 12,
-                                              fontWeight: FontWeight
-                                                  .bold,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
                                         Container(
                                           margin:
-                                          const EdgeInsets.only(
-                                              bottom: 20),
+                                              const EdgeInsets.only(bottom: 20),
                                           child: Text(
                                             title[index],
                                             style: TextStyle(
                                               color: (index % 2 == 0)
                                                   ? CustomTheme.white
-                                                  : CustomTheme
-                                                  .themeColor2,
+                                                  : CustomTheme.themeColor2,
                                               // color: CustomTheme.themeColor2,
                                               fontSize: 15,
-                                              fontWeight: FontWeight
-                                                  .bold,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
@@ -281,21 +266,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       title: title[index],
                                                       img: images[index],
                                                     ),
-                                                    direction: AxisDirection
-                                                        .up,
+                                                    direction: AxisDirection.up,
                                                   ));
                                             },
                                             color: CustomTheme.grey3,
-                                            padding: const EdgeInsets
-                                                .symmetric(
-                                                vertical: 0,
-                                                horizontal: 10),
-                                            disabledColor: CustomTheme
-                                                .white,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 10),
+                                            disabledColor: CustomTheme.white,
                                             pressedOpacity: 0.6,
                                             borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(5)),
+                                                const BorderRadius.all(
+                                                    Radius.circular(5)),
                                             child: SizedBox(
                                               width: 55,
                                               child: Row(
@@ -304,19 +285,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                     CupertinoIcons
                                                         .info_circle_fill,
                                                     size: 14,
-                                                    color: CustomTheme
-                                                        .white,
+                                                    color: CustomTheme.white,
                                                   ),
-                                                  const SizedBox(
-                                                      width: 5),
+                                                  const SizedBox(width: 5),
                                                   Text(
                                                     "Details",
                                                     style: TextStyle(
-                                                      color: CustomTheme
-                                                          .white,
+                                                      color: CustomTheme.white,
                                                       fontSize: 12,
-                                                      fontWeight: FontWeight
-                                                          .bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontFamily: "Quicksand",
                                                     ),
                                                   ),
@@ -337,22 +315,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       title: title[index],
                                                       img: images[index],
                                                     ),
-                                                    direction: AxisDirection
-                                                        .up,
+                                                    direction: AxisDirection.up,
                                                   ));
                                             },
-                                            color: CustomTheme
-                                                .themeColor1,
-                                            padding: const EdgeInsets
-                                                .symmetric(
-                                                vertical: 0,
-                                                horizontal: 10),
-                                            disabledColor: CustomTheme
-                                                .white,
+                                            color: CustomTheme.themeColor1,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 10),
+                                            disabledColor: CustomTheme.white,
                                             pressedOpacity: 0.6,
                                             borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(5)),
+                                                const BorderRadius.all(
+                                                    Radius.circular(5)),
                                             child: SizedBox(
                                               width: 90,
                                               child: Row(
@@ -362,19 +335,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                         .play_circle_fill,
                                                     size: 15,
                                                     color:
-                                                    CustomTheme
-                                                        .themeColor2,
+                                                        CustomTheme.themeColor2,
                                                   ),
-                                                  const SizedBox(
-                                                      width: 5),
+                                                  const SizedBox(width: 5),
                                                   Text(
                                                     "Watch Now",
                                                     style: TextStyle(
                                                       color: CustomTheme
                                                           .themeColor2,
                                                       fontSize: 13,
-                                                      fontWeight: FontWeight
-                                                          .bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontFamily: "Quicksand",
                                                     ),
                                                   ),
@@ -397,27 +368,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 pageSnapping: true,
                                 enlargeCenterPage: true,
                                 enableInfiniteScroll: true,
-                                aspectRatio: 12 / 12,
+                                aspectRatio: 16 / 9,
                                 autoPlayCurve: Curves.fastOutSlowIn,
                                 autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                                viewportFraction: 0.9,
+                                    const Duration(milliseconds: 800),
+                                viewportFraction: 1.0,
                               ),
                             ),
                           ),
-                          AnimatedSmoothIndicator(
-                            curve: Curves.easeInOut,
-                            activeIndex: activeindex,
-                            axisDirection: Axis.vertical,
-                            count: images.length,
-                            effect: ExpandingDotsEffect(
-                              dotHeight: 8,
-                              dotWidth: 15,
-                              activeDotColor: CustomTheme.themeColor1,
-                              dotColor: CustomTheme.grey2,
-                            ),
-                          ),
                         ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      alignment: Alignment.center,
+                      child: AnimatedSmoothIndicator(
+                        curve: Curves.easeInOut,
+                        activeIndex: activeindex,
+                        axisDirection: Axis.horizontal,
+                        count: images.length,
+                        effect: ExpandingDotsEffect(
+                          dotHeight: 8,
+                          dotWidth: 15,
+                          activeDotColor: CustomTheme.themeColor1,
+                          dotColor: CustomTheme.grey2,
+                        ),
                       ),
                     ),
 
@@ -456,10 +431,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   ));
                             },
                             child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 0),
                               height: 150,
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.all(
@@ -467,8 +441,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
                                     height: 180,
@@ -478,8 +451,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     margin: EdgeInsets.zero,
                                     color: CustomTheme.grey1,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         RichText(
                                           text: TextSpan(
@@ -493,14 +466,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       title[index],
                                                       softWrap: true,
                                                       overflow:
-                                                      TextOverflow
-                                                          .ellipsis,
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
-                                                        color: CustomTheme
-                                                            .white,
+                                                        color:
+                                                            CustomTheme.white,
                                                         fontSize: 12,
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                       ),
                                                     ),
                                                   ),
@@ -513,8 +485,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                         Text(
                                           (index + 1).toString(),
                                           style: TextStyle(
-                                            color: CustomTheme
-                                                .themeColor1,
+                                            color: CustomTheme.themeColor1,
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -652,8 +623,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -710,8 +680,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                             dense: true,
-                            tileColor: (index % 2 == 0) ? CustomTheme
-                                .grey1 : CustomTheme.grey2,
+                            tileColor: (index % 2 == 0)
+                                ? CustomTheme.grey1
+                                : CustomTheme.grey2,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                           );
@@ -735,8 +706,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -793,8 +763,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                             dense: true,
-                            tileColor: (index % 2 == 0) ? CustomTheme
-                                .grey1 : CustomTheme.grey2,
+                            tileColor: (index % 2 == 0)
+                                ? CustomTheme.grey1
+                                : CustomTheme.grey2,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                           );
@@ -818,8 +789,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       ),
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -876,8 +846,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               ),
                             ),
                             dense: true,
-                            tileColor: (index % 2 == 0) ? CustomTheme
-                                .grey1 : CustomTheme.grey2,
+                            tileColor: (index % 2 == 0)
+                                ? CustomTheme.grey1
+                                : CustomTheme.grey2,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                           );
@@ -896,5 +867,4 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       },
     );
   }
-
 }

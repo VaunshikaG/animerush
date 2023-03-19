@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import '../theme.dart';
+import '../utils/theme.dart';
 import 'Home.dart';
 import 'HomeDrawer.dart';
 import 'Search.dart';

@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../utils/theme.dart';
 import '../widgets/CustomCard.dart';
 
 class Account extends StatefulWidget {

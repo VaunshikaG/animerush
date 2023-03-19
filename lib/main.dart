@@ -5,7 +5,7 @@ import 'package:animerush/screens/BottomBar.dart';
 import 'package:animerush/screens/Details.dart';
 import 'package:animerush/screens/HomeDrawer.dart';
 import 'package:animerush/screens/Player.dart';
-import 'package:animerush/theme.dart';
+import 'package:animerush/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Anime Rush',
       debugShowCheckedModeBanner: false,
+      color: CustomTheme.themeColor2,
       theme: ThemeData(
         useMaterial3: true,
         // colorScheme: const ColorScheme.dark(),

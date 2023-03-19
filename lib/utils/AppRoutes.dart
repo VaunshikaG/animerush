@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 class AppRoutes {
   static const String splashScreen = '/splash_screen';
@@ -10,3 +10,5 @@ class AppRoutes {
   };
 
 }
+
+// Navigator.pushNamed(context, AppRoutes.splashScreen);
