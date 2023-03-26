@@ -26,68 +26,63 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.transparent,
-        body: SafeArea(
-          maintainBottomViewPadding: true,
-          minimum: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (overscroll) {
-              overscroll.disallowGlow();
-              return false;
-            },
-            child: SingleChildScrollView(
-              controller: scrollController,
-              physics: ClampingScrollPhysics(),
-              child: Column(
-                children: [
-                  Container(
-                    height: 50,
-                    margin: const EdgeInsets.symmetric(vertical: 15),
-                    width: MediaQuery.of(context).size.width,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      onChanged: (text) {},
-                      style: TextStyle(fontSize: 16, color: CustomTheme.white),
-                      decoration: InputDecoration(
-                        suffixIcon: Icon(
-                          CupertinoIcons.search,
-                          size: 26,
-                          color: CustomTheme.white,
-                        ),
-                        hintText: 'Search',
-                        hintStyle: TextStyle(fontSize: 16, color: CustomTheme.white),
-                        filled: true,
-                        fillColor: Colors.white24,
-                        contentPadding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: CustomTheme.transparent,
+      body: SafeArea(
+        maintainBottomViewPadding: true,
+        minimum: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overscroll) {
+            overscroll.disallowGlow();
+            return false;
+          },
+          child: SingleChildScrollView(
+            controller: scrollController,
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                Container(
+                  height: 50,
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  width: MediaQuery.of(context).size.width,
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    onChanged: (text) {},
+                    style: TextStyle(fontSize: 16, color: CustomTheme.white),
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        CupertinoIcons.search,
+                        size: 26,
+                        color: CustomTheme.white,
+                      ),
+                      hintText: 'Search',
+                      hintStyle: TextStyle(fontSize: 16, color: CustomTheme.white),
+                      filled: true,
+                      fillColor: CustomTheme.white24,
+                      contentPadding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: CustomTheme.transparent),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: CustomTheme.transparent),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide(color: CustomTheme.transparent),
                       ),
                     ),
                   ),
-                  _tabSection(context),
-                ],
-              ),
+                ),
+                _tabSection(context),
+              ],
             ),
           ),
         ),
       ),
-      onWillPop: () async {
-        return false;
-      },
     );
   }
 

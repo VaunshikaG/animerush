@@ -1,29 +1,50 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 import 'package:animerush/screens/Episode.dart';
+import 'package:animerush/utils/Constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rich_text_view/rich_text_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../podo/DetailsPodo.dart';
+import '../utils/ApiService.dart';
 import '../utils/CommonStyle.dart';
+import '../utils/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomScreenRoute.dart';
 
 class Details extends StatefulWidget {
-  final String title;
-  final String img;
+  final String id;
 
-  const Details({Key? key, required this.title, required this.img})
+  const Details({Key? key, required this.id})
       : super(key: key);
 
   @override
   State<Details> createState() => _DetailsState();
 }
 
-class _DetailsState extends State<Details> with TickerProviderStateMixin {
+class _DetailsState extends State<Details>{
   ScrollController scrollController = ScrollController();
-  late TabController _tabController;
+
+  bool noData = false, showNextEp = false;
+  var apiStatus,
+      animeType,
+      year,
+      status,
+      img,
+      name,
+      desc,
+      id,
+      lang,
+      duration,
+      ep,
+      views,
+      studio,
+      otherName,
+      nextEp;
 
   List<String> options = [
     "Share",
@@ -39,21 +60,15 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
   List<String> detailTitle = [
     "Other names",
     "Language",
+    "Duration",
     "Episodes",
     "Views",
     "Release Year",
     "Type",
     "Status",
+    "Studios",
   ];
-  List<String> details = [
-    "チェンソーマン",
-    "Subbed",
-    "12",
-    "91",
-    "2022",
-    "TV Series",
-    "Complected",
-  ];
+  List<String> details = [];
 
   List<String> title = [
     "One Piece",
@@ -95,33 +110,25 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
   @override
   void initState() {
     log(runtimeType.toString());
-    _tabController = TabController(vsync:this, length: 2);
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 1000), vsync: this);
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: animationController!,
-        curve: const Interval(0, 1.0, curve: Curves.fastOutSlowIn)));
-    setData();
+    detailsApiCall();
     super.initState();
+    apiStatus = "-";
+    animeType = "-";
+    year = "-";
+    status = "-";
+    img = "-";
+    name = "-";
+    desc = "-";
+    id = "-";
+    lang = "-";
+    duration = "-";
+    ep = "-";
+    views = "-";
+    studio = "-";
+    otherName = "-";
   }
 
   var top = 0.0;
-  AnimationController? animationController;
-  Animation<double>? animation;
-  double opacity1 = 0.0;
-  double opacity2 = 0.0;
-
-  Future<void> setData() async {
-    animationController?.forward();
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    setState(() {
-      opacity1 = 1.0;
-    });
-    await Future<dynamic>.delayed(const Duration(milliseconds: 300));
-    setState(() {
-      opacity2 = 1.0;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,163 +149,234 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
               child: CustomScrollView(
                 slivers: [
                   CustomAppBar(
-                    title: widget.title,
-                    img: widget.img,
+                    title: name,
+                    img: img,
                     backBtn: () {
                       Navigator.of(context).pop();
                     },
                     wishlist: () {},
                   ),
                   SliverToBoxAdapter(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                      margin: const EdgeInsets.only(bottom: 100),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //  title
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              "Chainsaw Man",
-                              softWrap: true,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: CustomTheme.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              "HD  •  Complected  •  TV Series",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: CustomTheme.white,
-                              ),
-                            ),
-                          ),
-
-                          //  desc
-                          RichTextView(
-                            text:
-                            "Denji has a simple dream—to live a happy and peaceful life, spending time with a girl he likes. This is a far cry from reality, however, as Denji is forced by the yakuza into killing devils in order to pay off his crushing debts. Using his pet devil Pochita as a weapon, he is ready to do anything for a bit of cash.Unfortunately, he has outlived his usefulness and is murdered by a devil in contract with the yakuza. However, in an unexpected turn of events, Pochita merges with Denji's dead body and grants him the powers of a chainsaw devil. Now able to transform parts of his body into chainsaws, a revived Denji uses his new abilities to quickly and brutally dispatch his enemies. Catching the eye of the official devil hunters who arrive at the scene, he is offered work at the Public Safety Bureau as one of them. Now with the means to face even the toughest of enemies, Denji will stop at nothing to achieve his simple teenage dreams.",
-                            maxLines: 4,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: CustomTheme.white,
-                              fontFamily: "Quicksand",
-                            ),
-                            truncate: true,
-                            viewLessText: 'less',
-                            linkStyle: TextStyle(
-                              fontSize: 13,
-                              color: CustomTheme.blue,
-                              fontFamily: "Quicksand",
-                            ),
-                            supportedTypes: const [],
-                          ),
-
-                          //  btns
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
+                    child: (apiStatus == 200)
+                        ? Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 15),
+                            margin: const EdgeInsets.only(bottom: 100),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                ActionChip(
-                                  elevation: 3,
-                                  padding: const EdgeInsets.all(2),
-                                  avatar: CircleAvatar(
-                                    backgroundColor: CustomTheme.themeColor1,
-                                    child: Icon(
-                                      CupertinoIcons.play_circle,
-                                      color: CustomTheme.themeColor2,
-                                      size: 20,
+                                //  title
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    name,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: CustomTheme.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  label: const Text('Watch Now'),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        CustomScreenRoute(
-                                          child: Episode(title: widget.title),
-                                          direction: AxisDirection
-                                              .up,
-                                        ));
-                                  },
-                                  backgroundColor: CustomTheme.themeColor1,
-                                  shape: const StadiumBorder(),
-                                  side: BorderSide.none,
                                 ),
-                                const SizedBox(width: 15),
-                                ActionChip(
-                                  elevation: 3,
-                                  padding: const EdgeInsets.all(2),
-                                  avatar: CircleAvatar(
-                                    backgroundColor: CustomTheme.themeColor1,
-                                    child: Icon(
-                                      Icons.bookmark_add_outlined,
-                                      color: CustomTheme.themeColor2,
-                                      size: 20,
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: Text(
+                                    "HD   •   $status   •   $animeType",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: CustomTheme.white,
                                     ),
                                   ),
-                                  label: const Text('Watchlist'),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        CustomScreenRoute(
-                                          child: Episode(title: widget.title),
-                                          direction: AxisDirection
-                                              .up,
-                                        ));
-                                  },
-                                  backgroundColor: CustomTheme.themeColor1,
-                                  shape: const StadiumBorder(),
-                                  side: BorderSide.none,
                                 ),
+
+                                //  desc
+                                RichTextView(
+                                  text: desc,
+                                  maxLines: 4,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: CustomTheme.white,
+                                    fontFamily: AppConst.FONT,
+                                  ),
+                                  truncate: true,
+                                  viewLessText: 'less',
+                                  linkStyle: TextStyle(
+                                    fontSize: 13,
+                                    color: CustomTheme.blue,
+                                    fontFamily: AppConst.FONT,
+                                  ),
+                                  supportedTypes: const [],
+                                ),
+
+                                //  btns
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      ActionChip(
+                                        elevation: 3,
+                                        padding: const EdgeInsets.all(2),
+                                        avatar: CircleAvatar(
+                                          backgroundColor:
+                                              CustomTheme.themeColor1,
+                                          child: Icon(
+                                            CupertinoIcons.play_circle,
+                                            color: CustomTheme.themeColor2,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        label: const Text('Watch Now'),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              CustomScreenRoute(
+                                                child: Episode(epDetails: epDetails),
+                                                direction: AxisDirection.up,
+                                              ));
+                                        },
+                                        backgroundColor:
+                                            CustomTheme.themeColor1,
+                                        shape: const StadiumBorder(),
+                                        side: BorderSide.none,
+                                      ),
+                                      const SizedBox(width: 15),
+                                      ActionChip(
+                                        elevation: 3,
+                                        padding: const EdgeInsets.all(2),
+                                        avatar: CircleAvatar(
+                                          backgroundColor:
+                                              CustomTheme.themeColor1,
+                                          child: Icon(
+                                            Icons.bookmark_add_outlined,
+                                            color: CustomTheme.themeColor2,
+                                            size: 20,
+                                          ),
+                                        ),
+                                        label: const Text('Watchlist'),
+                                        onPressed: () {
+                                          // Navigator.push(
+                                          //     context,
+                                          //     CustomScreenRoute(
+                                          //       child: Episode(
+                                          //         id: id,
+                                          //         epDetails: epDetails,
+                                          //       ),
+                                          //       direction: AxisDirection.up,
+                                          //     ));
+                                        },
+                                        backgroundColor:
+                                            CustomTheme.themeColor1,
+                                        shape: const StadiumBorder(),
+                                        side: BorderSide.none,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                Visibility(
+                                  visible: showNextEp,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric
+                                      (vertical: 10),
+                                    child: ListTile(
+                                      leading: Image.asset(
+                                        "assets/img/rocket.png",
+                                        height: 30,
+                                      ),
+                                      title: Text(
+                                        "Estimated the next episode will come at $nextEp",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          fontSize: 13.5,
+                                          color: CustomTheme.white,
+                                        ),
+                                      ),
+                                      minLeadingWidth: 0,
+                                      trailing: IconButton(
+                                        onPressed: () => setState(() => showNextEp = false),
+                                        icon: Icon(
+                                          CupertinoIcons.clear,
+                                          size: 14,
+                                          color: CustomTheme.white,
+                                        ),
+                                      ),
+                                      tileColor: CustomTheme.blue,
+                                      contentPadding: EdgeInsets.only(left: 10),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      dense: true,
+                                    ),
+                                  ),
+                                ),
+
+                                // info
+                                ListView.builder(
+                                  itemCount: detailTitle.length,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  physics: const ClampingScrollPhysics(),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 6, 15, 6),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return customText(
+                                      text1: detailTitle[index],
+                                      text2: details[index],
+                                    );
+                                  },
+                                ),
+
+                                // similar list
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 15, bottom: 10),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Similar Anime",
+                                    style: TextStyle(
+                                      color: CustomTheme.themeColor1,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ),
+                                similarList(),
+
+                                const SizedBox(height: 20),
                               ],
                             ),
-                          ),
-
-                          //  info
-                          ListView.builder(
-                            itemCount: detailTitle.length,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const ClampingScrollPhysics(),
-                            padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
-                            itemBuilder: (BuildContext context, int index) {
-                              return customText(
-                                text1: detailTitle[index],
-                                text2: details[index],
-                              );
-                            },
-                          ),
-
-                          //  similar list
-                          Container(
-                            margin: const EdgeInsets.only(left: 15, bottom: 10),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Similar Anime",
-                              style: TextStyle(
-                                color: CustomTheme.themeColor1,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
+                          )
+                        : Visibility(
+                            visible: noData,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/img/luffy1.png',
+                                    width: 200,
+                                  ),
+                                  Image.asset(
+                                    'assets/img/luffy2.png',
+                                    width: 200,
+                                  ),
+                                  const Text(
+                                    "No Data",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          similarList(),
-
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -327,10 +405,7 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
             Navigator.push(
                 context,
                 CustomScreenRoute(
-                  child: Details(
-                    title: title[index],
-                    img: titleImgs[index],
-                  ),
+                  child: Details(id: id),
                   direction: AxisDirection.up,
                 ));
           },
@@ -427,9 +502,8 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
             image: DecorationImage(
               alignment: Alignment.topCenter,
               fit: BoxFit.cover,
-              colorFilter:
-                  const ColorFilter.mode(Colors.black45, BlendMode.darken),
-              image: NetworkImage(widget.img),
+              colorFilter: ColorFilter.mode(CustomTheme.black45, BlendMode.darken),
+              image: NetworkImage(img),
             ),
           ),
           child: BackdropFilter(
@@ -448,7 +522,7 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                     placeholder: "assets/img/icon1.png",
                     width: 150,
                     height: 220,
-                    image: widget.img,
+                    image: img,
                     imageErrorBuilder: (context, error, stackTrace) {
                       return Image.asset(
                         "assets/img/icon1.png",
@@ -633,10 +707,7 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                   Navigator.push(
                       context,
                       CustomScreenRoute(
-                        child: Details(
-                          title: title[index],
-                          img: titleImgs[index],
-                        ),
+                        child: Details(id: id),
                         direction: AxisDirection.up,
                       ));
                 },
@@ -665,24 +736,24 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
                           alignment: Alignment.bottomCenter,
                           decoration: BoxDecoration(
                             color: CustomTheme.grey2,
-                            gradient: const LinearGradient(
+                            gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 tileMode: TileMode.mirror,
                                 colors: [
-                                  Colors.transparent,
-                                  Colors.transparent,
-                                  Colors.transparent,
-                                  Colors.transparent,
-                                  Colors.black12,
-                                  // Colors.black38,
-                                  Colors.black54,
-                                  Colors.black54,
-                                  Colors.black87,
-                                  Colors.black87,
-                                  Colors.black87,
-                                  Colors.black87,
-                                  Colors.black87,
+                                  CustomTheme.transparent,
+                                  CustomTheme.transparent,
+                                  CustomTheme.transparent,
+                                  CustomTheme.transparent,
+                                  CustomTheme.black12,
+                                  // CustomTheme.black38,
+                                  CustomTheme.black54,
+                                  CustomTheme.black54,
+                                  CustomTheme.black87,
+                                  CustomTheme.black87,
+                                  CustomTheme.black87,
+                                  CustomTheme.black87,
+                                  CustomTheme.black87,
                                 ]),
                           ),
                           child: Column(
@@ -777,8 +848,8 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
     return CustomScrollView(
       slivers: [
         CustomAppBar(
-          title: widget.title,
-          img: widget.img,
+          title: name,
+          img: img,
           backBtn: () {
             Navigator.of(context).pop();
           },
@@ -884,6 +955,108 @@ class _DetailsState extends State<Details> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  List<EpDetails> epDetails = [];
+  void detailsApiCall() async {
+    final prefs = await SharedPreferences.getInstance();
+    await showProgress(context, "Please wait...", true);
+
+    APIService apiService = new APIService();
+    apiService.DetailsApi().then((value) {
+    // apiService.DetailsApi(animeId: widget.id).then((value) {
+      try {
+        if (value != null) {
+          var responsebody = json.decode(value);
+          DetailsPodo detailsPodo = DetailsPodo.fromJson(responsebody);
+          apiStatus = responsebody["st"];
+          hideProgress();
+          if (apiStatus == 200) {
+            setState(() {
+              hideProgress();
+              id = detailsPodo.data!.id ?? "-";
+              name = detailsPodo.data!.name ?? "-";
+              img = detailsPodo.data!.aniImage ?? detailsPodo.data!.imageHighQuality ?? "https://animerush.in/media/image/white_logo.png";
+              desc = detailsPodo.data!.description ?? "-";
+              year = detailsPodo.data!.airedYear ?? "-";
+              otherName = detailsPodo.data!.japaneseName ?? "-";
+              ep = detailsPodo.data!.episodesTillNow ?? "-";
+              duration = detailsPodo.data!.duration ?? "-";
+              views = detailsPodo.data!.views ?? "-";
+              epDetails = detailsPodo.data!.epDetails!;
+
+              if (detailsPodo.data!.scheduleEp != null) {
+                var day = detailsPodo.data!.scheduleEp!.day ?? "";
+                var date = detailsPodo.data!.scheduleEp!.date ?? "";
+                var time = detailsPodo.data!.scheduleEp!.time ?? "";
+                if (day.isEmpty || date.isEmpty || time.isEmpty) {
+                  showNextEp = false;
+                } else {
+                  nextEp = "$day $date $time";
+                  showNextEp = true;
+                }
+              } else {
+                showNextEp = true;
+                nextEp = "-";
+              }
+
+              for(int i = 0; i < detailsPodo.data!.studios!.length; i++) {
+                studio = detailsPodo.data!.studios![i].name ?? "-";
+              }
+
+
+              if(detailsPodo.data!.animeWatchType == 'OV') {
+                animeType = "Ovas";
+              } else if(detailsPodo.data!.animeWatchType == 'ON') {
+                animeType = "Onas";
+              } else if(detailsPodo.data!.animeWatchType == 'M') {
+                animeType = "Movies";
+              } else if(detailsPodo.data!.animeWatchType == 'S') {
+                animeType = "TV Series";
+              } else if(detailsPodo.data!.animeWatchType == 'SP') {
+                animeType = "Specials";
+              } else {
+                animeType = "-";
+              }
+
+              if(detailsPodo.data!.status == 'C') {
+                status = "Completed";
+              } else if(detailsPodo.data!.status == 'O') {
+                status = "Ongoing";
+              } else {
+                status = "-";
+              }
+
+              if(detailsPodo.data!.type == 'S') {
+                lang = "Subbed";
+              } else if(detailsPodo.data!.type == 'D') {
+                lang = "Dubbed";
+              } else {
+                lang = "-";
+              }
+
+              details.add(otherName);
+              details.add(lang);
+              details.add("$duration min");
+              details.add(ep);
+              details.add(views.toString());
+              details.add(year);
+              details.add(animeType);
+              details.add(status);
+              details.add(studio.toString());
+
+            });
+          } else {
+            hideProgress();
+            noData = true;
+            // CustomSnackBar(context, Text(homePodo.msg!));
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+        rethrow;
+      }
+    });
   }
 
 }

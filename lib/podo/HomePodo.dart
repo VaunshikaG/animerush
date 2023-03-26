@@ -2,7 +2,7 @@ class HomePodo {
   int? st;
   String? msg;
   List<IsSpotlightData>? isSpotlightData;
-  List<Top10Data>? top10Data;
+  List<TopStreamingData>? topStreamingData;
   List<LatestMoviesData>? latestMoviesData;
   List<LatestSpecialData>? latestSpecialData;
   List<LatestOnasData>? latestOnasData;
@@ -14,7 +14,7 @@ class HomePodo {
       {this.st,
       this.msg,
       this.isSpotlightData,
-      this.top10Data,
+      this.topStreamingData,
       this.latestMoviesData,
       this.latestSpecialData,
       this.latestOnasData,
@@ -31,10 +31,10 @@ class HomePodo {
         isSpotlightData!.add(new IsSpotlightData.fromJson(v));
       });
     }
-    if (json['top_10_data'] != null) {
-      top10Data = <Top10Data>[];
-      json['top_10_data'].forEach((v) {
-        top10Data!.add(new Top10Data.fromJson(v));
+    if (json['top_streaming_data'] != null) {
+      topStreamingData = <TopStreamingData>[];
+      json['top_streaming_data'].forEach((v) {
+        topStreamingData!.add(new TopStreamingData.fromJson(v));
       });
     }
     if (json['latest_movies_data'] != null) {
@@ -83,8 +83,8 @@ class HomePodo {
       data['is_spotlight_data'] =
           this.isSpotlightData!.map((v) => v.toJson()).toList();
     }
-    if (this.top10Data != null) {
-      data['top_10_data'] = this.top10Data!.map((v) => v.toJson()).toList();
+    if (this.topStreamingData != null) {
+      data['top_streaming_data'] = this.topStreamingData!.map((v) => v.toJson()).toList();
     }
     if (this.latestMoviesData != null) {
       data['latest_movies_data'] =
@@ -342,34 +342,34 @@ class ScheduleEp {
   }
 }
 
-class Top10Data {
+class TopStreamingData {
   int? id;
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
-  Null? aniImage;
-  Null? banner;
+  String? aniImage;
+  String? banner;
   String? type;
   String? animeWatchType;
   String? status;
   bool? active;
   String? episodes;
   String? episodesTillNow;
-  Null? ratingAge;
-  Null? duration;
+  String? ratingAge;
+  String? duration;
   String? description;
   String? airedYear;
-  Null? premiered;
-  Null? views;
+  String? premiered;
+  int? views;
   List<Categories>? categories;
   List<Studios>? studios;
   List<Producers>? producers;
   ScheduleEp? scheduleEp;
 
-  Top10Data(
+  TopStreamingData(
       {this.id,
         this.name,
         this.japaneseName,
@@ -396,7 +396,7 @@ class Top10Data {
         this.producers,
         this.scheduleEp});
 
-  Top10Data.fromJson(Map<String, dynamic> json) {
+  TopStreamingData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
@@ -485,7 +485,7 @@ class LatestMoviesData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
   String? aniImage;
@@ -623,22 +623,22 @@ class LatestSpecialData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
-  Null? aniImage;
-  Null? banner;
+  String? aniImage;
+  String? banner;
   String? type;
   String? animeWatchType;
   String? status;
   bool? active;
   String? episodes;
   String? episodesTillNow;
-  Null? ratingAge;
-  Null? duration;
+  String? ratingAge;
+  String? duration;
   String? description;
   String? airedYear;
-  Null? premiered;
+  String? premiered;
   int? views;
   List<Categories>? categories;
   List<Studios>? studios;
@@ -761,7 +761,7 @@ class LatestOnasData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
   String? aniImage;
@@ -772,11 +772,11 @@ class LatestOnasData {
   bool? active;
   String? episodes;
   String? episodesTillNow;
-  Null? ratingAge;
-  Null? duration;
+  String? ratingAge;
+  String? duration;
   String? description;
   String? airedYear;
-  Null? premiered;
+  String? premiered;
   int? views;
   List<Categories>? categories;
   List<Studios>? studios;
@@ -899,7 +899,7 @@ class LatestOvasData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
   String? aniImage;
@@ -1037,23 +1037,23 @@ class RecentlyAddedSubData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
-  Null? aniImage;
-  Null? banner;
+  String? aniImage;
+  String? banner;
   String? type;
   String? animeWatchType;
   String? status;
   bool? active;
   String? episodes;
   String? episodesTillNow;
-  Null? ratingAge;
-  Null? duration;
+  String? ratingAge;
+  String? duration;
   String? description;
   String? airedYear;
-  Null? premiered;
-  Null? views;
+  String? premiered;
+  int? views;
   List<Categories>? categories;
   List<Studios>? studios;
   List<Producers>? producers;
@@ -1175,23 +1175,23 @@ class RecentlyAddedDubData {
   String? name;
   String? japaneseName;
   String? englishName;
-  Null? thumbnail;
+  String? thumbnail;
   String? image;
   String? imageHighQuality;
-  Null? aniImage;
-  Null? banner;
+  String? aniImage;
+  String? banner;
   String? type;
   String? animeWatchType;
   String? status;
   bool? active;
   String? episodes;
   String? episodesTillNow;
-  Null? ratingAge;
-  Null? duration;
+  String? ratingAge;
+  String? duration;
   String? description;
   String? airedYear;
-  Null? premiered;
-  Null? views;
+  String? premiered;
+  int? views;
   List<Categories>? categories;
   List<Studios>? studios;
   List<Producers>? producers;

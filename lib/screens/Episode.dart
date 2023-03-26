@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -8,13 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../podo/DetailsPodo.dart';
+import '../podo/EpDetailPodo.dart';
+import '../utils/ApiService.dart';
+import '../utils/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import 'Player.dart';
 
 class Episode extends StatefulWidget {
-  final String title;
-  const Episode({Key? key, required this.title}) : super(key: key);
+  final List<EpDetails> epDetails;
+  const Episode({Key? key, required this.epDetails}) : super(key: key);
 
   @override
   State<Episode> createState() => _EpisodeState();
@@ -25,8 +32,16 @@ class _EpisodeState extends State<Episode> {
   @override
   void initState() {
     log(runtimeType.toString());
-    _choiceIndex = 0;
+    // log(widget.epDetails.toString());
+    episodeApiCall();
     super.initState();
+    apiStatus = "";
+    animeId = "";
+    playerURL = "";
+    epImg = "";
+    title = "";
+    name = "";
+    desc = "";
   }
 
   @override
@@ -45,36 +60,114 @@ class _EpisodeState extends State<Episode> {
                 overscroll.disallowGlow();
                 return false;
               },
-              child: ListView(
-                children: [
-                  CustomAppBar3(
-                    title: "One Piece Episode 1",
-                    backBtn: () {
-                      Navigator.of(context).pop();
-                    },
-                    wishlist: () {},
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: CustomAppBar3(
+                      title: title,
+                      backBtn: () {
+                        Navigator.of(context).pop();
+                      },
+                      wishlist: () {},
+                    ),
                   ),
-                  const Player(
-                        url:
-                            "https://tc-005.agetcdn.com/1ab5d45273a9183bebb58eb74d5722d8ea6384f350caf008f08cf018f1f0566d0cb82a2a799830d1af97cd3f4b6a9a81ef3aed2fb783292b1abcf1b8560a1d1aa308008b88420298522a9f761e5aa1024fbe74e5aa853cfc933cd1219327d1232e91847a185021b184c027f97ae732b3708ee6beb80ba5db6628ced43f1196fe/a80af13ae85820b664b87e68fa55f4c8/ep.1.1677593409.360.m3u8",
-                      ),
-                  dwld(),
-                  details(),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: Text(
-                      "List of Episodes   :",
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Quicksand',
-                        fontSize: 14,
+                  SliverToBoxAdapter(
+                    child: (apiStatus == 200)
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Player(url: playerURL),
+                              dwld(),
+                              details(),
+                               Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                child: Text(
+                                  "List of Episodes   :",
+                                  softWrap: true,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: CustomTheme.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Quicksand',
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                child:  widget.epDetails.length > 100 ?
+                                SizedBox(
+                                  height: 70,
+                                  child: ListView.builder(
+                                    itemCount: finalChipCount,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric
+                                          (horizontal: 8, vertical: 0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _rangeIndex.value = index;
+                                              selectedIndex.value = 99999999;
+                                              getEpisodeRange(index);
+                                              if (finalChipCount == (index + 1)) {
+                                                epChunkList.value = widget.epDetails.sublist(int.parse(start) - 1);
+                                              } else {
+                                                epChunkList.value = widget.epDetails
+                                                    .sublist(int.parse(start) - 1, int.parse(end));
+                                              }
+                                            });
+                                          },
+                                          child: Chip(
+                                            backgroundColor:
+                                            _rangeIndex.value == index
+                                                ? CustomTheme.themeColor1
+                                                : CustomTheme.grey2,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            label: Text(
+                                              getEpisodeRange(index),
+                                              style: TextStyle(
+                                                color: CustomTheme.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ) : const SizedBox(),
+                              ),
+
+                              widget.epDetails.isNotEmpty ? episodes() : const SizedBox(),
+                              const SizedBox(height: 20),
+                            ],
+                          )
+                        : Visibility(
+                      visible: noData,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/img/luffy1.png',
+                              width: 200,
+                            ),
+                            Image.asset(
+                              'assets/img/luffy2.png',
+                              width: 200,
+                            ),
+                            const Text(
+                              "No Data",
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  episodes(),
                 ],
               ),
             ),
@@ -93,8 +186,14 @@ class _EpisodeState extends State<Episode> {
           image: DecorationImage(
             alignment: Alignment.center,
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Color(0xB0000000), BlendMode.darken),
-            image: NetworkImage("https://artworks.thetvdb.com/banners/v4/episode/361887/screencap/604df7d3ecf3a.jpg"),
+            colorFilter: const ColorFilter.mode(Color(0xB0000000), BlendMode.darken),
+            image: NetworkImage(epImg ?? "https://animerush.in/media/image/no_poster.jpg"),
+            onError: (error, stackTrace) {
+              Image.asset(
+                "assets/img/icon1.png",
+                fit: BoxFit.contain,
+              );
+            },
           ),
         ),
         child: ListTile(
@@ -102,8 +201,8 @@ class _EpisodeState extends State<Episode> {
             // height: 150,
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: FadeInImage.assetNetwork(
-              placeholder: "assets/img/icon1.png",
-              image: "https://artworks.thetvdb.com/banners/v4/episode/361887/screencap/604df7d3ecf3a.jpg",
+              placeholder: "https://animerush.in/media/image/no_poster.jpg",
+              image: epImg,
               fit: BoxFit.cover,
               imageErrorBuilder: (context, error, stackTrace) {
                 return Image.asset(
@@ -111,10 +210,11 @@ class _EpisodeState extends State<Episode> {
                   fit: BoxFit.contain,
                 );
               },
+              width: 60,
             ),
           ),
           title: Text(
-            "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
+            name,
             style: TextStyle(
               color: CustomTheme.white,
               fontSize: 15,
@@ -124,7 +224,7 @@ class _EpisodeState extends State<Episode> {
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Text(
-              "Alvida pirates plunder a ship only to find a barrel containing a strange boy names Luffy who is on a quest to find the legendary One Piece and become the King of Pirates.",
+              desc,
               style: TextStyle(
                 color: CustomTheme.white,
                 fontSize: 14,
@@ -161,50 +261,29 @@ class _EpisodeState extends State<Episode> {
             ),
           ],
         ),
-        subtitle: Row(
-          children: [
-            ActionChip(
-              elevation: 3,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              label: const Text('360p'),
-              onPressed: () {
-                downloadEp();
-                // downloadFile(
-                //   fileName: "One Piece Episode 1",
-                //   url: 'https://gogodownload.net/download.php?url=aHR0cHM6LyAawehyfcghysfdsDGDYdgdsfsdfwstdgdsgtert8AdrefsdsdfwerFrefdsfrersfdsrfer363435342eGM1cHBlOWVpLmdvY2RuYW5pLmNvbS91c2VyMTM0Mi9jNzUxYmFiMTkzOWEyYjgzMDIwNTY1ZTFhYzI0Mjg5Ni9FUC4xLnYxLjM2MHAubXA0P3Rva2VuPURMZDVUTUxkVGNtdTEzbnVCVmRiTmcmZXhwaXJlcz0xNjc4ODY4MzY5JmlkPTM1MTgmdGl0bGU9KDY0MHgzNjAtZ29nb2FuaW1lKW9uZS1waWVjZS1lcGlzb2RlLTEubXA0',
-                // );
-              },
-              backgroundColor: CustomTheme.themeColor1,
-              side: BorderSide.none,
-            ),
-            const SizedBox(width: 10),
-            ActionChip(
-              elevation: 3,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              label: const Text('480p'),
-              onPressed: () {},
-              backgroundColor: CustomTheme.themeColor1,
-              side: BorderSide.none,
-            ),
-            const SizedBox(width: 10),
-            ActionChip(
-              elevation: 3,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              label: const Text('720p'),
-              onPressed: () {},
-              backgroundColor: CustomTheme.themeColor1,
-              side: BorderSide.none,
-            ),
-            const SizedBox(width: 10),
-            ActionChip(
-              elevation: 3,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              label: const Text('1080p'),
-              onPressed: () {},
-              backgroundColor: CustomTheme.themeColor1,
-              side: BorderSide.none,
-            ),
-          ],
+        subtitle: SizedBox(
+          height: 40,
+          child: ListView.builder(
+            itemCount: dwldList.length,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            physics: const ClampingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ActionChip(
+                  elevation: 3,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  label: Text(dwldList[index].quality!),
+                  onPressed: () {},
+                  backgroundColor: CustomTheme.themeColor1,
+                  side: BorderSide.none,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                ),
+              );
+            },
+          ),
         ),
         minVerticalPadding: 10,
         tileColor: CustomTheme.grey3,
@@ -212,6 +291,54 @@ class _EpisodeState extends State<Episode> {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
+    );
+  }
+
+  abc() {
+    return Row(
+      children: [
+        ActionChip(
+          elevation: 3,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          label: const Text('360p'),
+          onPressed: () {
+            downloadEp();
+            // downloadFile(
+            //   fileName: "One Piece Episode 1",
+            //   url: 'https://gogodownload.net/download.php?url=aHR0cHM6LyAawehyfcghysfdsDGDYdgdsfsdfwstdgdsgtert8AdrefsdsdfwerFrefdsfrersfdsrfer363435342eGM1cHBlOWVpLmdvY2RuYW5pLmNvbS91c2VyMTM0Mi9jNzUxYmFiMTkzOWEyYjgzMDIwNTY1ZTFhYzI0Mjg5Ni9FUC4xLnYxLjM2MHAubXA0P3Rva2VuPURMZDVUTUxkVGNtdTEzbnVCVmRiTmcmZXhwaXJlcz0xNjc4ODY4MzY5JmlkPTM1MTgmdGl0bGU9KDY0MHgzNjAtZ29nb2FuaW1lKW9uZS1waWVjZS1lcGlzb2RlLTEubXA0',
+            // );
+          },
+          backgroundColor: CustomTheme.themeColor1,
+          side: BorderSide.none,
+        ),
+        const SizedBox(width: 10),
+        ActionChip(
+          elevation: 3,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          label: const Text('480p'),
+          onPressed: () {},
+          backgroundColor: CustomTheme.themeColor1,
+          side: BorderSide.none,
+        ),
+        const SizedBox(width: 10),
+        ActionChip(
+          elevation: 3,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          label: const Text('720p'),
+          onPressed: () {},
+          backgroundColor: CustomTheme.themeColor1,
+          side: BorderSide.none,
+        ),
+        const SizedBox(width: 10),
+        ActionChip(
+          elevation: 3,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          label: const Text('1080p'),
+          onPressed: () {},
+          backgroundColor: CustomTheme.themeColor1,
+          side: BorderSide.none,
+        ),
+      ],
     );
   }
 
@@ -259,7 +386,6 @@ class _EpisodeState extends State<Episode> {
       );*/
   }
 
-  int? _choiceIndex;
   Widget episodes() {
     return Container(
       alignment: Alignment.topCenter,
@@ -270,34 +396,145 @@ class _EpisodeState extends State<Episode> {
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-            maxCrossAxisExtent: 60,
+            mainAxisSpacing: 15,
+            crossAxisSpacing: 15,
+            maxCrossAxisExtent: 45,
           ),
-          itemCount: 50,
+          itemCount: epChunkList.length,
+          // itemCount: epChunkList.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
-            return ChoiceChip(
-              label: Text((index + 1).toString()),
-              selected: _choiceIndex == index,
-              onSelected: (bool selected) {
+            idList.add(epChunkList[index].id!);
+            // print(epChunkList.indexOf(epChunkList[index]));
+            return InkWell(
+              onTap: () async {
                 setState(() {
-                  _choiceIndex = selected ? index : 0;
+                  selectedIndex.value = index;
+                  print(index);
+                  // print(epChunkList[index].id.toString());
                 });
               },
-              elevation: 2,
-              labelStyle: TextStyle(
-                color: CustomTheme.white,
-                // fontWeight: FontWeight.bold,
+              splashColor: CustomTheme.white,
+              child: Container(
+                padding: EdgeInsets.zero,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: selectedIndex.value == index
+                        ? CustomTheme.themeColor1
+                        : CustomTheme.grey2,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  (startVal++ ).toString(),
+                  // (epChunkList[index]).toString(),
+                  // (index +1).toString(),
+                  style: TextStyle(
+                    color: CustomTheme.white,
+                    fontWeight: selectedIndex.value == index
+                        ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
               ),
-              backgroundColor: CustomTheme.grey2,
-              selectedColor: CustomTheme.themeColor1,
-              disabledColor: CustomTheme.grey2,
             );
           },
         ),
       ),
     );
+  }
+
+  bool noData = false;
+  var apiStatus, animeId, playerURL, epImg, title, name, desc;
+  var w_title, w_name, w_desc;
+  List<DownloadEpisodeLink> dwldList = [];
+
+  bool hasRemainingEp = false;
+  int remainingEp = 0;
+  int totalChipCount = 0;
+  int finalChipCount = 0;
+  int startVal = 0;
+  var start = '';
+  var end = '';
+  var _rangeIndex = 0.obs;
+  var selectedIndex = 9999999.obs;
+  RxList<EpDetails> epChunkList = <EpDetails>[].obs;
+  List<EpDetails> anime = [];
+  List<int> idList = [];
+
+  void episodeApiCall() async {
+    final prefs = await SharedPreferences.getInstance();
+    await showProgress(context, "Please wait...", true);
+
+    APIService apiService = new APIService();
+    for (int i = 0; i < widget.epDetails.length; i++) {
+        animeId = widget.epDetails[i].id;
+        // log(animeId.toString());
+        w_title = widget.epDetails[i].episodeTitle ?? "";
+        w_name = widget.epDetails[i].episodeName ?? "";
+        w_desc = widget.epDetails[i].videoDetails ?? "";
+    }
+
+    anime = widget.epDetails;
+    if ((anime.length % 100).floor() < 100) {
+      print((anime.length % 100).toString());
+      hasRemainingEp = true;
+      remainingEp = (anime.length % 100).floor();
+    }
+    totalChipCount = (anime.length / 100).floor();
+    epChunkList.value = anime.sublist(0, (hasRemainingEp == true && anime.length < 100)
+            ? remainingEp
+            : 100);
+    finalChipCount = totalChipCount + (hasRemainingEp ? 1 : 0);
+
+    print('Ep Chunk List ${epChunkList.length} + $remainingEp');
+    print((anime.length % 100).floor());
+    print(totalChipCount);
+    print(finalChipCount);
+    // int str1 = int.parse(start);
+    // int str2 = int.parse(end);
+    // log(epChunkList.getRange(str1, str2).toString());
+
+    apiService.EpisodeApi().then((value) {
+      // apiService.EpisodeApi(animeId: animeId.toString()).then((value) {
+      try {
+        if (value != null) {
+          var responsebody = json.decode(value);
+          EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responsebody);
+          apiStatus = responsebody["st"];
+          hideProgress();
+          if (apiStatus == 200) {
+            setState(() {
+              hideProgress();
+              for(int i = 0; i < epDetailPodo.data!.episodeLink!.length; i++) {
+                playerURL = epDetailPodo.data!.episodeLink![i].file;
+              }
+              epImg = epDetailPodo.data!.image ?? "https://animerush.in/media/image/no_poster.jpg";
+              title = epDetailPodo.data!.episodeTitle ?? w_title ?? "";
+              name = epDetailPodo.data!.episodeName ?? w_name ?? "";
+              desc = epDetailPodo.data!.videoDetails ?? w_desc ?? "";
+              dwldList = epDetailPodo.data!.downloadEpisodeLink!;
+
+            });
+          } else {
+            hideProgress();
+            noData = true;
+            // CustomSnackBar(context, Text(homePodo.msg!));
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+        rethrow;
+      }
+    });
+  }
+
+  String getEpisodeRange(int index) {
+    start = ((index * 100) + 1).toString();
+    end = ((100 * (index + 1))).toString();
+    if (index == totalChipCount && hasRemainingEp) {
+      end = ((100 * index) + remainingEp).toString();
+    }
+    startVal = int.parse(start);
+    // endVal = (int.parse(end) + 1).toString();
+    return ('$start - $end');
   }
 
 }

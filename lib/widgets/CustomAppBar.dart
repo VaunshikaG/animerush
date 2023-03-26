@@ -83,12 +83,36 @@ Widget CustomAppBar({
               ),
             ),
           ),
-          background: Image.network(
+          background:
+          // FadeInImage.assetNetwork(
+          //   placeholder: "https://animerush.in/media/image/no_poster.jpg",
+          //   image: img,
+          //   imageErrorBuilder: (context, error, stackTrace) {
+          //     return Image.network(
+          //       "https://animerush.in/media/image/no_poster.jpg",
+          //       fit: BoxFit.contain,
+          //       height: 400,
+          //     );
+          //   },
+          //   width: double.infinity,
+          //   height: 400,
+          //   fit: BoxFit.cover,
+          //   alignment: Alignment.topCenter,
+          // ),
+
+          Image.network(
             img,
             width: double.infinity,
             height: 400,
             fit: BoxFit.cover,
             alignment: Alignment.topCenter,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.network(
+                "https://animerush.in/media/image/no_poster.jpg",
+                fit: BoxFit.cover,
+                height: 400,
+              );
+            },
           ),
         );
       },

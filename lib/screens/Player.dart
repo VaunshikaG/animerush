@@ -56,7 +56,7 @@ class _PlayerState extends State<Player> {
           fit: BoxFit.contain,
         ),
         controlsConfiguration: BetterPlayerControlsConfiguration(
-          controlBarColor: Colors.transparent,
+          controlBarColor: CustomTheme.transparent,
           iconsColor: CustomTheme.white,
           progressBarBufferedColor: CustomTheme.white,
           progressBarPlayedColor: CustomTheme.themeColor1,

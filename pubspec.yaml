@@ -32,6 +32,9 @@ dependencies:
   progress_dialog_null_safe: ^1.0.7
   intl: ^0.17.0
   http: ^0.13.5
+  fluttertoast: ^8.2.1
+  shared_preferences: ^2.0.18
+  get: ^4.6.5
 
 
 

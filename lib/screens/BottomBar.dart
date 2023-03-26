@@ -30,7 +30,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   void initState() {
-    _selectedTab = widget.currentIndex ?? 0;
+    _selectedTab = widget.currentIndex;
     super.initState();
   }
 
@@ -67,7 +67,7 @@ class _BottomBarState extends State<BottomBar> {
           haptic: true,
           color: CustomTheme.white,
           activeColor: CustomTheme.themeColor1,
-          hoverColor: Colors.blueGrey[50]!,
+          hoverColor: CustomTheme.blueGrey50,
           gap: 8,
           iconSize: 22,
           backgroundColor: CustomTheme.themeColor2,
