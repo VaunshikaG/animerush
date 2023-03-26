@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Anime Rush',
       debugShowCheckedModeBanner: false,
-      color: CustomTheme.themeColor2,
+      color: CustomTheme.black,
       theme: ThemeData(
         useMaterial3: true,
         // colorScheme: const ColorScheme.dark(),

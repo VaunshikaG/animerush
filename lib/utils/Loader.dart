@@ -21,7 +21,7 @@ showProgress(BuildContext context, String message, bool isDismissible) async {
     elevation: 10,
     insetAnimCurve: Curves.easeInOut,
     messageTextStyle: TextStyle(
-      color: CustomTheme.themeColor2,
+      color: CustomTheme.black,
       fontSize: 15,
     ),
   );

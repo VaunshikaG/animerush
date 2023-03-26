@@ -237,14 +237,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                       .play_circle_fill,
                                                   size: 15,
                                                   color: CustomTheme
-                                                      .themeColor2,
+                                                      .black,
                                                 ),
                                                 const SizedBox(width: 5),
                                                 Text(
                                                   "Watch Now",
                                                   style: TextStyle(
                                                     color: CustomTheme
-                                                        .themeColor2,
+                                                        .black,
                                                     fontSize: 13,
                                                     fontWeight:
                                                         FontWeight.bold,

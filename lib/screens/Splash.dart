@@ -29,7 +29,7 @@ class _SplashState extends State<Splash> {
           width: size.width,
           height: size.height,
           decoration: BoxDecoration(
-            color: CustomTheme.themeColor2,
+            color: CustomTheme.black,
             image: DecorationImage(
               image: const AssetImage('assets/img/c.png'),
               fit: BoxFit.cover,
@@ -94,7 +94,7 @@ class _SplashState extends State<Splash> {
                     AxisDirection.up));
                   },
                   elevation: 3,
-                  backgroundColor: CustomTheme.themeColor2,
+                  backgroundColor: CustomTheme.black,
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                 ),

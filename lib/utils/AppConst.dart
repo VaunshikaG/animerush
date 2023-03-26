@@ -13,6 +13,11 @@ class AppConst {
 
   static const String FONT = "Quicksand";
 
+  static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  static RegExp passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+
+
+
 
 
 

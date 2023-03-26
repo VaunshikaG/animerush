@@ -38,12 +38,12 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: CustomTheme.themeColor2,
+      backgroundColor: CustomTheme.black,
       extendBody: true,
       appBar: AppBar(
         elevation: 0,
         iconTheme: IconThemeData(color: CustomTheme.white),
-        backgroundColor: CustomTheme.themeColor2,
+        backgroundColor: CustomTheme.black,
         titleSpacing: 5,
         title: FittedBox(
           fit: BoxFit.contain,
@@ -59,7 +59,7 @@ class _BottomBarState extends State<BottomBar> {
       endDrawer: const HomeDrawer(),
       body: _tabs[_selectedTab],
       bottomNavigationBar: Container(
-        color: CustomTheme.themeColor2,
+        color: CustomTheme.black,
         padding: const EdgeInsets.all(8),
         child: GNav(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -70,7 +70,7 @@ class _BottomBarState extends State<BottomBar> {
           hoverColor: CustomTheme.blueGrey50,
           gap: 8,
           iconSize: 22,
-          backgroundColor: CustomTheme.themeColor2,
+          backgroundColor: CustomTheme.black,
           tabBackgroundColor: CustomTheme.grey2,
           tabs: const [
             GButton(

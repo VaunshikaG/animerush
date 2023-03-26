@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:animerush/utils/Constants.dart';
+import 'package:animerush/utils/AppConst.dart';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';

@@ -15,7 +15,7 @@ Widget CustomAppBar({
     pinned: true,
     elevation: 4,
     expandedHeight: 300,
-    backgroundColor: CustomTheme.themeColor2,
+    backgroundColor: CustomTheme.black,
     leading: FittedBox(
       fit: BoxFit.contain,
       child: IconButton(
@@ -187,7 +187,7 @@ Widget CustomAppBar3({
 }) {
   return AppBar(
     elevation: 0,
-    backgroundColor: CustomTheme.themeColor2,
+    backgroundColor: CustomTheme.black,
     leading: FittedBox(
       fit: BoxFit.contain,
       child: IconButton(

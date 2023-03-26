@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 import 'package:animerush/screens/Episode.dart';
-import 'package:animerush/utils/Constants.dart';
+import 'package:animerush/utils/AppConst.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +138,7 @@ class _DetailsState extends State<Details>{
         width: kIsWeb ? 1100 : MediaQuery.of(context).size.width,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: CustomTheme.themeColor2,
+          backgroundColor: CustomTheme.black,
           body: SafeArea(
             top: false,
             child: NotificationListener<OverscrollIndicatorNotification>(
@@ -227,7 +227,7 @@ class _DetailsState extends State<Details>{
                                               CustomTheme.themeColor1,
                                           child: Icon(
                                             CupertinoIcons.play_circle,
-                                            color: CustomTheme.themeColor2,
+                                            color: CustomTheme.black,
                                             size: 20,
                                           ),
                                         ),
@@ -254,7 +254,7 @@ class _DetailsState extends State<Details>{
                                               CustomTheme.themeColor1,
                                           child: Icon(
                                             Icons.bookmark_add_outlined,
-                                            color: CustomTheme.themeColor2,
+                                            color: CustomTheme.black,
                                             size: 20,
                                           ),
                                         ),
@@ -498,7 +498,7 @@ class _DetailsState extends State<Details>{
       children: [
         Container(
           decoration: BoxDecoration(
-            color: CustomTheme.themeColor2,
+            color: CustomTheme.black,
             image: DecorationImage(
               alignment: Alignment.topCenter,
               fit: BoxFit.cover,
@@ -690,7 +690,7 @@ class _DetailsState extends State<Details>{
           ),
         ),
         Container(
-          color: CustomTheme.themeColor2,
+          color: CustomTheme.black,
           margin: const EdgeInsets.only(top: 25, bottom: 30),
           child: GridView.builder(
             shrinkWrap: true,
@@ -793,7 +793,7 @@ class _DetailsState extends State<Details>{
                                       child: Text(
                                         "EP 52",
                                         style: TextStyle(
-                                          color: CustomTheme.themeColor2,
+                                          color: CustomTheme.black,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -858,7 +858,7 @@ class _DetailsState extends State<Details>{
         SliverToBoxAdapter(
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            color: CustomTheme.themeColor2,
+            color: CustomTheme.black,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

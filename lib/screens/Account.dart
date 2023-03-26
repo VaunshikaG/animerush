@@ -3,7 +3,10 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../utils/AppConst.dart';
+import '../utils/CommonStyle.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomCard.dart';
 
@@ -18,6 +21,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
+  bool showPassword = true;
+
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +50,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your email',
-                          ),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter your email';
@@ -59,13 +62,26 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           onSaved: (value) {
                             _email = value!;
                           },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your password',
+                          controller: userNameController,
+                          cursorColor: CustomTheme.black,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(AppConst.emailRegex),
+                            FilteringTextInputFormatter.singleLineFormatter,
+                          ],
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
                           ),
+                          decoration: email_textFieldStyle(
+                            labelText: "Email or Username",
+                            hintText: "name@email.com",
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please enter your password';
@@ -78,6 +94,33 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           onSaved: (value) {
                             _password = value!;
                           },
+                          obscureText: showPassword,
+                          controller: passwordController,
+                          cursorColor: CustomTheme.black,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(AppConst.passwordRegex),
+                            FilteringTextInputFormatter.singleLineFormatter,
+                          ],
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
+                          ),
+                          decoration: password_textFieldStyle(
+                            labelText: "Password",
+                            hintText: "Password",
+                            suffix: IconButton(
+                              onPressed: () => setState(
+                                      () => showPassword = !showPassword),
+                              icon: showPassword
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
+                              color: CustomTheme.black,
+                              iconSize: 20,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 32),
                         ElevatedButton(

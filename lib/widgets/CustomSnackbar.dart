@@ -6,7 +6,7 @@ class CustomSnackBar {
       {SnackBarAction? snackBarAction, Color? backgroundColor}) {
     final SnackBar snackBar = SnackBar(
         action: snackBarAction,
-        backgroundColor: backgroundColor ?? CustomTheme.themeColor2,
+        backgroundColor: backgroundColor ?? CustomTheme.black,
         content: content,
         behavior: SnackBarBehavior.floating);
 

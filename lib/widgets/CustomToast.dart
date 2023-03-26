@@ -10,7 +10,7 @@ class CustomToast {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: CustomTheme.themeColor2,
+      backgroundColor: CustomTheme.black,
       textColor: CustomTheme.white,
       fontSize: 15,
     );

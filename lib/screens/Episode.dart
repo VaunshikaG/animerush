@@ -52,7 +52,7 @@ class _EpisodeState extends State<Episode> {
         width: kIsWeb ? 1100 : MediaQuery.of(context).size.width,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: CustomTheme.themeColor2,
+          backgroundColor: CustomTheme.black,
           body: SafeArea(
             top: false,
             child: NotificationListener<OverscrollIndicatorNotification>(
@@ -181,7 +181,7 @@ class _EpisodeState extends State<Episode> {
     return Container(
       margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: CustomTheme.themeColor2,
+          color: CustomTheme.black,
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
             alignment: Alignment.center,

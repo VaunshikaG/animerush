@@ -99,7 +99,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
               unselectedLabelColor: CustomTheme.white,
-              labelColor: CustomTheme.themeColor2,
+              labelColor: CustomTheme.black,
               indicatorSize: TabBarIndicatorSize.label,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
