@@ -8,7 +8,7 @@
 PRODUCT_NAME = animerush
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.animerush.animerush
+PRODUCT_BUNDLE_IDENTIFIER = com.animerush
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.animerush. All rights reserved.

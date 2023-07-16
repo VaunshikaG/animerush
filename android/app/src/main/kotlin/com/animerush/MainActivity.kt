@@ -1,4 +1,4 @@
-package com.animerush.animerush
+package com.animerush
 
 import io.flutter.embedding.android.FlutterActivity
 

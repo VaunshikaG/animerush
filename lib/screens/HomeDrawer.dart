@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
+import '../utils/AppTheme.dart';
 import '../utils/theme.dart';
-import '../widgets/CustomScreenRoute.dart';
-import 'Home.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer({Key? key}) : super(key: key);
@@ -60,13 +60,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
     "Supernatural",
     "Vampire",
   ];
+  var themeMode;
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Theme.of(context);
+    themeMode = (SchedulerBinding.instance.window.platformBrightness == Brightness.light);
+
     return SafeArea(
       child: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
-          overscroll.disallowGlow();
+          overscroll.disallowIndicator();
           return false;
         },
         child: Container(
@@ -75,7 +79,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           width: 250,
           child: Drawer(
             shape: const Border.symmetric(vertical: BorderSide()),
-            backgroundColor: CustomTheme.grey3,
+            // backgroundColor: appTheme.colorScheme.surface,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,15 +88,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     margin: const EdgeInsets.only(left: 15, top: 10),
                     width: 120,
                     height: 40,
-                    child: CupertinoButton(
+                    child: ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      color: CustomTheme.grey1,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 10),
-                      disabledColor: CustomTheme.white,
-                      pressedOpacity: 0.6,
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(5)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: appTheme.colorScheme.error,
+                        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      ),
                       child: FittedBox(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -100,16 +101,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             Icon(
                               CupertinoIcons.chevron_left,
                               size: 16,
-                              color: CustomTheme.white,
+                              color: appTheme.iconTheme.color,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               "Close menu",
-                              style: TextStyle(
-                                color: CustomTheme.white,
-                                fontSize: 13,
-                                fontFamily: "Quicksand",
-                              ),
+                              style: appTheme.textTheme.bodySmall,
                             ),
                           ],
                         ),
@@ -119,7 +116,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Container(
                     height: 70,
                     width: 250,
-                    color: CustomTheme.grey1,
+                    color: appTheme.disabledColor,
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: ListView.builder(
                       itemCount: menu.length,
@@ -129,9 +126,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       itemBuilder: (BuildContext context, int index) {
                         return CupertinoButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          color: CustomTheme.grey1,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                          disabledColor: CustomTheme.white,
+                          color: appTheme.colorScheme.surface,
+                          padding: const EdgeInsets.symmetric(vertical: 0,
+                              horizontal: 17),
+                          disabledColor: appTheme.disabledColor,
                           pressedOpacity: 0.6,
                           borderRadius: const BorderRadius.all(Radius.circular(5)),
                           child: FittedBox(
@@ -141,16 +139,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               children: [
                                 Icon(
                                   menuIcon[index],
-                                  color: CustomTheme.themeColor1,
+                                  color: appTheme.iconTheme.color,
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
                                   menu[index],
-                                  style: TextStyle(
-                                    color: CustomTheme.white,
-                                    fontSize: 13,
-                                    fontFamily: "Quicksand",
-                                  ),
+                                  style: appTheme.textTheme.titleSmall,
                                 ),
                               ],
                             ),
@@ -167,16 +161,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     itemBuilder: (BuildContext context, int index) {
                       return OutlinedButton(
                         onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide.none,
-                          alignment: Alignment.centerLeft,
-                        ),
+                        style: AppTheme.outlinedBtn1,
                         child: Text(
                           title[index],
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: CustomTheme.white,
-                          ),
+                          style: appTheme.textTheme.titleSmall,
                         ),
                       );
                     },
@@ -192,14 +180,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       mainAxisSpacing: 0,
                     ),
                     itemCount: genre.length,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext ctx, index) {
                       return OutlinedButton(
                         onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide.none,
-                          alignment: Alignment.centerLeft,
-                        ),
+                        style: AppTheme.outlinedBtn1,
                         child: Text(
                           genre[index],
                           softWrap: true,

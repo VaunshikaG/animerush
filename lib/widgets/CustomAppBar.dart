@@ -85,8 +85,12 @@ Widget CustomAppBar({
           ),
           background:
           // FadeInImage.assetNetwork(
-          //   placeholder: "https://animerush.in/media/image/no_poster.jpg",
           //   image: img,
+          //   placeholder: "assets/img/blank.png",
+          //   width: double.infinity,
+          //   height: 400,
+          //   fit: BoxFit.cover,
+          //   alignment: Alignment.topCenter,
           //   imageErrorBuilder: (context, error, stackTrace) {
           //     return Image.network(
           //       "https://animerush.in/media/image/no_poster.jpg",
@@ -94,12 +98,7 @@ Widget CustomAppBar({
           //       height: 400,
           //     );
           //   },
-          //   width: double.infinity,
-          //   height: 400,
-          //   fit: BoxFit.cover,
-          //   alignment: Alignment.topCenter,
           // ),
-
           Image.network(
             img,
             width: double.infinity,

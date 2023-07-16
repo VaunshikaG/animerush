@@ -4,6 +4,11 @@ class AppConst {
   static const String app_url = "https://animerush.in/api";
   // static const String app_url = "http://10.0.0.4:9923/api";
 
+  static const String signUp = "$app_url/sign-up/";
+  static const String otpVerify = "$app_url/verify-otp/";
+  static const String forgotPassword = "$app_url/forgot-password/";
+  static const String changePassword = "$app_url/change-password/";
+  static const String login = "$app_url/login/";
   static const String home = "$app_url/home-details/";
   static const String details = "$app_url/anime-details/";
   static const String episode = "$app_url/episode-details/";
@@ -12,6 +17,13 @@ class AppConst {
 
 
   static const String FONT = "Quicksand";
+  static const String LOGINSTATUS = "false";
+
+  static const String userName = "user_name";
+  static const String email = "email";
+  static const String token = "token";
+  static const String otp = "otp";
+  static const String apiStatus = "api_status";
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');

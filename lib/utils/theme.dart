@@ -8,6 +8,7 @@ class CustomTheme {
   // 202125  black
 
   static Color themeColor1 = CupertinoColors.activeOrange.darkColor;
+  static Color themeColor2 = const Color(0xFFFFB339);
 
   //  white
   static Color transparent = const Color(0x3C000000);

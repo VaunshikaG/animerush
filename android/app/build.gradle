@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.animerush.animerush"
+        applicationId "com.animerush"
         minSdkVersion 21
         multiDexEnabled true
         targetSdkVersion flutter.targetSdkVersion

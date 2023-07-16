@@ -5,12 +5,14 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import '../model/EpDetailPodo.dart';
+import '../model/VdResolutionModel.dart';
 import '../utils/theme.dart';
 
 class Player extends StatefulWidget {
-  final String url;
-
-  const Player({Key? key, required this.url}) : super(key: key);
+  final String url, placeHolder, title;
+  final List<DownloadEpisodeLink> dwldList;
+  const Player({Key? key, required this.url, required this.placeHolder, required this.title, required this.dwldList}) : super(key: key);
 
   @override
   State<Player> createState() => _PlayerState();

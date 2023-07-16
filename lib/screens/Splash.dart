@@ -4,6 +4,7 @@ import 'package:animerush/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../widgets/CustomScreenRoute.dart';
 
@@ -19,25 +20,17 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: CustomTheme.white,
       body: Center(
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           width: size.width,
           height: size.height,
-          decoration: BoxDecoration(
-            color: CustomTheme.black,
-            image: DecorationImage(
-              image: const AssetImage('assets/img/c.png'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(CustomTheme.themeColor1, BlendMode.softLight),
-            ),
-          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FadeInUp(
                 duration: duration,
@@ -45,7 +38,7 @@ class _SplashState extends State<Splash> {
                 child: Container(
                   margin: const EdgeInsets.only(top: 150, bottom: 45),
                   width: size.width / 1.5,
-                  height: size.height / 8,
+                  height: size.height / 9.9,
                   child: Image.asset('assets/img/white_logo.png'),
                 ),
               ),
@@ -54,25 +47,18 @@ class _SplashState extends State<Splash> {
                 delay: const Duration(milliseconds: 1000),
                 child: Text(
                   "Welcome !",
-                  style: TextStyle(
-                      color: CustomTheme.themeColor1,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                  style: appTheme.textTheme.displayMedium,
                 ),
               ),
               FadeInUp(
                 duration: duration,
                 delay: const Duration(milliseconds: 1500),
                 child: Container(
-                  margin: const EdgeInsets.only(top: 10, bottom: 200),
+                  margin: const EdgeInsets.only(top: 10, bottom: 100),
                   child: Text(
                     "AnimeRush.in - The best platform to watch anime online for Free",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        height: 1.5,
-                        color: CustomTheme.themeColor1,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w300),
+                    style: appTheme.textTheme.displaySmall,
                   ),
                 ),
               ),
@@ -82,21 +68,20 @@ class _SplashState extends State<Splash> {
                 child: ActionChip(
                   avatar: Icon(
                     CupertinoIcons.arrowtriangle_right_fill,
-                    color: CustomTheme.themeColor1,
+                    color: appTheme.iconTheme.color,
                   ),
                   label: Text(
                     'Continue',
-                    style: TextStyle(color: CustomTheme.themeColor1),
+                    style: appTheme.textTheme.bodyMedium,
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context, CustomScreenRoute(child: const BottomBar(currentIndex: 0), direction:
-                    AxisDirection.up));
+                    Get.off(() => const BottomBar(currentIndex: 0));
                   },
                   elevation: 3,
-                  backgroundColor: CustomTheme.black,
+                  backgroundColor: appTheme.primaryColor,
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                  side: BorderSide.none,
                 ),
               ),
             ],

@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../utils/theme.dart';
+import 'package:get/get.dart';
+
+import '../utils/theme.dart';
 
 class CustomSnackBar {
-  CustomSnackBar(BuildContext context, Widget content,
-      {SnackBarAction? snackBarAction, Color? backgroundColor}) {
-    final SnackBar snackBar = SnackBar(
-        action: snackBarAction,
-        backgroundColor: backgroundColor ?? CustomTheme.black,
-        content: content,
-        behavior: SnackBarBehavior.floating);
-
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  CustomSnackBar(String content) {
+    Get.rawSnackbar(
+      messageText: Text(
+        content,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: CustomTheme.black,
+        ),
+      ),
+      icon: Icon(
+        Icons.info_outline,
+        color: CustomTheme.black,
+      ),
+      borderRadius: 10,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
+      snackStyle: SnackStyle.FLOATING,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      isDismissible: false,
+      duration: const Duration(seconds: 10),
+    );
   }
 }

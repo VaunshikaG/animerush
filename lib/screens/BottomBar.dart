@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import '../utils/theme.dart';
 import 'Home.dart';
 import 'HomeDrawer.dart';
 import 'Search.dart';
@@ -36,14 +34,16 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Theme.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: CustomTheme.black,
       extendBody: true,
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: CustomTheme.white),
-        backgroundColor: CustomTheme.black,
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(color: appTheme.iconTheme.color),
+        backgroundColor: appTheme.colorScheme.background,
         titleSpacing: 5,
         title: FittedBox(
           fit: BoxFit.contain,
@@ -59,19 +59,19 @@ class _BottomBarState extends State<BottomBar> {
       endDrawer: const HomeDrawer(),
       body: _tabs[_selectedTab],
       bottomNavigationBar: Container(
-        color: CustomTheme.black,
+        color: appTheme.colorScheme.background,
         padding: const EdgeInsets.all(8),
         child: GNav(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           duration: const Duration(milliseconds: 400),
           haptic: true,
-          color: CustomTheme.white,
-          activeColor: CustomTheme.themeColor1,
-          hoverColor: CustomTheme.blueGrey50,
+          color: appTheme.iconTheme.color,
+          activeColor: appTheme.primaryColor,
+          hoverColor: appTheme.highlightColor,
           gap: 8,
           iconSize: 22,
-          backgroundColor: CustomTheme.black,
-          tabBackgroundColor: CustomTheme.grey2,
+          backgroundColor: appTheme.colorScheme.background,
+          tabBackgroundColor: appTheme.colorScheme.surface,
           tabs: const [
             GButton(
               icon: CupertinoIcons.house,
