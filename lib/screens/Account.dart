@@ -719,4 +719,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     return Column();
   }
 
+  @override
+  void dispose() {
+    loginController.dispose();
+    super.dispose();
+  }
 }

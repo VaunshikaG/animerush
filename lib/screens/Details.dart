@@ -52,43 +52,6 @@ class _DetailsState extends State<Details> {
     "Studios",
   ];
 
-  List<String> title = [
-    "One Piece",
-    "Chainsaw Man",
-    "Naruto Shippuden",
-    "Boruto: Naruto Next Generations",
-    "Kage No Jitsuryokusha Ni Naritakute!",
-    "Bleach: Sennen Kessen-Hen",
-    "Blue Lock",
-    "Detective Conan",
-    "Fumetsu No Anata E 2Nd Season",
-    "High School Dxd Hero",
-  ];
-  List<String> titleImgs = [
-    "https://cdnimg.xyz/images/anime/One-piece.jpg",
-    "https://cdnimg.xyz/cover/chainsaw-man-1664388043.png",
-    "https://cdnimg.xyz/images/anime/naruto_shippuden.jpg",
-    "https://cdnimg.xyz/cover/boruto-naruto-next-generations.png",
-    "https://cdnimg.xyz/cover/kage-no-jitsuryokusha-ni-naritakute-1664388804.png",
-    "https://cdnimg.xyz/cover/bleach-sennen-kessen-hen-1664387572.png",
-    "https://cdnimg.xyz/cover/blue-lock-1664387634.png",
-    "https://cdnimg.xyz/cover/detective-conan.png",
-    "https://cdnimg.xyz/cover/fumetsu-no-anata-e-2nd-season-1662695170.png",
-    "https://cdnimg.xyz/cover/high-school-dxd-hero.png",
-  ];
-  List<String> titleStatus = [
-    "Special  Complected  2009",
-    "Special  Complected  2020",
-    "Special  Complected  2015",
-    "Special  Complected  2021",
-    "Special  Complected  2009",
-    "Special  Complected  2020",
-    "Special  Complected  2015",
-    "Special  Complected  2021",
-    "Special  Complected  2015",
-    "Special  Complected  2021",
-  ];
-
   @override
   void initState() {
     log(runtimeType.toString());

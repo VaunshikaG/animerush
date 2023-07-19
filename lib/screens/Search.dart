@@ -289,7 +289,7 @@ class _SearchState extends State<Search> {
                           ],
                         ),
                       ),
-                    ))
+                    )),
               ],
             ),
           ),
@@ -300,7 +300,6 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    searchController.dispose();
     super.dispose();
   }
 

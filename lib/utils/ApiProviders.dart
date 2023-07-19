@@ -161,9 +161,9 @@ class ApiProviders {
       return http.get(
       // return http.post(
         myUri,
-        headers: <String, String>{
-          'Authorization': 'JWT $token',
-        },
+        // headers: <String, String>{
+        //   'Authorization': 'JWT $token',
+        // },
         // body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
@@ -191,9 +191,9 @@ class ApiProviders {
       return http.get(
       // return http.post(
         myUri,
-        headers: <String, String>{
-          'Authorization': 'JWT $token',
-        },
+        // headers: <String, String>{
+        //   'Authorization': 'JWT $token',
+        // },
         // body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
@@ -215,9 +215,34 @@ class ApiProviders {
       return http.get(
       // return http.post(
         myUri,
-        headers: <String, String>{
-          'Authorization': 'JWT $token',
-        },
+        // headers: <String, String>{
+        //   'Authorization': 'JWT $token',
+        // },
+        // body: model.toJson(),
+      ).then((http.Response response) {
+        final int statusCode = response.statusCode;
+        statusExp(statusCode);
+        return response.body;
+      });
+    } catch (e) {
+      catchExp(e);
+      rethrow;
+    }
+  }
+
+  Future<String> WatchListApi() async {
+  // Future<String> SearchApi({required WatchListModel model}) async {
+  //   Uri myUri = Uri.parse(AppConst.watchList);
+    Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
+    // Uri myUri = Uri.parse("https://mocki.io/v1/bde73b40-ac75-4e7d-9779-8a8a8a4bd503");
+
+    try {
+      return http.get(
+      // return http.post(
+        myUri,
+        // headers: <String, String>{
+        //   'Authorization': 'JWT $token',
+        // },
         // body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;

@@ -13,12 +13,13 @@ class AppConst {
   static const String details = "$app_url/anime-details/";
   static const String episode = "$app_url/episode-details/";
   static const String search = "$app_url/filter-details/";
+  static const String watchList = "$app_url/user-function/";
 
 
 
 
   static const String FONT = "Quicksand";
-  static const String LOGINSTATUS = "false";
+  static const String loginStatus = "false";
 
   static const String userName = "user_name";
   static const String email = "email";

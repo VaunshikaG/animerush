@@ -25,8 +25,8 @@ class LoginPodo {
 class Data {
   int? id;
   String? username;
+  String? realUsername;
   String? email;
-  bool? verified;
   bool? emailVerifiedStatus;
   String? created;
   String? jwtToken;
@@ -34,8 +34,8 @@ class Data {
   Data(
       {this.id,
         this.username,
+        this.realUsername,
         this.email,
-        this.verified,
         this.emailVerifiedStatus,
         this.created,
         this.jwtToken});
@@ -43,8 +43,8 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
+    realUsername = json['real_username'];
     email = json['email'];
-    verified = json['verified'];
     emailVerifiedStatus = json['email_verified_status'];
     created = json['created'];
     jwtToken = json['jwt_token'];
@@ -54,8 +54,8 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['username'] = this.username;
+    data['real_username'] = this.realUsername;
     data['email'] = this.email;
-    data['verified'] = this.verified;
     data['email_verified_status'] = this.emailVerifiedStatus;
     data['created'] = this.created;
     data['jwt_token'] = this.jwtToken;

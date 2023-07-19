@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       // home: const Splash(),
-      home: const BottomBar(currentIndex: 0),
+      home: const BottomBar(currentIndex: 2),
     );
   }
 }

@@ -119,3 +119,22 @@ class SearchModel {
     return map;
   }
 }
+
+class WatchListModel {
+  String? functionName;
+  String? type;
+
+  WatchListModel({
+    this.functionName,
+    this.type,
+  });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'function_name': 'watch_list',
+      'type': type!.trim(),
+    };
+
+    return map;
+  }
+}

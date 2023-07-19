@@ -210,6 +210,22 @@ class AppTheme {
             ),
           ),
     ),
+    tabBarTheme: TabBarTheme(
+      labelColor: CustomTheme.themeColor1,
+      indicatorSize: TabBarIndicatorSize.label,
+      labelStyle: GoogleFonts.quicksand(
+        fontSize: 13.5,
+        color: CustomTheme.themeColor1,
+        fontWeight: FontWeight.w500,
+      ),
+      unselectedLabelStyle: GoogleFonts.quicksand(
+        fontSize: 13.5,
+        color: CustomTheme.white,
+        fontWeight: FontWeight.w500,
+      ),
+      indicatorColor: CustomTheme.themeColor1,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+    ),
     expansionTileTheme: ExpansionTileThemeData(
       collapsedIconColor: CustomTheme.themeColor1,
       iconColor: CustomTheme.themeColor1,

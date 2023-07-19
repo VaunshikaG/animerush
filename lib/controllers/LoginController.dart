@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:animerush/utils/AppConst.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +38,21 @@ class LoginController extends GetxController {
       _apiProviders.LoginApi(model: loginModel).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
-          LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
-          if (loginPodo.st == ("100")) {
+          if (responseBody['st'] == 100) {
+            LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
-            prefs.setString(AppConst.userName, loginPodo.data!.username!);
-            Get.to(() => const BottomBar(currentIndex: 0));
+            prefs.setString(AppConst.userName, loginPodo.data!.realUsername!);
+            prefs.setBool(AppConst.loginStatus, true);
+            isLogin.value = false;
+            isLoggedIn.value = true;
+            Get.to(() => const BottomBar(currentIndex: 3));
+            userNameController.clear();
+            emailController.clear();
+            passwordController.clear();
+            otpController.clear();
           } else {
-            CustomSnackBar(loginPodo.msg!);
+            log(responseBody);
+            CustomSnackBar(responseBody['msg']);
           }
         }
       });
@@ -63,13 +72,21 @@ class LoginController extends GetxController {
       _apiProviders.SignUpApi(model: signUpModel).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
+          if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
-          if (commonResponse.st == ("100")) {
             message = commonResponse.msg;
-          } else if (commonResponse.st == ("101")) {
-            message = commonResponse.msg;
+            CustomSnackBar(message);
+            isSignin.value = false;
+            isLogin.value = true;
+            // Get.offAll(const BottomBar(currentIndex: 3));
+          userNameController.clear();
+          emailController.clear();
+          passwordController.clear();
+          otpController.clear();
+          } else if (responseBody['st'] == 101) {
+            message = responseBody['msg'];
           } else {
-            CustomSnackBar(commonResponse.msg!);
+            CustomSnackBar(responseBody['msg']);
           }
         }
       });
@@ -89,15 +106,19 @@ class LoginController extends GetxController {
       _apiProviders.OtpVerfiyApi(model: otpVerfiyModel).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
+          if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
-          if (commonResponse.st == ("100")) {
             isOtp.value = false;
             isPassword.value = true;
-            CustomSnackBar(commonResponse.msg!);
-          } else if (commonResponse.st == ("101")) {
-            CustomSnackBar(commonResponse.msg!);
+          userNameController.clear();
+          emailController.clear();
+          passwordController.clear();
+          otpController.clear();
+            CustomSnackBar(responseBody['msg']);
+          } else if (responseBody['st'] == 101) {
+            CustomSnackBar(responseBody['msg']);
           } else {
-            CustomSnackBar(commonResponse.msg!);
+            CustomSnackBar(responseBody['msg']);
           }
         }
       });
@@ -114,15 +135,19 @@ class LoginController extends GetxController {
           .then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
+          if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
-          if (commonResponse.st == ("100")) {
             isForgot.value = false;
             isOtp.value = true;
-            CustomSnackBar(commonResponse.msg!);
-          } else if (commonResponse.st == ("101")) {
-            CustomSnackBar(commonResponse.msg!);
+          userNameController.clear();
+          emailController.clear();
+          passwordController.clear();
+          otpController.clear();
+            CustomSnackBar(responseBody['msg']);
+          } else if (responseBody['st'] == 101) {
+            CustomSnackBar(responseBody['msg']);
           } else {
-            CustomSnackBar(commonResponse.msg!);
+            CustomSnackBar(responseBody['msg']);
           }
         }
       });
@@ -142,15 +167,19 @@ class LoginController extends GetxController {
       _apiProviders.ChangePasswordApi(model: changePasswordModel).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
-          CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
-          if (commonResponse.st == ("100")) {
+          if (responseBody['st'] == 100) {
+            CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
             isLogin.value = true;
             isPassword.value = false;
-            CustomSnackBar(commonResponse.msg!);
-          } else if (commonResponse.st == ("101")) {
-            CustomSnackBar(commonResponse.msg!);
+            userNameController.clear();
+            emailController.clear();
+            passwordController.clear();
+            otpController.clear();
+            CustomSnackBar(responseBody['msg']);
+          } else if (responseBody['st'] == 101) {
+            CustomSnackBar(responseBody['msg']);
           } else {
-            CustomSnackBar(commonResponse.msg!);
+            CustomSnackBar(responseBody['msg']);
           }
         }
       });
