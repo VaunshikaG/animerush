@@ -16,7 +16,7 @@ class CustomTheme {
   static Color white24 = Colors.white24;
 
   //  grey
-  static Color grey = Colors.grey;
+  static Color grey = Colors.grey.shade600;
   static Color grey300 = Colors.grey.shade300;
   static Color grey1 = const Color(0xFF1C1C1E);
   static Color grey2 = const Color(0xFF363638);
@@ -36,11 +36,11 @@ class CustomTheme {
 }
 
 List<Color> ColorList = [
-  CupertinoColors.systemIndigo,
-  CupertinoColors.systemYellow,
-  CupertinoColors.systemPurple,
-  CupertinoColors.systemPink,
-  CupertinoColors.systemTeal,
-  CupertinoColors.systemGreen,
-  CupertinoColors.systemRed,
+  CupertinoColors.systemIndigo.darkHighContrastColor,
+  CupertinoColors.systemOrange.darkHighContrastColor,
+  CupertinoColors.systemPurple.darkHighContrastColor,
+  CupertinoColors.systemPink.darkHighContrastColor,
+  CupertinoColors.systemBlue.darkHighContrastColor,
+  CupertinoColors.systemGreen.darkHighContrastColor,
+  CupertinoColors.systemRed.darkHighContrastColor,
 ];

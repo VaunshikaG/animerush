@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../model/login/LoginPodo.dart';
-import '../model/login/RqModels.dart';
+import '../model/RqModels.dart';
 import '../widgets/CustomSnackbar.dart';
-import '../widgets/CustomToast.dart';
 import 'AppConst.dart';
 import '../widgets/Loader.dart';
 
@@ -32,14 +30,15 @@ class ApiProviders {
 
   Future<String> LoginApi({required LoginModel model}) async {
     Uri myUri = Uri.parse(AppConst.login);
-    // Uri myUri = Uri.parse();
 
+    log(model.toJson().toString());
     try {
       return http.post(
         myUri,
-        body: jsonEncode(model),
+        body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
+        log(response.body);
         statusExp(statusCode);
         return response.body;
       });
@@ -51,12 +50,11 @@ class ApiProviders {
 
   Future<String> SignUpApi({required SignUpModel model}) async {
     Uri myUri = Uri.parse(AppConst.signUp);
-    // Uri myUri = Uri.parse();
 
     try {
       return http.post(
         myUri,
-        body: jsonEncode(model),
+        body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -70,12 +68,11 @@ class ApiProviders {
 
   Future<String> OtpVerfiyApi({required OtpVerfiyModel model}) async {
     Uri myUri = Uri.parse(AppConst.otpVerify);
-    // Uri myUri = Uri.parse();
 
     try {
       return http.post(
         myUri,
-        body: jsonEncode(model),
+        body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -89,7 +86,7 @@ class ApiProviders {
 
   Future<String> ForgotPasswordApi({required String email}) async {
     Uri myUri = Uri.parse(AppConst.forgotPassword);
-    // Uri myUri = Uri.parse();
+
     Map<String, String> requestBody = <String, String>{
       'email': '$email',
       "web_code": "AnimeRush",
@@ -112,12 +109,11 @@ class ApiProviders {
 
   Future<String> ChangePasswordApi({required ChangePasswordModel model}) async {
     Uri myUri = Uri.parse(AppConst.changePassword);
-    // Uri myUri = Uri.parse();
 
     try {
       return http.post(
         myUri,
-        body: model,
+        body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -130,14 +126,16 @@ class ApiProviders {
   }
 
   Future<String> HomeApi() async {
-    Uri myUri = Uri.parse(AppConst.home);
+    // Uri myUri = Uri.parse(AppConst.home);
+    Uri myUri = Uri.parse("https://mocki.io/v1/79e0e726-396d-4c05-b355-65b792cd4415");
 
     Map<String, String> jsonMap = {'key': AppConst.KEY};
 
     try {
-      return http.post(
+      return http.get(
+      // return http.post(
         myUri,
-        body: jsonMap,
+        // body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -149,26 +147,24 @@ class ApiProviders {
     }
   }
 
-  // Future<String> DetailsApi() async {
-  Future<String> DetailsApi({required String animeId}) async {
-    Uri myUri = Uri.parse(AppConst.details);
-    // Uri myUri = Uri.parse("https://mocki.io/v1/b4a89a45-6358-4b22-9220-dd08dd604ba8");
+  Future<String> DetailsApi() async {
+  // Future<String> DetailsApi({required String animeId}) async {
+  //   Uri myUri = Uri.parse(AppConst.details);
+    Uri myUri = Uri.parse("https://mocki.io/v1/90beb7d1-1b20-4ed2-9c19-182ab52eb88f");
 
-    Map<String, String> jsonMap = {
-      'key': AppConst.KEY,
-      'id': animeId,
-    };
-    var map = <String, dynamic>{};
-    map['key'] = AppConst.KEY;
-    map['id'] = animeId;
+    // Map<String, String> jsonMap = {
+    //   'key': AppConst.KEY,
+    //   'id': animeId,
+    // };
 
     try {
-      return http.post(
+      return http.get(
+      // return http.post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
-        body: jsonMap,
+        // body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         print(statusCode);
@@ -181,27 +177,48 @@ class ApiProviders {
     }
   }
 
-  // Future<String> EpisodeApi() async {
-  Future<String> EpisodeApi({required String episodeId}) async {
-    Uri myUri = Uri.parse(AppConst.details);
-    // Uri myUri = Uri.parse("https://mocki.io/v1/f1760b19-64fa-4c98-8092-0fc9348cc33e");
+  Future<String> EpisodeApi() async {
+  // Future<String> EpisodeApi({required String episodeId}) async {
+  //   Uri myUri = Uri.parse(AppConst.details);
+    Uri myUri = Uri.parse("https://mocki.io/v1/009e0142-f8fe-4f21-9585-36f0f3317577");
 
-    var map = <String, dynamic>{};
-    map['key'] = AppConst.KEY;
-    map['id'] = episodeId;
-
-    Map<String, String> jsonMap = {
-      'key': AppConst.KEY,
-      'id': episodeId,
-    };
+    // Map<String, String> jsonMap = {
+    //   'key': AppConst.KEY,
+    //   'id': episodeId,
+    // };
 
     try {
-      return http.post(
+      return http.get(
+      // return http.post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
-        body: jsonMap,
+        // body: jsonMap,
+      ).then((http.Response response) {
+        final int statusCode = response.statusCode;
+        statusExp(statusCode);
+        return response.body;
+      });
+    } catch (e) {
+      catchExp(e);
+      rethrow;
+    }
+  }
+
+  Future<String> SearchApi() async {
+  // Future<String> SearchApi({required SearchModel model}) async {
+  //   Uri myUri = Uri.parse(AppConst.search);
+    Uri myUri = Uri.parse("https://mocki.io/v1/1f975f19-6d43-49f3-8861-5a791d4ce71c");
+
+    try {
+      return http.get(
+      // return http.post(
+        myUri,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        // body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);

@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/SearchController.dart';
+import '../model/RqModels.dart';
 import '../utils/theme.dart';
+import '../widgets/SimilarList.dart';
 import 'Details.dart';
 
 class Search extends StatefulWidget {
@@ -43,50 +45,17 @@ class _SearchState extends State<Search> {
     {'title': 'Vampire', 'icon': 'assets/icons/vampire.png', 'value': 'vampire'},
   ];
 
-  List<String> categoryTitle = [
-    "Movies",
-    "TV Series",
-    "OVAs",
-    "ONAs",
-    "Specials",
-    "Completed",
-    "Ongoing",
-    "Subbed",
-    "Dubbed",
-  ];
-  List<String> genreTitle = [
-    "Comedy",
-    "Harem",
-    "Romance",
-    "School",
-    "Seinen",
-    "Action",
-    "Fantasy",
-    "Shoujo",
-    "Parody",
-    "Shounen",
-    "Super Power",
-    "Slice Of Life",
-    "Kids",
-    "Mecha",
-    "Police",
-    "Psychological",
-    "Sci-Fi",
-    "Sports",
-    "Drama",
-    "Mystery",
-    "Supernatural",
-    "Vampire",
-  ];
-
-  List<String> categoryFilter = [];
-  List<String> genreFilter = [];
   List<CategoryTitle> categoryNames = [];
   List<GenreTitle> genreNames = [];
 
   @override
   void initState() {
     log(runtimeType.toString());
+    searchController.isTyping.value = false;
+    searchController.noData.value = false;
+    searchController.hasData.value = false;
+    searchController.showChips.value = true;
+    searchController.showHistory.value = true;
     //  text chip
     // genreNames = genreTitle.map((name) => GenreTitle(name)).toList();
     categoryNames = categoryData.map((map) => CategoryTitle(map['title'], map['value'])).toList();
@@ -120,23 +89,24 @@ class _SearchState extends State<Search> {
                   onSubmitted: (value) {
                     setState(() {
                       if (value.isNotEmpty) {
-                        if (searchController.searchHistory.length >= 4) {
-                          searchController.searchHistory.removeRange(0, 1);
+                        if (searchController.searchHistory.length >=
+                            4) {
+                          searchController.searchHistory
+                              .removeRange(0, 1);
                           searchController.searchHistory.add(value);
                         } else {
                           searchController.searchHistory.add(value);
+                          searchController.showChips.value = true;
+                          searchController.showHistory.value = true;
                         }
                       }
                     });
                   },
                   style: appTheme.textTheme.titleMedium,
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.search,
-                      size: 23,
-                      color: appTheme.primaryColor,
-                    ),
-                    onPressed: () {},
+                  prefixIcon: Icon(
+                    CupertinoIcons.search,
+                    size: 23,
+                    color: appTheme.primaryColor,
                   ),
                   suffixIcon: Icon(
                     CupertinoIcons.clear_circled_solid,
@@ -144,125 +114,194 @@ class _SearchState extends State<Search> {
                     color: appTheme.iconTheme.color,
                   ),
                   onTap: () => searchController.isTyping.value = true,
-                  backgroundColor:
-                      appTheme.dialogBackgroundColor.withOpacity(0.25),
+                  backgroundColor: appTheme.dialogBackgroundColor
+                      .withOpacity(0.25),
                   suffixInsets: const EdgeInsets.only(right: 15),
                 ),
-
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 20, 0, 5),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Anime Type",
-                    style: appTheme.textTheme.labelMedium,
-                  ),
-                ),
-                categoryChips(),
-
-
-                /*ExpansionTile(
-                  title: Text(
-                    "Genre",
-                    style: appTheme.textTheme.labelMedium,
-                  ),
-                  children: [
-                    Wrap(
-                      spacing: -5,
-                      runSpacing: -15,
-                      children: genreChips.toList(),
-                    )
-                  ],
-                ),*/
-
-                Container(
-                  margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Genre",
-                    style: appTheme.textTheme.labelMedium,
-                  ),
-                ),
-                genreChips(),
-
-                (searchController.searchHistory.isNotEmpty)
-                    ? Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            if (!FocusScope.of(context).hasPrimaryFocus) {
-                              FocusScope.of(context).unfocus();
-                            }
-                            searchController.searchHistory.clear();
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                          visualDensity: const VisualDensity(vertical: -2),
-                          padding: const EdgeInsets.fromLTRB(0, 5, 10, 0),
-                        ),
+                Obx(() => Visibility(
+                  visible: searchController.showChips.value,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 20, 0, 5),
+                        alignment: Alignment.centerLeft,
                         child: Text(
-                          "Clear All",
+                          "Anime Type",
                           style: appTheme.textTheme.labelMedium,
                         ),
                       ),
-                    ),
-                    ListView.builder(
-                      itemCount: searchController.searchHistory.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      physics: const ClampingScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          leading: IconButton(
-                            icon: Icon(
-                              CupertinoIcons.search,
-                              size: 17,
-                              color: appTheme.primaryColor,
+                      categoryChips(),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Genre",
+                          style: appTheme.textTheme.labelMedium,
+                        ),
+                      ),
+                      genreChips(),
+
+                      /*ExpansionTile(
+                      title: Text(
+                        "Genre",
+                        style: appTheme.textTheme.labelMedium,
+                      ),
+                      children: [
+                        Wrap(
+                          spacing: -5,
+                          runSpacing: -15,
+                          children: genreChips.toList(),
+                        )
+                      ],
+                    ),*/
+
+                    ],
+                  ),
+                )),
+                Obx(() => Visibility(
+                  visible: searchController.showHistory.value,
+                      child: (searchController.searchHistory.isNotEmpty)
+                          ? Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (!FocusScope.of(context)
+                                      .hasPrimaryFocus) {
+                                    FocusScope.of(context)
+                                        .unfocus();
+                                  }
+                                  searchController.searchHistory
+                                      .clear();
+                                });
+                              },
+                              style: TextButton.styleFrom(
+                                visualDensity: const VisualDensity(
+                                    vertical: -2),
+                                padding: const EdgeInsets.fromLTRB(
+                                    0, 5, 10, 0),
+                              ),
+                              child: Text(
+                                "Clear All",
+                                style:
+                                appTheme.textTheme.labelMedium,
+                              ),
                             ),
-                            onPressed: () {
-                              if (!FocusScope.of(context).hasPrimaryFocus) {
-                                FocusScope.of(context).unfocus();
-                                searchController.isTyping.value = false;
-                              }
+                          ),
+                          ListView.builder(
+                            itemCount: searchController
+                                .searchHistory.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            physics: const ClampingScrollPhysics(),
+                            itemBuilder:
+                                (BuildContext context, int index) {
+                              return ListTile(
+                                leading: IconButton(
+                                  icon: Icon(
+                                    CupertinoIcons.search,
+                                    size: 17,
+                                    color: appTheme.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    if (!FocusScope.of(context)
+                                        .hasPrimaryFocus) {
+                                      FocusScope.of(context)
+                                          .unfocus();
+                                      searchController
+                                          .isTyping.value = false;
+                                    }
+                                  },
+                                ),
+                                title: Text(
+                                  searchController
+                                      .searchHistory[index]
+                                      .toString(),
+                                  style: appTheme
+                                      .textTheme.titleMedium,
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(
+                                    CupertinoIcons
+                                        .clear_circled_solid,
+                                    size: 15,
+                                    color: appTheme.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchController.searchHistory
+                                          .removeAt(index);
+                                    });
+                                  },
+                                ),
+                                horizontalTitleGap: 5,
+                                visualDensity: const VisualDensity(
+                                    vertical: -4),
+                              );
                             },
-                          ),
-                          title: Text(
-                            searchController.searchHistory[index].toString(),
-                            style: appTheme.textTheme.titleMedium,
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(
-                              CupertinoIcons.clear_circled_solid,
-                              size: 15,
-                              color: appTheme.primaryColor,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                searchController.searchHistory.removeAt(index);
-                              });
-                            },
-                          ),
-                          horizontalTitleGap: 5,
-                          visualDensity: const VisualDensity(vertical: -4),
-                        );
-                      },
-                    )
-                  ],
-                )
-                    : Container(
+                          )
+                        ],
+                      )
+                          : Container(
                         margin: const EdgeInsets.only(top: 30),
                         child: const Center(
                           child: Text("No search history.."),
                         ),
                       ),
+                    )),
+                Obx(() => Visibility(
+                  visible: searchController.hasData.value,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 15, bottom: 10, top: 15),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              searchController.displayName,
+                              style: appTheme.textTheme.bodyLarge,
+                            ),
+                          ),
+                          SimilarList(
+                            itemCount: searchController.animeList.length,
+                            similarData: searchController.animeList,
+                          ),
+                        ],
+                      ),
+                    )),
+                Obx(() => Visibility(
+                  visible: searchController.noData.value,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/img/luffy1.png',
+                              width: 200,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Oops, failed to load data!",
+                              style: appTheme.textTheme.displayLarge,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   // single chip selection
@@ -272,43 +311,38 @@ class _SearchState extends State<Search> {
       height: 40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: categoryTitle.length,
+        itemCount: categoryData.length,
         itemBuilder: (BuildContext context, int index) {
           final item = categoryData[index];
           return Container(
             margin: const EdgeInsets.only(right: 7),
             child: FilterChip(
-              label: Text(categoryTitle[index]),
+              label: Text(item['title']),
               labelStyle: appTheme.textTheme.bodySmall,
-              selected: searchController.categoryType.contains(categoryTitle[index]),
+              selected: searchController.categoryType.contains(item['title']),
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {
-                    if (categoryFilter.length == 1 && categoryFilter.contains(searchController.categoryType)) {
-                      categoryFilter.removeLast();
-                      categoryFilter.removeWhere((String name) {
-                        return name == searchController.categoryType;
-                      });
-                    } else if (categoryFilter.length == 0){
-                      searchController.categoryType = item['title'];
-                      categoryFilter.add(item['title']);
-                      if (searchController.categoryType == item['title']) {
-                        searchController.value1 = item['value'];
-                        log(searchController.value1);
-                      }
+                    searchController.categoryType = item['title'];
+                    if (searchController.categoryType == item['title']) {
+                      searchController.value1 = item['value'];
                     }
                   } else {
                     searchController.categoryType = "";
-                    categoryFilter.removeWhere((String name) {
-                      return name == categoryTitle[index];
-                    });
+                    searchController.value1 = "";
                   }
+                  searchController.searchApiCall(pgName: "chips",
+                      searchModel: SearchModel(
+                        val: searchController.value1,
+                        genres: searchController.value2,
+                        pageId: '1',
+                        sort: '',
+                      ));
                 });
               },
               backgroundColor: appTheme.disabledColor,
               disabledColor: appTheme.disabledColor,
               selectedColor: appTheme.hoverColor,
-              // selectedColor: appTheme.primaryColor,
               elevation: 2,
               showCheckmark: false,
               side: BorderSide.none,
@@ -362,31 +396,27 @@ class _SearchState extends State<Search> {
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {
-                    if (genreFilter.length == 1 && genreFilter.contains(searchController.genreType)) {
-                      genreFilter.removeLast();
-                      genreFilter.removeWhere((String name) {
-                        return name == searchController.genreType;
-                      });
-                    } else if (genreFilter.length == 0){
-                      searchController.genreType = item['title'];
-                      genreFilter.add(item['title']);
-                      if (searchController.genreType == item['title']) {
-                        searchController.value2 = item['value'];
-                        log(searchController.value2);
-                      }
+                    searchController.genreType = item['title'];
+                    if (searchController.genreType == item['title']) {
+                      searchController.value2 = item['value'];
                     }
                   } else {
                     searchController.genreType = "";
-                    genreFilter.removeWhere((String name) {
-                      return name == item['title'];
-                    });
+                    searchController.value2 = "";
                   }
+                  searchController.searchApiCall(
+                      pgName: "chips",
+                      searchModel: SearchModel(
+                        val: searchController.value1,
+                        genres: searchController.value2,
+                        pageId: '1',
+                        sort: '',
+                      ));
                 });
               },
               backgroundColor: appTheme.disabledColor,
               disabledColor: appTheme.disabledColor,
               selectedColor: appTheme.hoverColor,
-              // selectedColor: appTheme.primaryColor,
               visualDensity: const VisualDensity(vertical: 3),
               elevation: 2,
               showCheckmark: false,
@@ -425,26 +455,58 @@ class _SearchState extends State<Search> {
     "https://cdnimg.xyz/cover/high-school-dxd-hero.png",
   ];
 
-  Widget similarList() {
+  Widget searchResultList() {
+    final appTheme = Theme.of(context);
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200,
-        crossAxisSpacing: 0,
-        mainAxisSpacing: 125,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 160,
       ),
-      // itemCount: 4,
-      itemCount: title.length,
+      itemCount: searchController.animeList.length,
       itemBuilder: (BuildContext ctx, index) {
+        final searchResultList = searchController.animeList[index];
+        final lang, type, status;
+
+        if(searchResultList.type == 'S') {
+          lang = "SUB";
+        } else if(searchResultList.type == 'D') {
+          lang = "DUB";
+        } else {
+          lang = "-";
+        }
+
+        if(searchResultList.animeWatchType == 'ON') {
+          type = "Onas";
+        } else if(searchResultList.animeWatchType == 'OV') {
+          type = "Ovas";
+        } else if(searchResultList.animeWatchType == 'M') {
+          type = "Movie";
+        } else if(searchResultList.animeWatchType == 'SP') {
+          type = "Special";
+        } else if(searchResultList.animeWatchType == 'S') {
+          type = "Series";
+        } else {
+          type = "-";
+        }
+
+        if(searchResultList.status == 'C') {
+          status = "Completed";
+        } else if(searchResultList.status == 'O') {
+          status = "Ongoing";
+        } else {
+          status = "-";
+        }
+
         return GestureDetector(
           onTap: () {
-            // Get.off(() => Details(id: detailsController.id));
+            Get.off(() => Details(id: searchResultList.id.toString()));
           },
-          child: Container(
-            // height: 220,
-            width: 200,
+          child: SizedBox(
+            height: 220,
             child: Wrap(
               children: [
                 Container(
@@ -453,12 +515,12 @@ class _SearchState extends State<Search> {
                   margin: const EdgeInsets.only(left: 6),
                   child: FadeInImage.assetNetwork(
                     alignment: Alignment.center,
-                    placeholder: "assets/img/icon1.png",
-                    image: titleImgs[index],
+                    placeholder: "assets/img/blank.png",
+                    image: searchResultList.aniImage ?? searchResultList.imageHighQuality!,
                     fit: BoxFit.fill,
                     imageErrorBuilder: (context, error, stackTrace) {
                       return Image.asset(
-                        "assets/img/icon1.png",
+                        "assets/img/blank.png",
                         fit: BoxFit.contain,
                       );
                     },
@@ -481,39 +543,51 @@ class _SearchState extends State<Search> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "SUB",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: CustomTheme.white,
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 7),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: (lang == "SUB")
+                                    ? appTheme.indicatorColor
+                                    : appTheme.colorScheme.error,
+                              ),
+                              child: Text(
+                                lang,
+                                style: appTheme.textTheme.labelSmall,
                               ),
                             ),
                             const SizedBox(width: 10),
-                            Text(
-                              "EP 1090",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: CustomTheme.white,
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 7),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: appTheme.dialogBackgroundColor,
+                              ),
+                              child: Text(
+                                "EP ${searchResultList.episodes}",
+                                style: appTheme.textTheme.labelSmall,
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 7),
                         SizedBox(
-                          height: 30,
+                          height: 40,
                           child: Text(
-                            title[index],
+                            searchResultList.name ?? "",
                             softWrap: true,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: CustomTheme.white,
-                            ),
+                            style: appTheme.textTheme.titleMedium,
                           ),
                         ),
                         const SizedBox(height: 8),
+                        Text(
+                          "$type  •  $status  •  ${searchResultList.airedYear ?? "-"}",
+                          overflow: TextOverflow.ellipsis,
+                          style: appTheme.textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 7),
                       ],
                     ),
                   ),
@@ -530,34 +604,35 @@ class _SearchState extends State<Search> {
   Iterable<Widget> get genreChips1 sync* {
     final appTheme = Theme.of(context);
 
-    for (GenreTitle genre in genreNames) {
+    for (GenreTitle item in genreNames) {
       yield Padding(
         padding: const EdgeInsets.all(5.3),
         child: FilterChip(
           label: Text(
-            genre.title,
+            item.title,
             style: appTheme.textTheme.bodySmall,
             softWrap: true,
           ),
-          selected: searchController.genreType.contains(genre.title),
+          selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) {
             setState(() {
               if (selected) {
-                if (genreFilter.length == 1 && genreFilter.contains(searchController.genreType)) {
-                  genreFilter.removeLast();
-                  genreFilter.removeWhere((String name) {
-                    return name == searchController.genreType;
-                  });
-                } else if (genreFilter.length == 0){
-                  searchController.genreType = genre.title;
-                  genreFilter.add(genre.title);
+                searchController.genreType = item.title;
+                if (searchController.genreType == item.title) {
+                  searchController.value2 = item.value;
                 }
               } else {
                 searchController.genreType = "";
-                genreFilter.removeWhere((String name) {
-                  return name == searchController.genreType;
-                });
+                searchController.value2 = "";
               }
+              searchController.searchApiCall(
+                  pgName: "drawer",
+                  searchModel: SearchModel(
+                    val: searchController.value1,
+                    genres: searchController.value2,
+                    pageId: '1',
+                    sort: '',
+                  ));
             });
           },
           backgroundColor: appTheme.disabledColor,
@@ -604,30 +679,27 @@ class _SearchState extends State<Search> {
               ],
             ),
           ),
-          // label: Text(item['title']),
           labelStyle: appTheme.textTheme.titleSmall,
           selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) {
             setState(() {
               if (selected) {
-                if (genreFilter.length == 1 && genreFilter.contains(searchController.genreType)) {
-                  genreFilter.removeLast();
-                  genreFilter.removeWhere((String name) {
-                    return name == searchController.genreType;
-                  });
-                } else if (genreFilter.length == 0){
-                  searchController.genreType = item.title;
-                  genreFilter.add(item.title);
-                  if (searchController.genreType == item.title) {
-                    searchController.value2 = item.value;
-                  }
+                searchController.genreType = item.title;
+                if (searchController.genreType == item.title) {
+                  searchController.value2 = item.value;
                 }
               } else {
                 searchController.genreType = "";
-                genreFilter.removeWhere((String name) {
-                  return name == item.title;
-                });
+                searchController.value2 = "";
               }
+              searchController.searchApiCall(
+                  pgName: "drawer",
+                  searchModel: SearchModel(
+                    val: searchController.value1,
+                    genres: searchController.value2,
+                    pageId: '1',
+                    sort: '',
+                  ));
             });
           },
           backgroundColor: appTheme.disabledColor,
@@ -728,8 +800,8 @@ class _SearchState extends State<Search> {
 }
 
 //  text chip
-class GenreTitle2 {
-  const GenreTitle2(this.name);
+class GenreTitle1 {
+  const GenreTitle1(this.name);
   final String name;
 }
 

@@ -52,8 +52,8 @@ class EpisodeController extends GetxController {
     // int str2 = int.parse(end);
     // log(epChunkList.getRange(str1, str2).toString());
 
-    // _apiProviders.EpisodeApi().then((value) {
-    _apiProviders.EpisodeApi(episodeId: animeId.toString()).then((value) {
+    _apiProviders.EpisodeApi().then((value) {
+    // _apiProviders.EpisodeApi(episodeId: animeId.toString()).then((value) {
       try {
         if (value != null) {
           var responsebody = json.decode(value);

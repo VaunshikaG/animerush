@@ -21,10 +21,10 @@ class DownloadClass {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(
-    debug: true,
-    ignoreSsl: true,
-  );
+  // await FlutterDownloader.initialize(
+  //   debug: true,
+  //   ignoreSsl: true,
+  // );
   runApp(MyApp());
 }
 

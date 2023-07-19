@@ -12,6 +12,7 @@ class AppConst {
   static const String home = "$app_url/home-details/";
   static const String details = "$app_url/anime-details/";
   static const String episode = "$app_url/episode-details/";
+  static const String search = "$app_url/filter-details/";
 
 
 
@@ -26,7 +27,7 @@ class AppConst {
   static const String apiStatus = "api_status";
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-  static RegExp passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+  static RegExp passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
 
 

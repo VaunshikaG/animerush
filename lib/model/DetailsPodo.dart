@@ -275,7 +275,8 @@ class ScheduleEp {
 class EpDetails {
   int? id;
   // int? epRank;
-  double? epRank;
+  // double? epRank;
+  String? epRank;
   String? episodeName;
   String? episodeTitle;
   String? image;
@@ -291,7 +292,7 @@ class EpDetails {
 
   EpDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    epRank = json['ep_rank'];
+    epRank = json['ep_rank'].toString();
     episodeName = json['episode_name'];
     episodeTitle = json['episode_title'];
     image = json['image'];

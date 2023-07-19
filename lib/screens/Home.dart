@@ -74,19 +74,22 @@ class _HomeState extends State<Home> {
                             child: CarouselSlider.builder(
                               itemCount: homeController.spotlightData.length,
                               itemBuilder: (BuildContext context, index, _) {
+                                var img =  homeController.spotlightData[index]
+                                    .banner ??
+                                    homeController.spotlightData[index].aniImage.toString();
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
                                   padding: EdgeInsets.zero,
                                   decoration: BoxDecoration(
                                     color: appTheme.dialogBackgroundColor,
                                     image: DecorationImage(
-                                      image: NetworkImage(
-                                        homeController.spotlightData[index].banner ??
-                                            homeController.spotlightData[index]
-                                                .aniImage
-                                                .toString(),
-                                      ),
+                                      image: NetworkImage(img),
                                       fit: BoxFit.cover,
+                                      onError: (error, stackTrace) =>
+                                              Image.asset(
+                                            "assets/img/icon1.png",
+                                            fit: BoxFit.cover,
+                                          ),
                                     ),
                                   ),
                                   child: Container(
@@ -433,11 +436,11 @@ class _HomeState extends State<Home> {
                     child: FittedBox(
                       fit: BoxFit.fill,
                       child: FadeInImage.assetNetwork(
-                        placeholder: "assets/img/icon1.png",
+                        placeholder: "assets/img/blank.png",
                         image: homeController.topData[index].aniImage.toString(),
                         imageErrorBuilder: (context, error, stackTrace) {
                           return Image.asset(
-                            "assets/img/icon1.png",
+                            "assets/img/blank.png",
                             fit: BoxFit.contain,
                           );
                         },
@@ -486,11 +489,11 @@ class _HomeState extends State<Home> {
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/img/icon1.png",
+                placeholder: "assets/img/blank.png",
                 image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/img/icon1.png",
+                    "assets/img/blank.png",
                     fit: BoxFit.contain,
                   );
                 },
@@ -556,11 +559,11 @@ class _HomeState extends State<Home> {
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/img/icon1.png",
+                placeholder: "assets/img/blank.png",
                 image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/img/icon1.png",
+                    "assets/img/blank.png",
                     fit: BoxFit.contain,
                   );
                 },
@@ -623,11 +626,11 @@ class _HomeState extends State<Home> {
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/img/icon1.png",
+                placeholder: "assets/img/blank.png",
                 image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/img/icon1.png",
+                    "assets/img/blank.png",
                     fit: BoxFit.contain,
                   );
                 },
@@ -690,11 +693,11 @@ class _HomeState extends State<Home> {
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/img/icon1.png",
+                placeholder: "assets/img/blank.png",
                 image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    "assets/img/icon1.png",
+                    "assets/img/blank.png",
                     fit: BoxFit.contain,
                   );
                 },

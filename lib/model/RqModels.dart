@@ -13,9 +13,9 @@ class SignUpModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': username,
-      'email': email,
-      'password': password,
+      'username': username!.trim(),
+      'email': email!.trim(),
+      'password': password!.trim(),
       "web_code": "AnimeRush",
     };
 
@@ -36,8 +36,8 @@ class LoginModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': username,
-      'password': password,
+      'username': username!.trim(),
+      'password': password!.trim(),
       "web_code": "AnimeRush",
     };
 
@@ -58,8 +58,8 @@ class OtpVerfiyModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': otp,
-      'email': email,
+      'username': otp!.trim(),
+      'email': email!.trim(),
       "web_code": "AnimeRush",
     };
 
@@ -82,10 +82,38 @@ class ChangePasswordModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'otp': otp,
-      'email': email,
-      'password': password,
+      'otp': otp!.trim(),
+      'email': email!.trim(),
+      'password': password!.trim(),
       "web_code": "AnimeRush",
+    };
+
+    return map;
+  }
+}
+
+class SearchModel {
+  String? key;
+  String? val;
+  String? pageId;
+  String? sort;
+  String? genres;
+
+  SearchModel({
+    this.key,
+    this.val,
+    this.pageId,
+    this.sort,
+    this.genres,
+  });
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'key': 'lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc',
+      'val': val!.trim(),
+      'page_id': pageId!.trim(),
+      'sort': sort!.trim(),
+      'genres': genres!.trim(),
     };
 
     return map;

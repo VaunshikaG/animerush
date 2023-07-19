@@ -5,7 +5,7 @@ import '../utils/theme.dart';
 
 class elevatedButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final void Function() onPressed;
 
   const elevatedButton({Key? key, required this.text, required this.onPressed})
       : super(key: key);
@@ -25,7 +25,7 @@ class elevatedButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: appTheme.textTheme.headlineSmall,
+          style: appTheme.textTheme.labelSmall,
         ),
       );
   }

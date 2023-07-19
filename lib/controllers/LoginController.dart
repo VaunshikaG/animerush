@@ -6,41 +6,26 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/CommonResponse.dart';
-import '../model/login/LoginPodo.dart';
-import '../model/login/RqModels.dart';
+import '../model/LoginPodo.dart';
+import '../model/RqModels.dart';
 import '../screens/BottomBar.dart';
 import '../utils/ApiProviders.dart';
 import '../widgets/CustomSnackbar.dart';
 
 class LoginController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
-  bool isLoggedIn = false,
-      isLogin = true,
-      isSignin = false,
-      isForgot = false,
-      isOtp = false,
-      isPassword = false;
-  var message, apiStatus;
+  RxBool isLoggedIn = false.obs,
+      isLogin = true.obs,
+      isSignin = false.obs,
+      isForgot = false.obs,
+      isOtp = false.obs,
+      isPassword = false.obs;
+  var message;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController otpController = TextEditingController();
-
-  void onReady() {
-    super.onReady();
-  }
-
-  Future<void> loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    // isLoggedIn = prefs.getBool(AppConst.LOGINSTATUS)!;
-    isLoggedIn = true;
-    isLogin = true;
-    isSignin = false;
-    isForgot = false;
-    isOtp = false;
-    isPassword = false;
-  }
 
   Future<void> loginApi() async {
     final prefs = await SharedPreferences.getInstance();
@@ -106,7 +91,8 @@ class LoginController extends GetxController {
           var responseBody = json.decode(value);
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
           if (commonResponse.st == ("100")) {
-            apiStatus = commonResponse.st;
+            isOtp.value = false;
+            isPassword.value = true;
             CustomSnackBar(commonResponse.msg!);
           } else if (commonResponse.st == ("101")) {
             CustomSnackBar(commonResponse.msg!);
@@ -130,8 +116,8 @@ class LoginController extends GetxController {
           var responseBody = json.decode(value);
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
           if (commonResponse.st == ("100")) {
-            isForgot = false;
-            isOtp = true;
+            isForgot.value = false;
+            isOtp.value = true;
             CustomSnackBar(commonResponse.msg!);
           } else if (commonResponse.st == ("101")) {
             CustomSnackBar(commonResponse.msg!);
@@ -158,8 +144,8 @@ class LoginController extends GetxController {
           var responseBody = json.decode(value);
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
           if (commonResponse.st == ("100")) {
-            isLogin = true;
-            isPassword = false;
+            isLogin.value = true;
+            isPassword.value = false;
             CustomSnackBar(commonResponse.msg!);
           } else if (commonResponse.st == ("101")) {
             CustomSnackBar(commonResponse.msg!);

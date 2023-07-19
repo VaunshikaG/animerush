@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
 import '../utils/AppConst.dart';
@@ -26,19 +27,30 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   final _formKey3 = GlobalKey<FormState>();
   final _formKey4 = GlobalKey<FormState>();
   final _formKey5 = GlobalKey<FormState>();
-  bool showPassword = true;
+  bool showPassword = true, showLog = false;
   TabController? _controller;
-  var themeMode;
 
   @override
   void initState() {
     log(runtimeType.toString());
+    // loadData();
     super.initState();
+  }
+
+  Future<void> loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    // isLoggedIn = prefs.getBool(AppConst.LOGINSTATUS)!;
+    loginController.isLoggedIn.value = false;
+    loginController.isLogin.value = true;
+    loginController.isSignin.value = false;
+    loginController.isForgot.value = false;
+    loginController.isOtp.value = false;
+    loginController.isPassword.value = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    themeMode = (SchedulerBinding.instance.window.platformBrightness == Brightness.light);
+    final appTheme = Theme.of(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -51,7 +63,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: loginController.isLoggedIn == false
+              child: loginController.isLoggedIn.isFalse
                   ? signup()
                   : _tabSection(),
             ),
@@ -70,8 +82,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         //  login
-        Visibility(
-          visible: loginController.isLogin,
+        Obx(() => Visibility(
+          visible: loginController.isLogin.value,
           child: Form(
             key: _formKey1,
             child: Column(
@@ -101,7 +113,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(AppConst.emailRegex),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
                   style: appTheme.textTheme.headlineSmall,
@@ -120,14 +131,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+                    RegExp passRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                     if (value!.isEmpty) {
                       return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password should be at least 6 characters';
-                    }
-                    if (value.length >= 20) {
-                      return 'Password should be at less than 20 characters';
+                    // } else if (!passRegExp.hasMatch(value)) {
+                    //   return 'Password is not strong';
                     }
                     return null;
                   },
@@ -137,7 +145,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(AppConst.passwordRegex),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
                   style: appTheme.textTheme.headlineSmall,
@@ -160,10 +167,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 elevatedButton(
                   text: 'Login',
                   onPressed: () {
-                    if (!FocusScope.of(context).hasPrimaryFocus) {
-                      FocusScope.of(context).unfocus();
+                    if (_formKey1.currentState!.validate()) {
+                      if (!FocusScope.of(context).hasPrimaryFocus) {
+                        FocusScope.of(context).unfocus();
+                      }
+                      _formKey1.currentState!.save();
+                      loginController.loginApi();
                     }
-                    loginController.loginApi();
                   },
                 ),
                 const SizedBox(height: 20),
@@ -173,10 +183,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   children: [
                     Text(
                       "Don't have an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: themeMode? CustomTheme.black : CustomTheme.white,
-                      ),
+                      style: appTheme.textTheme.bodySmall,
                     ),
                     textButton(
                       text: 'Register',
@@ -185,8 +192,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          loginController.isLogin = false;
-                          loginController.isSignin = true;
+                          loginController.isLogin.value = false;
+                          loginController.isSignin.value = true;
                         });
                       },
                     ),
@@ -199,19 +206,19 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       if (!FocusScope.of(context).hasPrimaryFocus) {
                         FocusScope.of(context).unfocus();
                       }
-                      loginController.isLogin = false;
-                      loginController.isForgot = true;
+                      loginController.isLogin.value = false;
+                      loginController.isForgot.value = true;
                     });
                   },
                 ),
               ],
             ),
           ),
-        ),
+        )),
 
         //  forget
-        Visibility(
-          visible: loginController.isForgot,
+        Obx(() => Visibility(
+          visible: loginController.isForgot.value,
           child: Form(
             key: _formKey3,
             child: Column(
@@ -231,8 +238,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+                    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                     if (value!.isEmpty) {
-                      return 'Please fill this field';
+                      return 'Please enter your password';
+                    } else if (!emailRegExp.hasMatch(value)) {
+                      return 'Email is not valid';
                     }
                     return null;
                   },
@@ -241,7 +251,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(AppConst.emailRegex),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
                   style: appTheme.textTheme.headlineSmall,
@@ -255,12 +264,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 elevatedButton(
                   text: 'Get Otp',
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (_formKey3.currentState!.validate()) {
                       if (!FocusScope.of(context).hasPrimaryFocus) {
                         FocusScope.of(context).unfocus();
+                        _formKey3.currentState!.save();
+                        loginController.forgotPasswordApi();
                       }
-                      _formKey1.currentState!.save();
-                      loginController.forgotPasswordApi();
                     }
                   },
                 ),
@@ -271,10 +280,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   children: [
                     Text(
                       "You already have an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: themeMode? CustomTheme.black : CustomTheme.white,
-                      ),
+                      style: appTheme.textTheme.bodySmall,
                     ),
                     textButton(
                       text: 'Login',
@@ -283,8 +289,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          loginController.isForgot = false;
-                          loginController.isLogin = true;
+                          loginController.isForgot.value = false;
+                          loginController.isLogin.value = true;
                         });
                       },
                     ),
@@ -293,11 +299,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-        ),
+        )),
 
         //  otp
-        Visibility(
-          visible: loginController.isOtp,
+        Obx(() => Visibility(
+          visible: loginController.isOtp.value,
           child: Form(
             key: _formKey4,
             child: Column(
@@ -341,15 +347,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 elevatedButton(
                   text: 'Verify',
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (_formKey4.currentState!.validate()) {
                       if (!FocusScope.of(context).hasPrimaryFocus) {
                         FocusScope.of(context).unfocus();
-                      }
-                      _formKey1.currentState!.save();
-                      loginController.otpApi();
-                      if (loginController.apiStatus == '100') {
-                        loginController.isOtp = false;
-                        loginController.isPassword = true;
+                        _formKey4.currentState!.save();
+                        loginController.otpApi();
                       }
                     }
                   },
@@ -361,10 +363,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   children: [
                     Text(
                       "You already have an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: themeMode? CustomTheme.black : CustomTheme.white,
-                      ),
+                      style: appTheme.textTheme.bodySmall,
                     ),
                     textButton(
                       text: 'Login',
@@ -373,8 +372,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          loginController.isOtp = false;
-                          loginController.isLogin = true;
+                          loginController.isOtp.value = false;
+                          loginController.isLogin.value = true;
                         });
                       },
                     ),
@@ -383,11 +382,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-        ),
+        )),
 
         //  password
-        Visibility(
-          visible: loginController.isPassword,
+        Obx(() => Visibility(
+          visible: loginController.isPassword.value,
           child: Form(
             key: _formKey5,
             child: Column(
@@ -407,8 +406,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+                    RegExp passRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                     if (value!.isEmpty) {
-                      return 'Please fill this field';
+                      return 'Please enter your password';
+                    } else if (!passRegExp.hasMatch(value)) {
+                      return 'Password is not strong';
                     }
                     return null;
                   },
@@ -431,12 +433,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 elevatedButton(
                   text: 'Submit',
                   onPressed: () {
-                    if (_formKey1.currentState!.validate()) {
+                    if (_formKey5.currentState!.validate()) {
                       if (!FocusScope.of(context).hasPrimaryFocus) {
                         FocusScope.of(context).unfocus();
+                        _formKey5.currentState!.save();
+                        loginController.changePasswordApi();
                       }
-                      _formKey1.currentState!.save();
-                      loginController.changePasswordApi();
                     }
                   },
                 ),
@@ -447,10 +449,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   children: [
                     Text(
                       "You already have an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: themeMode? CustomTheme.black : CustomTheme.white,
-                      ),
+                      style: appTheme.textTheme.bodySmall,
                     ),
                     textButton(
                       text: 'Login',
@@ -459,8 +458,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          loginController.isPassword = false;
-                          loginController.isLogin = true;
+                          loginController.isPassword.value = false;
+                          loginController.isLogin.value = true;
                         });
                       },
                     ),
@@ -469,11 +468,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-        ),
+        )),
 
         //  sign up
-        Visibility(
-          visible: loginController.isSignin,
+        Obx(() => Visibility(
+          visible: loginController.isSignin.value,
           child: Form(
             key: _formKey2,
             child: Column(
@@ -503,7 +502,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(AppConst.emailRegex),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
                   style: appTheme.textTheme.headlineSmall,
@@ -522,8 +520,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+                    RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                     if (value!.isEmpty) {
-                      return 'Please fill this field';
+                      return 'Please enter your password';
+                    } else if (!emailRegExp.hasMatch(value)) {
+                      return 'Email is not valid';
                     }
                     return null;
                   },
@@ -554,11 +555,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
+                    RegExp passRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                     if (value!.isEmpty) {
                       return 'Please enter your password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password should be at least 6 characters';
+                    } else if (!passRegExp.hasMatch(value)) {
+                      return 'Password is not strong';
                     }
                     return null;
                   },
@@ -568,7 +569,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(AppConst.passwordRegex),
                     FilteringTextInputFormatter.singleLineFormatter,
                   ],
                   style: appTheme.textTheme.headlineSmall,
@@ -594,9 +594,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     if (_formKey1.currentState!.validate()) {
                       if (!FocusScope.of(context).hasPrimaryFocus) {
                         FocusScope.of(context).unfocus();
+                        _formKey1.currentState!.save();
+                        loginController.signUpApi();
                       }
-                      _formKey1.currentState!.save();
-                      loginController.signUpApi();
                     }
                   },
                 ),
@@ -607,10 +607,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   children: [
                     Text(
                       "You already have an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: themeMode? CustomTheme.black : CustomTheme.white,
-                      ),
+                      style: appTheme.textTheme.bodySmall,
                     ),
                     textButton(
                       text: 'Login',
@@ -619,8 +616,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          loginController.isSignin = false;
-                          loginController.isLogin = true;
+                          loginController.isSignin.value = false;
+                          loginController.isLogin.value = true;
                         });
                       },
                     ),
@@ -629,7 +626,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-        ),
+        )),
       ],
     );
   }
@@ -647,7 +644,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               controller: _controller,
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
-              unselectedLabelColor: themeMode ? CustomTheme.black : CustomTheme.white,
               labelColor: appTheme.scaffoldBackgroundColor,
               indicatorSize: TabBarIndicatorSize.label,
               indicator: BoxDecoration(

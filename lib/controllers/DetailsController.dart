@@ -36,8 +36,8 @@ class DetailsController extends GetxController {
   List<String> details = [];
 
   Future<void> detailsApiCall({required String? animeId}) async {
-    // _apiProviders.DetailsApi().then((value) {
-      _apiProviders.DetailsApi(animeId: animeId!).then((value) {
+    _apiProviders.DetailsApi().then((value) {
+      // _apiProviders.DetailsApi(animeId: animeId!).then((value) {
       try {
         if (value != null) {
           var responsebody = json.decode(value);
