@@ -38,6 +38,7 @@ class LoginController extends GetxController {
       _apiProviders.LoginApi(model: loginModel).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
+          print(responseBody);
           if (responseBody['st'] == 100) {
             LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
@@ -46,6 +47,7 @@ class LoginController extends GetxController {
             isLogin.value = false;
             isLoggedIn.value = true;
             Get.to(() => const BottomBar(currentIndex: 3));
+            CustomSnackBar("Login Successful");
             userNameController.clear();
             emailController.clear();
             passwordController.clear();

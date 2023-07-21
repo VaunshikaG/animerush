@@ -9,7 +9,7 @@ import 'AppConst.dart';
 import '../widgets/Loader.dart';
 
 class ApiProviders {
-  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0NiwidXNlcm5hbWUiOiJBbmltZVJ1c2hfYW5pbWVydXNoMTAiLCJleHAiOjE2ODk1ODY5NDcsImVtYWlsIjoicnRlajU1MDhAZ21haWwuY29tIn0.i012UMfDldkkyxrAzznXqr-_Mol0sbIyibgxDaHUgMk";
+  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTAwMTA3MzIsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.879sbT1ekJCpDL1Z96-5lXed8P7zOW2WcLy7ZfXZPlk";
 
   void catchExp(Object e) {
     hideProgress();
@@ -230,20 +230,26 @@ class ApiProviders {
     }
   }
 
-  Future<String> WatchListApi() async {
-  // Future<String> SearchApi({required WatchListModel model}) async {
-  //   Uri myUri = Uri.parse(AppConst.watchList);
-    Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
+  // Future<String> WatchListApi() async {
+  Future<String> WatchListApi({required String type}) async {
+    Uri myUri = Uri.parse(AppConst.watchList);
+  //   Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
     // Uri myUri = Uri.parse("https://mocki.io/v1/bde73b40-ac75-4e7d-9779-8a8a8a4bd503");
+    // Uri myUri = Uri.parse("https://mocki.io/v1/45a7acdb-209e-465a-bfa5-79bcb6c00f75");
+
+    Map<String, dynamic> jsonMap = {
+      'function_name': 'watch_list',
+      'type': type,
+    };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: model.toJson(),
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);

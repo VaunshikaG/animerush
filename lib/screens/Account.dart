@@ -39,13 +39,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
   Future<void> loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    // isLoggedIn = prefs.getBool(AppConst.LOGINSTATUS)!;
-    loginController.isLoggedIn.value = false;
-    loginController.isLogin.value = true;
-    loginController.isSignin.value = false;
-    loginController.isForgot.value = false;
-    loginController.isOtp.value = false;
-    loginController.isPassword.value = false;
+    loginController.isLoggedIn.value = prefs.getBool(AppConst.loginStatus)!;
+    // loginController.isLoggedIn.value = false;
+    // loginController.isLogin.value = true;
+    // loginController.isSignin.value = false;
+    // loginController.isForgot.value = false;
+    // loginController.isOtp.value = false;
+    // loginController.isPassword.value = false;
   }
 
   @override
@@ -63,7 +63,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: loginController.isLoggedIn.isFalse
+              child: loginController.isLoggedIn.value
                   ? signup()
                   : _tabSection(),
             ),
@@ -635,7 +635,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     final appTheme = Theme.of(context);
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Wrap(
         children: <Widget>[
           Container(
@@ -644,22 +644,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               controller: _controller,
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
-              labelColor: appTheme.scaffoldBackgroundColor,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: appTheme.primaryColor,
-              ),
               labelPadding: const EdgeInsets.symmetric(horizontal: 5),
               tabs: [
                 Tab(
                   height: 35,
                   child: Container(
+                    alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: appTheme.primaryColor, width: 1),
-                    ),
                     child: const Center(
                       child: Text("Profile"),
                     ),
@@ -668,26 +659,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 Tab(
                   height: 35,
                   child: Container(
+                    alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: appTheme.primaryColor, width: 1),
-                    ),
                     child: const Center(
                       child: Text("Continue Watching"),
-                    ),
-                  ),
-                ),
-                Tab(
-                  height: 35,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: appTheme.primaryColor, width: 1),
-                    ),
-                    child: const Center(
-                      child: Text("WatchList"),
                     ),
                   ),
                 ),
@@ -700,7 +675,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
             child: TabBarView(
               controller: _controller,
               children: [
-                Profile(), ContinueWatch(), WatchList(),
+                Profile(), ContinueWatch(),
               ],
             ),
           ),
@@ -710,13 +685,89 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   }
 
   Widget Profile() {
-    return Column();
+    final appTheme = Theme.of(context);
+
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(
+            Icons.logout,
+            size: 22,
+            color: appTheme.iconTheme.color,
+          ),
+          title: Text(
+            'Logout',
+            style: appTheme.textTheme.titleMedium,
+          ),
+          onTap: () => _logout(),
+          dense: true,
+          minLeadingWidth: 0,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+      ],
+    );
   }
   Widget ContinueWatch() {
     return Column();
   }
-  Widget WatchList() {
-    return Column();
+
+  Widget? _logout() {
+    final appTheme = Theme.of(context);
+
+    Get.defaultDialog(
+      cancel: ActionChip(
+        onPressed: () => Get.back(),
+        avatar: Icon(
+          Icons.close,
+          color: appTheme.iconTheme.color,
+        ),
+        label: SizedBox(
+          width: 30,
+          child: Center(
+            child: Text(
+              'No',
+              style: appTheme.textTheme.titleSmall,
+            ),
+          ),
+        ),
+        backgroundColor: appTheme.colorScheme.surface,
+        elevation: 2,
+        side: BorderSide.none,
+        padding: const EdgeInsets.all(5),
+      ),
+      confirm: ActionChip(
+        onPressed: () async {
+          final pref = await SharedPreferences.getInstance();
+          await pref.clear();
+          Get.deleteAll();
+
+          // Get.offAll(() => SplashScreen());
+        },
+        avatar: Icon(
+          Icons.check,
+          color: appTheme.scaffoldBackgroundColor,
+        ),
+        label: SizedBox(
+          width: 30,
+          child: Center(
+            child: Text(
+              'Yes',
+              style: appTheme.textTheme.labelSmall,
+            ),
+          ),
+        ),
+        backgroundColor: appTheme.primaryColor,
+        elevation: 1,
+        side: BorderSide.none,
+        padding: const EdgeInsets.all(5),
+      ),
+      title: 'Logout?',
+      titleStyle: appTheme.textTheme.displayMedium,
+      middleText: 'Do you want to logout?',
+      middleTextStyle: appTheme.textTheme.bodyMedium,
+      barrierDismissible: false,
+      radius: 5,
+    );
   }
 
   @override

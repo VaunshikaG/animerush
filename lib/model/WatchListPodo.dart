@@ -2,7 +2,7 @@ class WatchListPodo {
   int? st;
   String? msg;
   String? functionName;
-  List<Data>? data;
+  List<WatchData>? data;
 
   WatchListPodo({this.st, this.msg, this.functionName, this.data});
 
@@ -11,8 +11,8 @@ class WatchListPodo {
     msg = json['msg'];
     functionName = json['function_name'];
     if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) { data!.add(new Data.fromJson(v)); });
+      data = <WatchData>[];
+      json['data'].forEach((v) { data!.add(new WatchData.fromJson(v)); });
     }
   }
 
@@ -28,7 +28,7 @@ class WatchListPodo {
   }
 }
 
-class Data {
+class WatchData {
   int? id;
   int? user;
   Anime? anime;
@@ -37,9 +37,9 @@ class Data {
   bool? removed;
   String? created;
 
-  Data({this.id, this.user, this.anime, this.type, this.typeVal, this.removed, this.created});
+  WatchData({this.id, this.user, this.anime, this.type, this.typeVal, this.removed, this.created});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  WatchData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     user = json['user'];
     anime = json['anime'] != null ? new Anime.fromJson(json['anime']) : null;

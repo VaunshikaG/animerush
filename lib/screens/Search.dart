@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../controllers/SearchController.dart';
 import '../model/RqModels.dart';
 import '../utils/theme.dart';
+import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'Details.dart';
 
@@ -114,7 +115,7 @@ class _SearchState extends State<Search> {
                     color: appTheme.iconTheme.color,
                   ),
                   onTap: () => searchController.isTyping.value = true,
-                  backgroundColor: appTheme.dialogBackgroundColor
+                  backgroundColor: appTheme.splashColor
                       .withOpacity(0.25),
                   suffixInsets: const EdgeInsets.only(right: 15),
                 ),
@@ -265,7 +266,7 @@ class _SearchState extends State<Search> {
                             ),
                           ),
                           SimilarList(
-                            itemCount: searchController.animeList.length,
+                            dataLength: searchController.animeList.length,
                             similarData: searchController.animeList,
                           ),
                         ],
@@ -273,22 +274,7 @@ class _SearchState extends State<Search> {
                     )),
                 Obx(() => Visibility(
                   visible: searchController.noData.value,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/img/luffy1.png',
-                              width: 200,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              "Oops, failed to load data!",
-                              style: appTheme.textTheme.displayLarge,
-                            ),
-                          ],
-                        ),
-                      ),
+                      child: noData(context),
                     )),
               ],
             ),
@@ -300,6 +286,7 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
+    searchController.dispose();
     super.dispose();
   }
 
@@ -560,7 +547,7 @@ class _SearchState extends State<Search> {
                               padding: const EdgeInsets.symmetric(horizontal: 7),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: appTheme.dialogBackgroundColor,
+                                color: appTheme.splashColor,
                               ),
                               child: Text(
                                 "EP ${searchResultList.episodes}",

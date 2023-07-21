@@ -20,23 +20,35 @@ class WishListController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  List<Anime> animeList = [];
+  int dataLength = 0;
+
   Future<void> watchApi(String type) async {
+    print(type);
+    animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      WatchListModel watchModel = WatchListModel(type: type);
-      _apiProviders.WatchListApi().then((value) {
-      // _apiProviders.WatchListApi(model: watchModel).then((value) {
+      // _apiProviders.WatchListApi().then((value) {
+      _apiProviders.WatchListApi(type: type).then((value) {
         if (value != null) {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 100) {
             WatchListPodo watchListPodo = WatchListPodo.fromJson(responseBody);
+            for (int i = 0; i < watchListPodo.data!.length; i++) {
+              dataLength = watchListPodo.data!.length;
+              animeList.add(watchListPodo.data![i].anime!);
+            }
+            print(watchListPodo.data!.length);
+            print(watchListPodo.data![0].typeVal);
             noData.value = false;
             showLogin.value = false;
             hasData.value = true;
           } else if (responseBody['st'] == 101) {
+            print('here');
+            dataLength = 0;
             showLogin.value = false;
-            hasData.value = false;
+            hasData.value = true;
             noData.value = true;
           } else if (responseBody['detail'] == "Signature has expired.") {
             prefs.setBool(AppConst.loginStatus, false);

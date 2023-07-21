@@ -10,6 +10,7 @@ import '../model/DetailsPodo.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
+import '../widgets/NoData.dart';
 import 'Details.dart';
 import 'Player.dart';
 
@@ -35,7 +36,7 @@ class _EpisodeState extends State<Episode> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, "Please wait...", true);
+    await showProgress(context, true);
     epController.hasData.value = false;
     epController.noData.value = false;
     Future.delayed(Duration(seconds: 1), () {
@@ -174,22 +175,7 @@ class _EpisodeState extends State<Episode> {
                           )),
                           Obx(() => Visibility(
                             visible: epController.noData.value,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/img/luffy1.png',
-                                    width: 200,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "Oops, failed to load data!",
-                                    style: appTheme.textTheme.displayLarge,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            child: noData(context),
                           )),
                         ],
                       ),
@@ -441,7 +427,7 @@ class _EpisodeState extends State<Episode> {
                   // print(epChunkList[index].id.toString());
                 });
               },
-              splashColor: appTheme.dialogBackgroundColor,
+              splashColor: appTheme.splashColor,
               child: Container(
                 padding: EdgeInsets.zero,
                 alignment: Alignment.center,
@@ -455,7 +441,7 @@ class _EpisodeState extends State<Episode> {
                   // (epChunkList[index]).toString(),
                   // (index +1).toString(),
                   style: TextStyle(
-                    color: appTheme.dialogBackgroundColor,
+                    color: appTheme.splashColor,
                     fontWeight: epController.selectedIndex.value == index
                         ? FontWeight.bold
                         : FontWeight.normal,

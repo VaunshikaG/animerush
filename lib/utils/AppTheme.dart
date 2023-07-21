@@ -120,9 +120,10 @@ class AppTheme {
     highlightColor: CustomTheme.blueGrey50,
     disabledColor: CustomTheme.grey3,
     hintColor: CustomTheme.grey2,
-    dialogBackgroundColor: CustomTheme.white,
+    // dialogBackgroundColor: const Color(0xFF4F5A69),
+    dialogBackgroundColor: const Color(0xFF333A44),
     dividerColor: CustomTheme.black,
-    splashColor: CustomTheme.transparent,
+    splashColor: CustomTheme.white,
     hoverColor: CustomTheme.themeColor2,
     indicatorColor: Colors.cyan,
     appBarTheme: AppBarTheme(
@@ -140,6 +141,7 @@ class AppTheme {
       error: CupertinoColors.systemRed,
       secondary: CustomTheme.grey,
       surface: CustomTheme.grey1,
+      tertiary: Colors.blueGrey.shade900,
     ),
     textTheme: GoogleFonts.quicksandTextTheme(
       ThemeData.dark().textTheme.copyWith(

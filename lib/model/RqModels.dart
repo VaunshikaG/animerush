@@ -132,7 +132,7 @@ class WatchListModel {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'function_name': 'watch_list',
-      'type': type!.trim(),
+      'type': type,
     };
 
     return map;

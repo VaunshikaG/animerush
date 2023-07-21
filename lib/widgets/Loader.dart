@@ -1,29 +1,32 @@
-import 'package:animerush/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
+import '../utils/theme.dart';
+
 ProgressDialog? progressDialog;
 
-showProgress(BuildContext context, String message, bool isDismissible) async {
-  progressDialog = ProgressDialog(context,
-      type: ProgressDialogType.normal, isDismissible: isDismissible);
-  progressDialog?.style(
-    message: message,
-    borderRadius: 10,
-    backgroundColor: CustomTheme.white,
-    progressWidget: Container(
-      padding: const EdgeInsets.all(8),
-      child: CircularProgressIndicator(
-        backgroundColor: CustomTheme.white,
-        color: CustomTheme.themeColor1,
+showProgress(BuildContext context, bool isDismissible) async {
+  progressDialog = ProgressDialog(
+    context,
+    type: ProgressDialogType.normal,
+    isDismissible: isDismissible,
+    customBody: SizedBox(
+      height: 55,
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: RefreshProgressIndicator(
+          backgroundColor: const Color(0xFF333A44),
+          color: CustomTheme.themeColor1,
+        ),
       ),
     ),
-    elevation: 10,
+  );
+  progressDialog?.style(
+    message: '',
+    borderRadius: 0,
+    backgroundColor: const Color(0xFF000000),
+    elevation: 0,
     insetAnimCurve: Curves.easeInOut,
-    messageTextStyle: TextStyle(
-      color: CustomTheme.black,
-      fontSize: 15,
-    ),
   );
   await progressDialog?.show();
 }

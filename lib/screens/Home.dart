@@ -9,6 +9,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../controllers/HomeController.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
+import '../widgets/NoData.dart';
 import 'Details.dart';
 
 class Home extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, "Please wait...", true);
+    await showProgress(context, true);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
   }
@@ -81,7 +82,7 @@ class _HomeState extends State<Home> {
                                   width: MediaQuery.of(context).size.width,
                                   padding: EdgeInsets.zero,
                                   decoration: BoxDecoration(
-                                    color: appTheme.dialogBackgroundColor,
+                                    color: appTheme.splashColor,
                                     image: DecorationImage(
                                       image: NetworkImage(img),
                                       fit: BoxFit.cover,
@@ -96,7 +97,7 @@ class _HomeState extends State<Home> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 10),
                                     decoration: BoxDecoration(
-                                      color: appTheme.dialogBackgroundColor.withOpacity(0.5),
+                                      color: appTheme.splashColor.withOpacity(0.5),
                                       gradient: RadialGradient(
                                         radius: 0.8,
                                         center: const Alignment(0.7, 0),
@@ -140,7 +141,7 @@ class _HomeState extends State<Home> {
                                                 color: appTheme.disabledColor,
                                                 padding: const EdgeInsets.symmetric(
                                                     vertical: 0, horizontal: 10),
-                                                disabledColor: appTheme.dialogBackgroundColor,
+                                                disabledColor: appTheme.splashColor,
                                                 pressedOpacity: 0.6,
                                                 borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
@@ -173,7 +174,7 @@ class _HomeState extends State<Home> {
                                                 color: appTheme.primaryColor,
                                                 padding: const EdgeInsets.symmetric(
                                                     vertical: 0, horizontal: 10),
-                                                disabledColor: appTheme.dialogBackgroundColor,
+                                                disabledColor: appTheme.splashColor,
                                                 pressedOpacity: 0.6,
                                                 borderRadius: const BorderRadius.all(
                                                     Radius.circular(5)),
@@ -339,22 +340,7 @@ class _HomeState extends State<Home> {
                   )),
                   Obx(() => Visibility(
                     visible: homeController.noData.value,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/img/luffy1.png',
-                            width: 200,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Oops, failed to load data!",
-                            style: appTheme.textTheme.displayLarge,
-                          ),
-                        ],
-                      ),
-                    ),
+                    child: noData(context),
                   )),
                 ],
               ),

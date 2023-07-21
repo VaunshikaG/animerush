@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/DetailsPodo.dart';
+import '../model/SimilarModel.dart';
 import '../utils/ApiProviders.dart';
 import '../widgets/Loader.dart';
 
@@ -33,6 +34,7 @@ class DetailsController extends GetxController {
 
   List<EpDetails> epDetails = [];
   List<DetailsData> similarData = [];
+  SimilarModel? similarModel;
   List<String> details = [];
 
   Future<void> detailsApiCall({required String? animeId}) async {
@@ -78,6 +80,19 @@ class DetailsController extends GetxController {
 
             for (int i = 0; i < detailsPodo.data!.relatedAnime!.length; i++) {
               similarData = detailsPodo.data!.relatedAnime!;
+
+              similarModel = SimilarModel(
+                id: detailsPodo.data!.relatedAnime![i].id,
+                name: detailsPodo.data!.relatedAnime![i].name,
+                aniImage: detailsPodo.data!.relatedAnime![i].aniImage,
+                imageHighQuality: detailsPodo.data!.relatedAnime![i].imageHighQuality,
+                banner: detailsPodo.data!.relatedAnime![i].banner,
+                type: detailsPodo.data!.relatedAnime![i].type,
+                animeWatchType: detailsPodo.data!.relatedAnime![i].animeWatchType,
+                status: detailsPodo.data!.relatedAnime![i].status,
+                airedYear: detailsPodo.data!.relatedAnime![i].airedYear,
+                episodes: detailsPodo.data!.relatedAnime![i].episodes,
+              );
             }
 
             if (detailsPodo.data!.animeWatchType == 'OV') {

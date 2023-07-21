@@ -2,12 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
 import '../controllers/WishListController.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
+import '../widgets/NoData.dart';
+import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
 
 class Wishlist extends StatefulWidget {
@@ -21,7 +24,6 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   WishListController wishListController = Get.put(WishListController());
   LoginController loginController = Get.put(LoginController());
 
-  final _formKey1 = GlobalKey<FormState>();
   bool showPassword = true;
   ScrollController scrollController = ScrollController();
   TabController? _controller;
@@ -36,14 +38,12 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   }
 
   Future<void> loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await showProgress(context, "Please wait...", true);
+    await showProgress(context, true);
     wishListController.watchApi('00');
   }
 
   @override
   Widget build(BuildContext context) {
-    print(wishListController.showLogin);
     final appTheme = Theme.of(context);
 
     return Scaffold(
@@ -62,25 +62,6 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Obx(() => Visibility(
-                    visible: wishListController.noData.value,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/img/luffy1.png',
-                            width: 200,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            "Oops, failed to load data!",
-                            style: appTheme.textTheme.displayLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )),
                   Obx(() => Visibility(
                     visible: wishListController.hasData.value,
                     child: _tabSection(),
@@ -105,10 +86,9 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   }
 
   Widget _tabSection() {
-    final appTheme = Theme.of(context);
-
     return DefaultTabController(
       length: 6,
+      initialIndex: 0,
       child: Wrap(
         children: <Widget>[
           Container(
@@ -117,6 +97,23 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
               controller: _controller,
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
+              onTap: (index) {
+                setState(() {
+                  if (index == 0) {
+                    wishListController.watchApi('00');
+                  } else if (index == 1) {
+                    wishListController.watchApi('01');
+                  } else if (index == 2) {
+                    wishListController.watchApi('02');
+                  } else if (index == 3) {
+                    wishListController.watchApi('03');
+                  } else if (index == 4) {
+                    wishListController.watchApi('04');
+                  } else if (index == 5) {
+                    wishListController.watchApi('05');
+                  }
+                });
+              },
               tabs: [
                 Tab(
                   height: 35,
@@ -174,6 +171,7 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
             height: MediaQuery.of(context).size.height * 0.82,
             child: TabBarView(
               controller: _controller,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 wishList(),
                 wishList(),
@@ -190,7 +188,13 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   }
 
   Widget wishList() {
-    return Column();
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: wishListController.noData.value ?
+        noData(context) : SimilarList(
+        dataLength: wishListController.dataLength,
+        similarData: wishListController.animeList,
+      ),
+    );
   }
-
 }

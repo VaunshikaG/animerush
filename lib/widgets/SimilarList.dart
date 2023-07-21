@@ -5,10 +5,10 @@ import '../model/DetailsPodo.dart';
 import '../screens/Details.dart';
 
 class SimilarList extends StatelessWidget {
-  final int itemCount;
+  final int dataLength;
   final similarData;
   // final void Function() onTap;
-  SimilarList({super.key, required this.itemCount, required this.similarData});
+  SimilarList({super.key, required this.dataLength, required this.similarData});
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class SimilarList extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 7),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: appTheme.dialogBackgroundColor,
+                                color: appTheme.splashColor,
                               ),
                               child: Text(
                                 "EP ${similarList.episodes}",

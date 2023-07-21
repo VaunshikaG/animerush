@@ -13,6 +13,7 @@ import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomScreenRoute.dart';
+import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
 
@@ -63,7 +64,7 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, "Please wait...", true);
+    await showProgress(context, true);
     detailsController.hasData.value = false;
     detailsController.noData.value = false;
     Future.delayed(const Duration(seconds: 1), () {
@@ -300,7 +301,7 @@ class _DetailsState extends State<Details> {
                                         ),
                                       ),
                                       SimilarList(
-                                        itemCount: detailsController.similarData
+                                        dataLength: detailsController.similarData
                                             .length,
                                         similarData: detailsController.similarData,
                                       ),
@@ -312,22 +313,7 @@ class _DetailsState extends State<Details> {
                               )),
                           Obx(() => Visibility(
                                 visible: detailsController.noData.value,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/luffy1.png',
-                                        width: 200,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        "Oops, failed to load data!",
-                                        style: appTheme.textTheme.displayLarge,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                child: noData(context),
                               )),
                         ],
                       ),
