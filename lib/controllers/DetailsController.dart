@@ -13,8 +13,8 @@ class DetailsController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
 
   RxBool noData = false.obs, hasData = false.obs;
-  bool showNextEp = false;
-
+  bool showNextEp = true;
+  int length = 0;
   var apiStatus = "",
       animeType = "",
       year = "",
@@ -38,10 +38,13 @@ class DetailsController extends GetxController {
   List<String> details = [];
 
   Future<void> detailsApiCall({required String? animeId}) async {
-    _apiProviders.DetailsApi().then((value) {
+    epDetails.clear();
+    similarData.clear();
+    details.clear();
+    _apiProviders.detailsApi().then((value) {
       // _apiProviders.DetailsApi(animeId: animeId!).then((value) {
       try {
-        if (value != null) {
+        if (value.isNotEmpty) {
           var responsebody = json.decode(value);
           if (responsebody["st"] == 200) {
             DetailsPodo detailsPodo = DetailsPodo.fromJson(responsebody);
@@ -57,7 +60,8 @@ class DetailsController extends GetxController {
             duration = detailsPodo.data!.duration ?? "-";
             views = detailsPodo.data!.views.toString() ?? "-";
             epDetails = detailsPodo.data!.epDetails!;
-            // epDetails[0].epRank!.toStringAsFixed(epDetails[0].epRank!.truncateToDouble() == epDetails[0].epRank ? 0 : 2);
+            length = detailsPodo.data!.epDetails!.length;
+            print('here');
 
             if (detailsPodo.data!.scheduleEp != null) {
               var day = detailsPodo.data!.scheduleEp!.day ?? "";

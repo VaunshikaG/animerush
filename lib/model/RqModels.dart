@@ -120,19 +120,22 @@ class SearchModel {
   }
 }
 
-class WatchListModel {
+class ProfilePasswordModel {
   String? functionName;
-  String? type;
+  String? currentPassword;
+  String? newPassword;
 
-  WatchListModel({
+  ProfilePasswordModel({
     this.functionName,
-    this.type,
+    this.currentPassword,
+    this.newPassword,
   });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'function_name': 'watch_list',
-      'type': type,
+      'function_name': 'change-password',
+      'current_password': currentPassword!.trim(),
+      'new_password': newPassword!.trim(),
     };
 
     return map;

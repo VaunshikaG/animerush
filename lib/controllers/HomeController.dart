@@ -26,8 +26,8 @@ class HomeController extends GetxController {
   void homeApiCall() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      _apiProviders.HomeApi().then((value) {
-        if (value != null) {
+      _apiProviders.homeApi().then((value) {
+        if (value.isNotEmpty) {
           var responsebody = json.decode(value);
           if (responsebody["st"] == 200) {
             HomePodo homePodo = HomePodo.fromJson(responsebody);

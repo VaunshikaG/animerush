@@ -8,11 +8,11 @@ class LoginPodo {
   LoginPodo.fromJson(Map<String, dynamic> json) {
     st = json['st'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['st'] = this.st;
     data['msg'] = this.msg;
     if (this.data != null) {
@@ -51,7 +51,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['username'] = this.username;
     data['real_username'] = this.realUsername;

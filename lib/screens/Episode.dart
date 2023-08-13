@@ -5,8 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rich_text_view/rich_text_view.dart';
 import '../controllers/EpisodeController.dart';
 import '../model/DetailsPodo.dart';
+import '../utils/AppConst.dart';
+import '../model/Chunks.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
@@ -17,14 +20,25 @@ import 'Player.dart';
 class Episode extends StatefulWidget {
   final String? id;
   final List<EpDetails> epDetails;
-  const Episode({Key? key, required this.epDetails, this.id}) : super(key: key);
+  const Episode(
+      {Key? key, required this.epDetails, this.id,})
+      : super(key: key);
 
   @override
   State<Episode> createState() => _EpisodeState();
 }
 
-class _EpisodeState extends State<Episode> {
+class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
   EpisodeController epController = Get.put(EpisodeController());
+  late AnimationController animationController;
+  late Animation<double> fadeAnimation;
+
+  List<EpDetails> chunkList = [];
+  bool hasRemainingEp = false;
+  int remainingEp = 0, totalChipCount = 0, finalChipCount = 0, startVal = 0, 
+      length = 0, rangeIndex = 0, selectedIndex = 0;
+  var start = '', end = '';
+  int startIdx = 0;
 
   @override
   void initState() {
@@ -39,7 +53,7 @@ class _EpisodeState extends State<Episode> {
     await showProgress(context, true);
     epController.hasData.value = false;
     epController.noData.value = false;
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       for (int i = 0; i < widget.epDetails.length; i++) {
         epController.animeId = widget.epDetails[i].id.toString();
         // log(animeId.toString());
@@ -50,7 +64,46 @@ class _EpisodeState extends State<Episode> {
 
       epController.anime = widget.epDetails;
       epController.episodeApiCall();
+      chunks();
+      animationController = AnimationController(
+          duration: const Duration(milliseconds: 1800), vsync: this);
+      fadeAnimation =
+          Tween<double>(begin: 0, end: 1).animate(animationController);
     });
+  }
+
+  void chunks() {
+    // checks if the remainder of the division of the length of the "anime" list by 50 is less than 50.
+    if ((widget.epDetails.length % 50).floor() < 50) {
+      log('length : ${(widget.epDetails.length % 50).toString()}');
+      hasRemainingEp = true;
+      remainingEp = (widget.epDetails.length % 50).floor();
+      log('remainingEp : ${remainingEp.toString()}');
+    }
+    totalChipCount =
+        (widget.epDetails.length / 50).floor();
+    log('chunks of 50 : $totalChipCount');
+
+    //  size of the remaining chunk; otherwise, it takes 50.
+    chunkList = widget.epDetails.sublist(
+        0, (hasRemainingEp == true && widget.epDetails.length < 50)
+            ? remainingEp : 50);
+
+    //  size of remaining chunk; otherwise, it takes 50.
+    finalChipCount = totalChipCount + (hasRemainingEp ? 1 : 0);
+    log('final : $finalChipCount');
+  }
+
+  String getEpisodeRange(int index) {
+    startIdx = ((index * 50) + 1);
+    start = ((index * 50) + 1).toString();
+    end = ((50 * (index + 1))).toString();
+    if (index == totalChipCount && hasRemainingEp) {
+      end = ((50 * index) + remainingEp).toString();
+    }
+    // startVal = int.parse(start);
+    // endVal = (int.parse(end) + 1).toString();
+    return ('$start - $end');
   }
 
   @override
@@ -64,10 +117,9 @@ class _EpisodeState extends State<Episode> {
       },
       child: Align(
         alignment: Alignment.topCenter,
-        child: Container(
+        child: SizedBox(
           width: kIsWeb ? 1100 : MediaQuery.of(context).size.width,
           child: Scaffold(
-            resizeToAvoidBottomInset: false,
             body: SafeArea(
               top: false,
               child: NotificationListener<OverscrollIndicatorNotification>(
@@ -90,93 +142,40 @@ class _EpisodeState extends State<Episode> {
                       child: Column(
                         children: [
                           Obx(() => Visibility(
-                            visible: epController.hasData.value,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Player(
+                                visible: epController.hasData.value,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Player(
                                       url: epController.playerURL,
                                       title: epController.title,
                                       placeHolder: epController.epImg.value,
                                       dwldList: epController.dwldList,
                                     ),
-                                dwld(),
-                                details(),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: Text(
-                                    "List of Episodes   :",
-                                    softWrap: true,
-                                    textAlign: TextAlign.left,
-                                    style: appTheme.textTheme.titleMedium,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: widget.epDetails.length > 100
-                                      ? SizedBox(
-                                    height: 70,
-                                    child: ListView.builder(
-                                      itemCount: epController.finalChipCount,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                epController.rangeIndex.value = index;
-                                                epController.selectedIndex.value =
-                                                99999999;
-                                                epController.getEpisodeRange(index);
-                                                if (epController.finalChipCount ==
-                                                    (index + 1)) {
-                                                  epController.epChunkList.value = widget
-                                                      .epDetails.sublist(int.parse(epController.start) - 1);
-                                                } else {
-                                                  epController.epChunkList.value = widget
-                                                      .epDetails.sublist(int.parse(epController.start) - 1,
-                                                      int.parse(epController.end));
-                                                }
-                                              });
-                                            },
-                                            child: Chip(
-                                              backgroundColor:
-                                              epController.rangeIndex.value ==
-                                                  index
-                                                  ? appTheme.primaryColor
-                                                  : appTheme.hintColor,
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                  horizontal: 10),
-                                              label: Text(
-                                                epController.getEpisodeRange(index),
-                                                style: appTheme.textTheme.titleSmall,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                    dwld(),
+                                    details(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 10),
+                                      child: Text(
+                                        "List of Episodes   :",
+                                        softWrap: true,
+                                        textAlign: TextAlign.left,
+                                        style: appTheme.textTheme.titleMedium,
+                                      ),
                                     ),
-                                  )
-                                      : const SizedBox(),
+
+                                    (finalChipCount > 0)
+                                        ? episodes()
+                                        : const Placeholder(),
+                                    const SizedBox(height: 20),
+                                  ],
                                 ),
-                                widget.epDetails.isNotEmpty
-                                    ? episodes()
-                                    : const SizedBox(),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
-                          )),
+                              )),
                           Obx(() => Visibility(
-                            visible: epController.noData.value,
-                            child: noData(context),
-                          )),
+                                visible: epController.noData.value,
+                                child: noData(context),
+                              )),
                         ],
                       ),
                     ),
@@ -196,7 +195,7 @@ class _EpisodeState extends State<Episode> {
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: appTheme.scaffoldBackgroundColor,
+        color: appTheme.disabledColor,
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
           alignment: Alignment.center,
@@ -233,12 +232,20 @@ class _EpisodeState extends State<Episode> {
           epController.name,
           style: appTheme.textTheme.bodyLarge,
         ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(
-            epController.desc,
-            style: appTheme.textTheme.bodySmall,
+        subtitle: RichTextView(
+          text: epController.desc,
+          maxLines: 4,
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+          style: appTheme.textTheme.titleSmall,
+          truncate: true,
+          viewLessText: 'less',
+          linkStyle: TextStyle(
+            fontSize: 13,
+            color: CustomTheme.blue,
+            fontFamily: AppConst.FONT,
           ),
+          supportedTypes: const [],
         ),
         minVerticalPadding: 13,
         tileColor: appTheme.disabledColor,
@@ -264,13 +271,13 @@ class _EpisodeState extends State<Episode> {
               size: 20,
             ),
             Text(
-              'Download   :',
+              ' Download   :',
               style: appTheme.textTheme.bodySmall,
             ),
           ],
         ),
         subtitle: SizedBox(
-          height: 40,
+          height: 35,
           child: ListView.builder(
             itemCount: epController.dwldList.length,
             shrinkWrap: true,
@@ -282,8 +289,10 @@ class _EpisodeState extends State<Episode> {
                 padding: const EdgeInsets.only(right: 8),
                 child: ActionChip(
                   elevation: 3,
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   label: Text(epController.dwldList[index].quality!),
+                  labelStyle: appTheme.textTheme.labelSmall,
                   onPressed: () {},
                   backgroundColor: appTheme.primaryColor,
                   side: BorderSide.none,
@@ -400,63 +409,135 @@ class _EpisodeState extends State<Episode> {
   Widget episodes() {
     final appTheme = Theme.of(context);
 
-    return Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      height: 550,
-      child: Scrollbar(
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        /*ListView.builder(
           shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisSpacing: 15,
-            crossAxisSpacing: 15,
-            maxCrossAxisExtent: 45,
-          ),
-          itemCount: epController.epChunkList.length,
-          // itemCount: epChunkList.length,
+          itemCount: sublists.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
-            epController.idList.add(epController.epChunkList[index].id!);
-            // print(epChunkList.indexOf(epChunkList[index]));
-            return InkWell(
-              onTap: () async {
+            bool isExpanded = selectedItems.containsAll(sublists[index]);
+
+            return ListTile(
+              title: Text('${index * 50 + 1} - ${(index + 1) * 50}'),
+              onTap: () {
                 setState(() {
-                  epController.selectedIndex.value = index;
-                  print(index);
-                  // print(epChunkList[index].id.toString());
+                  if (isExpanded) {
+                    selectedItems.removeWhere((item) => sublists[index].contains(item));
+                  } else {
+                    selectedItems.addAll(sublists[index]);
+                  }
                 });
+                print(isExpanded);
               },
-              splashColor: appTheme.splashColor,
-              child: Container(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: epController.selectedIndex.value == index
-                        ? appTheme.primaryColor
-                        : appTheme.hintColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  (epController.startVal++).toString(),
-                  // (epChunkList[index]).toString(),
-                  // (index +1).toString(),
-                  style: TextStyle(
-                    color: appTheme.splashColor,
-                    fontWeight: epController.selectedIndex.value == index
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
-              ),
+              tileColor: Colors.greenAccent,
+              subtitle: (isExpanded == true)
+                  ? Wrap(
+                direction: Axis.horizontal,
+
+                children: sublists[index]
+                    .map((item) => ElevatedButton(
+                  onPressed: () {
+                    print('Item ${item.epRank} pressed');
+                  },
+                  child: Text(item.epRank.toString()),
+                ))
+                    .toList(),
+              )
+                  : const Text('nothing'),
+              dense: true,
             );
           },
+        ),*/
+        widget.epDetails.length > 50
+            ? SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: finalChipCount,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: const EdgeInsets.all(8),
+                      child: ActionChip(
+                        onPressed: () {
+                          setState(() {
+                            rangeIndex = index;
+                            selectedIndex = 99999999;
+                            getEpisodeRange (index);
+                            if (finalChipCount == (index + 1)) {
+                              chunkList = widget.epDetails.sublist(int.parse(start) - 1);
+                            } else {
+                              chunkList = widget.epDetails.sublist(int.parse(start) - 1, int.parse(end));
+                            }
+                          });
+                        },
+                        side: BorderSide.none,
+                        disabledColor: appTheme.colorScheme.secondary,
+                        backgroundColor:
+                            rangeIndex == index
+                                ? appTheme.primaryColor
+                                : appTheme.hintColor,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 7, vertical: 0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7)),
+                        label: Text(
+                          getEpisodeRange(index),
+                          style: rangeIndex == index
+                              ? appTheme.textTheme.labelSmall
+                              : appTheme.textTheme.titleSmall,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            : const SizedBox(),
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          alignment: Alignment.topLeft,
+          child: GridView.builder(
+            physics: const ClampingScrollPhysics(),
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: (startIdx > 1000) ? 5 : 6,
+              crossAxisSpacing: (startIdx > 999) ? 8 : 9,
+            ),
+            itemCount: chunkList.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return ActionChip(
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                side: BorderSide.none,
+                disabledColor: appTheme.colorScheme.secondary,
+                backgroundColor:
+                selectedIndex == index
+                    ? appTheme.primaryColor
+                    : appTheme.hintColor,
+                padding: const EdgeInsets.all(5),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7)),
+                label: Text(
+                  chunkList[index].epRank.toString(),
+                  style: selectedIndex == index
+                      ? appTheme.textTheme.labelSmall
+                      : appTheme.textTheme.titleSmall,
+                ),
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

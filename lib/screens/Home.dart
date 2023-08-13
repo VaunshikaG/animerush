@@ -185,7 +185,7 @@ class _HomeState extends State<Home> {
                                                       Icon(
                                                         CupertinoIcons.play_circle_fill,
                                                         size: 15,
-                                                        color: appTheme.colorScheme.background,
+                                                        color: appTheme.scaffoldBackgroundColor,
                                                       ),
                                                       const SizedBox(width: 5),
                                                       Text(

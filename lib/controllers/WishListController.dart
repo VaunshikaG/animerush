@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/ContinueWatchPodo.dart';
 import '../model/RqModels.dart';
 import '../model/WatchListPodo.dart';
 import '../utils/ApiProviders.dart';
@@ -21,6 +22,7 @@ class WishListController extends GetxController {
   TextEditingController passwordController = TextEditingController();
 
   List<Anime> animeList = [];
+  List<ContinueData>? continueList = [];
   int dataLength = 0;
 
   Future<void> watchApi(String type) async {
@@ -28,9 +30,9 @@ class WishListController extends GetxController {
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      // _apiProviders.WatchListApi().then((value) {
-      _apiProviders.WatchListApi(type: type).then((value) {
-        if (value != null) {
+      _apiProviders.watchListApi().then((value) {
+      // _apiProviders.WatchListApi(type: type).then((value) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 100) {
@@ -48,10 +50,52 @@ class WishListController extends GetxController {
             print('here');
             dataLength = 0;
             showLogin.value = false;
-            hasData.value = true;
+            hasData.value = false;
             noData.value = true;
           } else if (responseBody['detail'] == "Signature has expired.") {
             prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+          }
+        } else {
+          CustomSnackBar('error');
+        }
+      });
+    } catch (e) {
+      hideProgress();
+      rethrow;
+    }
+  }
+
+  Future<void> continueApi() async {
+    animeList.clear();
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      _apiProviders.continueApi().then((value) async {
+      // _apiProviders.ContinueApi(type: type).then((value) {
+        if (value.isNotEmpty) {
+          var responseBody = json.decode(value);
+          hideProgress();
+          if (responseBody['st'] == 100) {
+            ContinueWatchPodo continueWatchPodo = ContinueWatchPodo.fromJson(responseBody);
+            for (int i = 0; i < continueWatchPodo.data!.length; i++) {
+              dataLength = continueList!.length;
+              continueList = continueWatchPodo.data;
+            }
+            noData.value = false;
+            showLogin.value = false;
+            hasData.value = true;
+          } else if (responseBody['st'] == 101) {
+            print('here');
+            dataLength = 0;
+            showLogin.value = false;
+            hasData.value = false;
+            noData.value = true;
+          } else if (responseBody['detail'] == "Signature has expired.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            await prefs.clear();
+            // Get.deleteAll();
             hasData.value = false;
             noData.value = false;
             showLogin.value = true;

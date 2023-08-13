@@ -61,6 +61,12 @@ class _SearchState extends State<Search> {
     // genreNames = genreTitle.map((name) => GenreTitle(name)).toList();
     categoryNames = categoryData.map((map) => CategoryTitle(map['title'], map['value'])).toList();
     genreNames = genreData.map((map) => GenreTitle(map['title'], map['icon'], map['value'])).toList();
+    searchController.searchApiCall(pgName: "searchField", searchModel: SearchModel(
+          val: 'anime',
+          genres: '',
+          pageId: '1',
+          sort: '',
+        ));
     super.initState();
   }
 
@@ -90,11 +96,17 @@ class _SearchState extends State<Search> {
                   onSubmitted: (value) {
                     setState(() {
                       if (value.isNotEmpty) {
-                        if (searchController.searchHistory.length >=
-                            4) {
-                          searchController.searchHistory
-                              .removeRange(0, 1);
+                        if (searchController.searchHistory.length >= 4) {
+                          searchController.searchHistory.removeRange(0, 1);
                           searchController.searchHistory.add(value);
+
+                          searchController.searchApiCall(pgName: "searchField",
+                              searchModel: SearchModel(
+                                val: value,
+                                genres: '',
+                                pageId: '1',
+                                sort: '',
+                              ));
                         } else {
                           searchController.searchHistory.add(value);
                           searchController.showChips.value = true;

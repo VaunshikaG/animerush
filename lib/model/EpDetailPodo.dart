@@ -31,7 +31,7 @@ class Data {
   String? gogoStreamingUrl;
   String? webEpisodeUrl;
   StreamDetails? streamDetails;
-  List<EpisodeLink>? episodeLink;
+  EpisodeLink? episodeLink;
   List<DownloadEpisodeLink>? downloadEpisodeLink;
 
   Data(
@@ -57,12 +57,9 @@ class Data {
     streamDetails = json['stream_details'] != null
         ? new StreamDetails.fromJson(json['stream_details'])
         : null;
-    if (json['episode_link'] != null) {
-      episodeLink = <EpisodeLink>[];
-      json['episode_link'].forEach((v) {
-        episodeLink!.add(new EpisodeLink.fromJson(v));
-      });
-    }
+    episodeLink = json['episode_link'] != null
+        ? new EpisodeLink.fromJson(json['episode_link'])
+        : null;
     if (json['download_episode_link'] != null) {
       downloadEpisodeLink = <DownloadEpisodeLink>[];
       json['download_episode_link'].forEach((v) {
@@ -84,7 +81,7 @@ class Data {
       data['stream_details'] = this.streamDetails!.toJson();
     }
     if (this.episodeLink != null) {
-      data['episode_link'] = this.episodeLink!.map((v) => v.toJson()).toList();
+      data['episode_link'] = this.episodeLink!.toJson();
     }
     if (this.downloadEpisodeLink != null) {
       data['download_episode_link'] =

@@ -14,7 +14,7 @@ class VdResolutionModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['360p'] = this.s360p;
     data['480p'] = this.s480p;
     data['720p'] = this.s720p;

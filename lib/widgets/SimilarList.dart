@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import '../model/DetailsPodo.dart';
 import '../screens/Details.dart';
+import '../utils/theme.dart';
 
 class SimilarList extends StatelessWidget {
   final int dataLength;
@@ -58,6 +60,83 @@ class SimilarList extends StatelessWidget {
         }
 
         return GestureDetector(
+          onTap: () {
+            Get.offAll(() => Details(id: similarList.id.toString()));
+          },
+          child: Container(
+            height: 230,
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            // decoration: BoxDecoration(color: CustomTheme.grey300),
+            child: Wrap(
+              children: [
+                Column(
+                  children: [
+                    FadeInImage.assetNetwork(
+                      alignment: Alignment.center,
+                      placeholder: "assets/img/blank.png",
+                      image: similarList.aniImage ?? similarList.imageHighQuality!,
+                      fit: BoxFit.fill,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/img/blank.png",
+                          fit: BoxFit.contain,
+                        );
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 5, top: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: (lang == "SUB")
+                                ? appTheme.indicatorColor
+                                : appTheme.colorScheme.error,
+                          ),
+                          child: Text(
+                            lang,
+                            style: appTheme.textTheme.labelSmall,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5, top: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: appTheme.colorScheme.background,
+                          ),
+                          child: Text(
+                            "EP ${similarList.episodes}",
+                            style: appTheme.textTheme.labelSmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ListTile(
+                      title: Text(
+                        similarList.name ?? "",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: appTheme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "$type  •  $status  •  ${similarList.airedYear ?? "-"}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: appTheme.textTheme.titleSmall,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+        /*return GestureDetector(
           onTap: () {
             Get.offAll(() => Details(id: similarList.id.toString()));
           },
@@ -149,7 +228,7 @@ class SimilarList extends StatelessWidget {
               ],
             ),
           ),
-        );
+        );*/
       },
     );
   }

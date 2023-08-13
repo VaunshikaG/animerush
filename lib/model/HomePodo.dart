@@ -28,55 +28,55 @@ class HomePodo {
     if (json['is_spotlight_data'] != null) {
       isSpotlightData = <IsSpotlightData>[];
       json['is_spotlight_data'].forEach((v) {
-        isSpotlightData!.add(new IsSpotlightData.fromJson(v));
+        isSpotlightData!.add(IsSpotlightData.fromJson(v));
       });
     }
     if (json['top_streaming_data'] != null) {
       topStreamingData = <TopStreamingData>[];
       json['top_streaming_data'].forEach((v) {
-        topStreamingData!.add(new TopStreamingData.fromJson(v));
+        topStreamingData!.add(TopStreamingData.fromJson(v));
       });
     }
     if (json['latest_movies_data'] != null) {
       latestMoviesData = <LatestMoviesData>[];
       json['latest_movies_data'].forEach((v) {
-        latestMoviesData!.add(new LatestMoviesData.fromJson(v));
+        latestMoviesData!.add(LatestMoviesData.fromJson(v));
       });
     }
     if (json['latest_special_data'] != null) {
       latestSpecialData = <LatestSpecialData>[];
       json['latest_special_data'].forEach((v) {
-        latestSpecialData!.add(new LatestSpecialData.fromJson(v));
+        latestSpecialData!.add(LatestSpecialData.fromJson(v));
       });
     }
     if (json['latest_onas_data'] != null) {
       latestOnasData = <LatestOnasData>[];
       json['latest_onas_data'].forEach((v) {
-        latestOnasData!.add(new LatestOnasData.fromJson(v));
+        latestOnasData!.add(LatestOnasData.fromJson(v));
       });
     }
     if (json['latest_ovas_data'] != null) {
       latestOvasData = <LatestOvasData>[];
       json['latest_ovas_data'].forEach((v) {
-        latestOvasData!.add(new LatestOvasData.fromJson(v));
+        latestOvasData!.add(LatestOvasData.fromJson(v));
       });
     }
     if (json['recently_added_sub_data'] != null) {
       recentlyAddedSubData = <RecentlyAddedSubData>[];
       json['recently_added_sub_data'].forEach((v) {
-        recentlyAddedSubData!.add(new RecentlyAddedSubData.fromJson(v));
+        recentlyAddedSubData!.add(RecentlyAddedSubData.fromJson(v));
       });
     }
     if (json['recently_added_dub_data'] != null) {
       recentlyAddedDubData = <RecentlyAddedDubData>[];
       json['recently_added_dub_data'].forEach((v) {
-        recentlyAddedDubData!.add(new RecentlyAddedDubData.fromJson(v));
+        recentlyAddedDubData!.add(RecentlyAddedDubData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['st'] = this.st;
     data['msg'] = this.msg;
     if (this.isSpotlightData != null) {
@@ -193,28 +193,28 @@ class IsSpotlightData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -269,7 +269,7 @@ class Categories {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['anime'] = this.anime;
     data['category'] = this.category;
     data['category_name'] = this.categoryName;
@@ -294,7 +294,7 @@ class Studios {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['anime'] = this.anime;
     data['studio'] = this.studio;
     data['name'] = this.name;
@@ -309,7 +309,7 @@ class Producers {
   Producers.fromJson(Map<String, dynamic> json) {}
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     return data;
   }
 }
@@ -332,7 +332,7 @@ class ScheduleEp {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['name'] = this.name;
     data['day'] = this.day;
     data['date'] = this.date;
@@ -421,28 +421,28 @@ class TopStreamingData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -559,28 +559,28 @@ class LatestMoviesData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -697,28 +697,28 @@ class LatestSpecialData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -835,28 +835,28 @@ class LatestOnasData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -973,28 +973,28 @@ class LatestOvasData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -1111,28 +1111,28 @@ class RecentlyAddedSubData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
@@ -1249,28 +1249,28 @@ class RecentlyAddedDubData {
     if (json['categories'] != null) {
       categories = <Categories>[];
       json['categories'].forEach((v) {
-        categories!.add(new Categories.fromJson(v));
+        categories!.add(Categories.fromJson(v));
       });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
       json['studios'].forEach((v) {
-        studios!.add(new Studios.fromJson(v));
+        studios!.add(Studios.fromJson(v));
       });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
       json['producers'].forEach((v) {
-        producers!.add(new Producers.fromJson(v));
+        producers!.add(Producers.fromJson(v));
       });
     }
     scheduleEp = json['schedule_ep'] != null
-        ? new ScheduleEp.fromJson(json['schedule_ep'])
+        ? ScheduleEp.fromJson(json['schedule_ep'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;

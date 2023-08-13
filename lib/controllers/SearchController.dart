@@ -20,11 +20,11 @@ class Search_Controller extends GetxController {
   int currentPg = 1, nextPg = 1, previousPg = 1;
 
   Future<void> searchApiCall({required SearchModel searchModel, required String pgName}) async {
-    _apiProviders.SearchApi().then((value) {
+    _apiProviders.searchApi().then((value) {
       // _apiProviders.SearchApi(model: searchModel).then((value) {
       log(searchModel.toJson().toString());
       try {
-        if (value != null) {
+        if (value.isNotEmpty) {
           var responsebody = json.decode(value);
           if (responsebody["st"] == 200) {
             SearchPodo searchPodo = SearchPodo.fromJson(responsebody);

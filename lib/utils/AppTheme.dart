@@ -121,9 +121,9 @@ class AppTheme {
     disabledColor: CustomTheme.grey3,
     hintColor: CustomTheme.grey2,
     // dialogBackgroundColor: const Color(0xFF4F5A69),
-    dialogBackgroundColor: const Color(0xFF333A44),
+    // dialogBackgroundColor: const Color(0xFF333A44),
     dividerColor: CustomTheme.black,
-    splashColor: CustomTheme.white,
+    splashColor: CustomTheme.transparent,
     hoverColor: CustomTheme.themeColor2,
     indicatorColor: Colors.cyan,
     appBarTheme: AppBarTheme(
@@ -136,8 +136,7 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       brightness: Brightness.dark,
       primary: CustomTheme.themeColor1,
-      onPrimary: CustomTheme.themeColor1,
-      background: CustomTheme.black,
+      background: CustomTheme.white,
       error: CupertinoColors.systemRed,
       secondary: CustomTheme.grey,
       surface: CustomTheme.grey1,
@@ -192,8 +191,8 @@ class AppTheme {
             ),
             headlineMedium: TextStyle(
               fontSize: 15,
-              color: CustomTheme.grey,
-              fontWeight: FontWeight.w400,
+              color: CustomTheme.grey400,
+              fontWeight: FontWeight.w500,
             ),
             labelSmall: TextStyle(
               color: CustomTheme.black,
@@ -229,11 +228,18 @@ class AppTheme {
       labelPadding: const EdgeInsets.symmetric(horizontal: 5),
     ),
     expansionTileTheme: ExpansionTileThemeData(
-      collapsedIconColor: CustomTheme.themeColor1,
-      iconColor: CustomTheme.themeColor1,
-      backgroundColor: CustomTheme.black,
-      childrenPadding: EdgeInsets.zero,
+      iconColor: CustomTheme.grey1,
+      collapsedIconColor: CustomTheme.grey1,
+      backgroundColor: CustomTheme.grey1,
+      collapsedBackgroundColor: CustomTheme.grey1,
+      childrenPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
       tilePadding: const EdgeInsets.symmetric(horizontal: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      collapsedShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
     ),
     dividerTheme: DividerThemeData(color: CustomTheme.transparent),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

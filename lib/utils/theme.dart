@@ -16,8 +16,10 @@ class CustomTheme {
   static Color white24 = Colors.white24;
 
   //  grey
-  static Color grey = Colors.grey.shade600;
+  static Color grey = Colors.grey;
+  static Color grey400 = Colors.grey.shade400;
   static Color grey300 = Colors.grey.shade300;
+  static Color grey600 = Colors.grey.shade600;
   static Color grey1 = const Color(0xFF1C1C1E);
   static Color grey2 = const Color(0xFF363638);
   static Color grey3 = const Color(0xFF2C2C2E);

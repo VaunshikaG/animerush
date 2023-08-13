@@ -20,12 +20,14 @@ class LoginController extends GetxController {
       isSignin = false.obs,
       isForgot = false.obs,
       isOtp = false.obs,
-      isPassword = false.obs;
+      isPassword = false.obs,
+      isChangePass = false.obs;
   var message;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
   Future<void> loginApi() async {
@@ -35,15 +37,16 @@ class LoginController extends GetxController {
         username: userNameController.text,
         password: passwordController.text,
       );
-      _apiProviders.LoginApi(model: loginModel).then((value) {
-        if (value != null) {
+      _apiProviders.loginApi(model: loginModel).then((value) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
-          print(responseBody);
           if (responseBody['st'] == 100) {
             LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
             prefs.setString(AppConst.userName, loginPodo.data!.realUsername!);
             prefs.setBool(AppConst.loginStatus, true);
+            prefs.setString(AppConst.email, loginPodo.data!.email.toString());
+            prefs.setString(AppConst.dateJoined, loginPodo.data!.created.toString());
             isLogin.value = false;
             isLoggedIn.value = true;
             Get.to(() => const BottomBar(currentIndex: 3));
@@ -52,6 +55,9 @@ class LoginController extends GetxController {
             emailController.clear();
             passwordController.clear();
             otpController.clear();
+          } else if (responseBody['st'] == 101) {
+            log(responseBody);
+            CustomSnackBar(responseBody['msg']);
           } else {
             log(responseBody);
             CustomSnackBar(responseBody['msg']);
@@ -71,8 +77,8 @@ class LoginController extends GetxController {
         email: emailController.text,
         password: passwordController.text,
       );
-      _apiProviders.SignUpApi(model: signUpModel).then((value) {
-        if (value != null) {
+      _apiProviders.signUpApi(model: signUpModel).then((value) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
@@ -86,6 +92,8 @@ class LoginController extends GetxController {
           passwordController.clear();
           otpController.clear();
           } else if (responseBody['st'] == 101) {
+            isSignin.value = true;
+            isLogin.value = false;
             message = responseBody['msg'];
           } else {
             CustomSnackBar(responseBody['msg']);
@@ -105,8 +113,8 @@ class LoginController extends GetxController {
         email: prefs.getString(AppConst.email),
         otp: otpController.text,
       );
-      _apiProviders.OtpVerfiyApi(model: otpVerfiyModel).then((value) {
-        if (value != null) {
+      _apiProviders.otpVerfiyApi(model: otpVerfiyModel).then((value) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
@@ -133,9 +141,9 @@ class LoginController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     try {
       prefs.setString(AppConst.email, emailController.text);
-      _apiProviders.ForgotPasswordApi(email: emailController.text)
+      _apiProviders.forgotPasswordApi(email: emailController.text)
           .then((value) {
-        if (value != null) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
           CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
@@ -166,8 +174,8 @@ class LoginController extends GetxController {
         email: prefs.getString(AppConst.email),
         password: passwordController.text,
       );
-      _apiProviders.ChangePasswordApi(model: changePasswordModel).then((value) {
-        if (value != null) {
+      _apiProviders.changePasswordApi(model: changePasswordModel).then((value) {
+        if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
             CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
@@ -179,6 +187,31 @@ class LoginController extends GetxController {
             otpController.clear();
             CustomSnackBar(responseBody['msg']);
           } else if (responseBody['st'] == 101) {
+            CustomSnackBar(responseBody['msg']);
+          } else {
+            CustomSnackBar(responseBody['msg']);
+          }
+        }
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> profilePasswordApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      ProfilePasswordModel passwordModel = ProfilePasswordModel(
+        currentPassword: passwordController.text,
+        newPassword: newPasswordController.text,
+      );
+      _apiProviders.profilePasswordApi(model: passwordModel).then((value) {
+        if (value.isNotEmpty) {
+          var responseBody = json.decode(value);
+          if (responseBody['st'] == 100) {
+            // CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
+            newPasswordController.clear();
+            passwordController.clear();
             CustomSnackBar(responseBody['msg']);
           } else {
             CustomSnackBar(responseBody['msg']);

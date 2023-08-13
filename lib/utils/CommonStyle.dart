@@ -353,3 +353,37 @@ Widget customText({required String text1, required String text2}) {
     ),
   );
 }
+
+Widget customTile({required String text1, required String text2}) {
+  return ListTile(
+    title: Padding(
+      padding: const EdgeInsets.only(left: 3),
+      child: Text(
+        text1,
+        style: TextStyle(
+          fontSize: 15,
+          color: CustomTheme.grey400,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+    subtitle: Container(
+      margin: const EdgeInsets.symmetric(vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      constraints: const BoxConstraints(maxWidth: 300),
+      decoration: BoxDecoration(
+        color: CustomTheme.grey300,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        text2,
+        style: TextStyle(
+          fontSize: 14,
+          color: CustomTheme.black,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    ),
+    contentPadding: EdgeInsets.zero,
+  );
+}

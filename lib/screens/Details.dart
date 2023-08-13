@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import '../controllers/DetailsController.dart';
+import '../model/Chunks.dart';
 import '../utils/CommonStyle.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomScreenRoute.dart';
 import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
@@ -72,7 +72,7 @@ class _DetailsState extends State<Details> {
     });
   }
 
-  var top = 0.0;
+    var top = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +174,7 @@ class _DetailsState extends State<Details> {
                                                 child: Icon(
                                                   CupertinoIcons.play_circle,
                                                   color: appTheme
-                                                      .colorScheme.background,
+                                                      .scaffoldBackgroundColor,
                                                   size: 20,
                                                 ),
                                               ),
@@ -185,9 +185,9 @@ class _DetailsState extends State<Details> {
                                               ),
                                               onPressed: () {
                                                 Get.off(() => Episode(
-                                                      epDetails: detailsController.epDetails,
-                                                      id: widget.id,
-                                                    ));
+                                                  epDetails: detailsController.epDetails,
+                                                  id: widget.id,
+                                                ));
                                               },
                                               backgroundColor:
                                                   appTheme.primaryColor,
@@ -204,7 +204,7 @@ class _DetailsState extends State<Details> {
                                                 child: Icon(
                                                   Icons.bookmark_add_outlined,
                                                   color: appTheme
-                                                      .colorScheme.background,
+                                                      .scaffoldBackgroundColor,
                                                   size: 20,
                                                 ),
                                               ),
@@ -328,9 +328,8 @@ class _DetailsState extends State<Details> {
     );
   }
 
-  @override
-  void dispose() {
-    detailsController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 }

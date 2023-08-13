@@ -13,7 +13,7 @@ class AppConst {
   static const String details = "$app_url/anime-details/";
   static const String episode = "$app_url/episode-details/";
   static const String search = "$app_url/filter-details/";
-  static const String watchList = "$app_url/user-function/";
+  static const String userFun = "$app_url/user-function/";
 
 
 
@@ -26,6 +26,7 @@ class AppConst {
   static const String token = "token";
   static const String otp = "otp";
   static const String apiStatus = "api_status";
+  static const String dateJoined = "date_joined";
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');

@@ -1,18 +1,20 @@
-class WatchListPodo {
+class ContinueWatchPodo {
   int? st;
   String? msg;
   String? functionName;
-  List<WatchData>? data;
+  List<ContinueData>? data;
 
-  WatchListPodo({this.st, this.msg, this.functionName, this.data});
+  ContinueWatchPodo({this.st, this.msg, this.functionName, this.data});
 
-  WatchListPodo.fromJson(Map<String, dynamic> json) {
+  ContinueWatchPodo.fromJson(Map<String, dynamic> json) {
     st = json['st'];
     msg = json['msg'];
     functionName = json['function_name'];
     if (json['data'] != null) {
-      data = <WatchData>[];
-      json['data'].forEach((v) { data!.add(WatchData.fromJson(v)); });
+      data = <ContinueData>[];
+      json['data'].forEach((v) {
+        data!.add(ContinueData.fromJson(v));
+      });
     }
   }
 
@@ -28,23 +30,27 @@ class WatchListPodo {
   }
 }
 
-class WatchData {
+class ContinueData {
   int? id;
   int? user;
-  Anime? anime;
-  String? type;
-  String? typeVal;
+  ContinueAnime? anime;
+  String? episode;
   bool? removed;
   String? created;
 
-  WatchData({this.id, this.user, this.anime, this.type, this.typeVal, this.removed, this.created});
+  ContinueData(
+      {this.id,
+        this.user,
+        this.anime,
+        this.episode,
+        this.removed,
+        this.created});
 
-  WatchData.fromJson(Map<String, dynamic> json) {
+  ContinueData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     user = json['user'];
-    anime = json['anime'] != null ? Anime.fromJson(json['anime']) : null;
-    type = json['type'];
-    typeVal = json['type_val'];
+    anime = json['anime'] != null ? ContinueAnime.fromJson(json['anime']) : null;
+    episode = json['episode'];
     removed = json['removed'];
     created = json['created'];
   }
@@ -56,15 +62,14 @@ class WatchData {
     if (this.anime != null) {
       data['anime'] = this.anime!.toJson();
     }
-    data['type'] = this.type;
-    data['type_val'] = this.typeVal;
+    data['episode'] = this.episode;
     data['removed'] = this.removed;
     data['created'] = this.created;
     return data;
   }
 }
 
-class Anime {
+class ContinueAnime {
   int? id;
   String? name;
   String? japaneseName;
@@ -91,9 +96,34 @@ class Anime {
   List<Producers>? producers;
   ScheduleEp? scheduleEp;
 
-  Anime({this.id, this.name, this.japaneseName, this.englishName, this.thumbnail, this.image, this.imageHighQuality, this.aniImage, this.banner, this.type, this.animeWatchType, this.status, this.active, this.episodes, this.episodesTillNow, this.ratingAge, this.duration, this.description, this.airedYear, this.premiered, this.views, this.categories, this.studios, this.producers, this.scheduleEp});
+  ContinueAnime(
+      {this.id,
+        this.name,
+        this.japaneseName,
+        this.englishName,
+        this.thumbnail,
+        this.image,
+        this.imageHighQuality,
+        this.aniImage,
+        this.banner,
+        this.type,
+        this.animeWatchType,
+        this.status,
+        this.active,
+        this.episodes,
+        this.episodesTillNow,
+        this.ratingAge,
+        this.duration,
+        this.description,
+        this.airedYear,
+        this.premiered,
+        this.views,
+        this.categories,
+        this.studios,
+        this.producers,
+        this.scheduleEp});
 
-  Anime.fromJson(Map<String, dynamic> json) {
+  ContinueAnime.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
@@ -117,17 +147,25 @@ class Anime {
     views = json['views'];
     if (json['categories'] != null) {
       categories = <Categories>[];
-      json['categories'].forEach((v) { categories!.add(Categories.fromJson(v)); });
+      json['categories'].forEach((v) {
+        categories!.add(Categories.fromJson(v));
+      });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
-      json['studios'].forEach((v) { studios!.add(Studios.fromJson(v)); });
+      json['studios'].forEach((v) {
+        studios!.add(Studios.fromJson(v));
+      });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
-      json['producers'].forEach((v) { producers!.add(Producers.fromJson(v)); });
+      json['producers'].forEach((v) {
+        producers!.add(Producers.fromJson(v));
+      });
     }
-    scheduleEp = json['schedule_ep'] != null ? ScheduleEp.fromJson(json['schedule_ep']) : null;
+    scheduleEp = json['schedule_ep'] != null
+        ? ScheduleEp.fromJson(json['schedule_ep'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -175,7 +213,8 @@ class Categories {
   String? categoryName;
   String? categoryNameVal;
 
-  Categories({this.anime, this.category, this.categoryName, this.categoryNameVal});
+  Categories(
+      {this.anime, this.category, this.categoryName, this.categoryNameVal});
 
   Categories.fromJson(Map<String, dynamic> json) {
     anime = json['anime'];
@@ -257,4 +296,3 @@ class ScheduleEp {
     return data;
   }
 }
-
