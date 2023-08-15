@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import '../controllers/DetailsController.dart';
+import '../controllers/WatchListController.dart';
 import '../model/Chunks.dart';
 import '../utils/CommonStyle.dart';
 import '../widgets/Loader.dart';
@@ -28,6 +29,7 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   DetailsController detailsController = Get.put(DetailsController());
+  WatchListController watchListController = Get.put(WatchListController());
   ScrollController scrollController = ScrollController();
 
   List<String> options = [
@@ -193,9 +195,11 @@ class _DetailsState extends State<Details> {
                                                   appTheme.primaryColor,
                                               shape: const StadiumBorder(),
                                               side: BorderSide.none,
+                                              labelPadding: const EdgeInsets
+                                                  .only(right: 6),
                                             ),
                                             const SizedBox(width: 15),
-                                            ActionChip(
+                                            /*ActionChip(
                                               elevation: 3,
                                               padding: const EdgeInsets.all(2),
                                               avatar: CircleAvatar(
@@ -209,25 +213,97 @@ class _DetailsState extends State<Details> {
                                                 ),
                                               ),
                                               label: Text(
-                                                'Watchlist',
+                                                'Add To WatchList',
                                                 style: appTheme
                                                     .textTheme.labelSmall,
                                               ),
-                                              onPressed: () {
-                                                // Navigator.push(
-                                                //     context,
-                                                //     CustomScreenRoute(
-                                                //       child: Episode(
-                                                //         id: id,
-                                                //         epDetails: epDetails,
-                                                //       ),
-                                                //       direction: AxisDirection.up,
-                                                //     ));
-                                              },
+                                              onPressed: () {},
                                               backgroundColor:
                                                   appTheme.primaryColor,
                                               shape: const StadiumBorder(),
                                               side: BorderSide.none,
+                                            ),*/
+                                            PopupMenuButton(
+                                              onSelected: (String value) {
+                                                setState(() {
+                                                  watchListController.addToListApi(
+                                                    animeId: widget.id!,
+                                                    type: value,
+                                                  );
+                                                });
+                                              },
+                                              itemBuilder: (BuildContext ctx) => [
+                                                PopupMenuItem(
+                                                  value: '01',
+                                                  child: Text(
+                                                    'Watching',
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: '02',
+                                                  child: Text(
+                                                    'On Hold',
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: '03',
+                                                  child: Text(
+                                                    'Plan To Watch',
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: '04',
+                                                  child: Text(
+                                                    'Dropped',
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: '05',
+                                                  child: Text(
+                                                    'Completed',
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                              ],
+                                              padding: EdgeInsets.zero,
+                                              color: appTheme.hintColor,
+                                              shadowColor: appTheme.disabledColor,
+                                              child: Chip(
+                                                elevation: 3,
+                                                padding:
+                                                    const EdgeInsets.all(2),
+                                                avatar: CircleAvatar(
+                                                  backgroundColor:
+                                                      appTheme.primaryColor,
+                                                  child: Icon(
+                                                    Icons.bookmark_add_outlined,
+                                                    color: appTheme
+                                                        .scaffoldBackgroundColor,
+                                                    size: 20,
+                                                  ),
+                                                ),
+                                                label: Text(
+                                                  'Add To WatchList',
+                                                  style: appTheme
+                                                      .textTheme.labelSmall,
+                                                ),
+                                                backgroundColor:
+                                                    appTheme.primaryColor,
+                                                shape: const StadiumBorder(),
+                                                side: BorderSide.none,
+                                                labelPadding:
+                                                    const EdgeInsets.only(
+                                                        right: 6),
+                                              ),
                                             ),
                                           ],
                                         ),

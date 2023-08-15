@@ -28,14 +28,14 @@ class EpisodeController extends GetxController {
   List<int> idList = [];
   VdResolutionModel? vdResolutionModel;
 
-  Future<void> episodeApiCall() async {
+  Future<void> episodeApiCall({required String epId}) async {
     _apiProviders.episodeApi().then((value) {
     // _apiProviders.EpisodeApi(episodeId: animeId.toString()).then((value) {
       try {
         if (value.isNotEmpty) {
-          var responsebody = json.decode(value);
-          if (responsebody["st"] == 200) {
-            EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responsebody);
+          var responseBody = json.decode(value);
+          if (responseBody["st"] == 200) {
+            EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
             hasData.value = true;
             // for (int i = 0; i < epDetailPodo.data!.episodeLink!.length; i++) {
               playerURL = epDetailPodo.data!.episodeLink!.file!;

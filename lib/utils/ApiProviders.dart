@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -258,6 +259,35 @@ class ApiProviders {
       'function_name': 'watch_list',
       // 'type': type,
     };
+
+    try {
+      return http.get(
+      // return http.post(
+        myUri,
+        // headers: <String, String>{
+        //   'Authorization': 'JWT $token',
+        // },
+        // body: jsonMap,
+      ).then((http.Response response) {
+        final int statusCode = response.statusCode;
+        statusExp(statusCode);
+        return response.body;
+      });
+    } catch (e) {
+      catchExp(e);
+      rethrow;
+    }
+  }
+
+  Future<String> addToListApi() async {
+  // Future<String> addToListApi({required String type, required String animeId}) async {
+    //   Uri myUri = Uri.parse(AppConst.addWatch);
+    Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
+
+    // Map<String, dynamic> jsonMap = {
+    //   'anime': animeId,
+    //   'type': type,
+    // };
 
     try {
       return http.get(

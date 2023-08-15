@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/CommonResponse.dart';
 import '../model/ContinueWatchPodo.dart';
 import '../model/RqModels.dart';
 import '../model/WatchListPodo.dart';
@@ -13,7 +14,7 @@ import '../utils/ApiProviders.dart';
 import '../utils/AppConst.dart';
 import '../widgets/CustomSnackbar.dart';
 
-class WishListController extends GetxController {
+class WatchListController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
   RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
 
@@ -52,6 +53,35 @@ class WishListController extends GetxController {
             showLogin.value = false;
             hasData.value = false;
             noData.value = true;
+          } else if (responseBody['detail'] == "Signature has expired.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+          }
+        } else {
+          CustomSnackBar('error');
+        }
+      });
+    } catch (e) {
+      hideProgress();
+      rethrow;
+    }
+  }
+
+  Future<void> addToListApi({required String type, required String animeId}) async {
+    print(type);
+    animeList.clear();
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      _apiProviders.addToListApi().then((value) {
+      // _apiProviders.addToListApi(animeId: animeId, type: type).then((value) {
+        if (value.isNotEmpty) {
+          var responseBody = json.decode(value);
+          hideProgress();
+          if (responseBody['st'] == 200) {
+            CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
+            CustomSnackBar(commonResponse.msg!);
           } else if (responseBody['detail'] == "Signature has expired.") {
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;

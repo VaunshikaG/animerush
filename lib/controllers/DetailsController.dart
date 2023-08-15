@@ -7,12 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/DetailsPodo.dart';
 import '../model/SimilarModel.dart';
 import '../utils/ApiProviders.dart';
+import '../utils/AppConst.dart';
 import '../widgets/Loader.dart';
 
 class DetailsController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
 
-  RxBool noData = false.obs, hasData = false.obs;
+  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
   bool showNextEp = true;
   int length = 0;
   var apiStatus = "",
@@ -38,6 +39,7 @@ class DetailsController extends GetxController {
   List<String> details = [];
 
   Future<void> detailsApiCall({required String? animeId}) async {
+    final prefs = await SharedPreferences.getInstance();
     epDetails.clear();
     similarData.clear();
     details.clear();
@@ -45,9 +47,9 @@ class DetailsController extends GetxController {
       // _apiProviders.DetailsApi(animeId: animeId!).then((value) {
       try {
         if (value.isNotEmpty) {
-          var responsebody = json.decode(value);
-          if (responsebody["st"] == 200) {
-            DetailsPodo detailsPodo = DetailsPodo.fromJson(responsebody);
+          var responseBody = json.decode(value);
+          if (responseBody["st"] == 200) {
+            DetailsPodo detailsPodo = DetailsPodo.fromJson(responseBody);
             hasData.value = true;
             id = detailsPodo.data!.id.toString() ?? "-";
             name = detailsPodo.data!.name ?? "-";
@@ -139,6 +141,11 @@ class DetailsController extends GetxController {
             details.add(status);
             details.add(studio.toString());
             hideProgress();
+          } else if (responseBody['detail'] == "Signature has expired.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
           } else {
             hideProgress();
             noData.value = true;

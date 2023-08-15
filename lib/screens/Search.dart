@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import '../controllers/SearchController.dart';
 import '../model/RqModels.dart';
 import '../utils/theme.dart';
+import '../widgets/CustomButtons.dart';
 import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
+import 'BottomBar.dart';
 import 'Details.dart';
 
 class Search extends StatefulWidget {
@@ -288,6 +290,16 @@ class _SearchState extends State<Search> {
                   visible: searchController.noData.value,
                       child: noData(context),
                     )),
+                Obx(() => Visibility(
+                  visible: searchController.showLogin.value,
+                  child: Center(
+                    child: elevatedButton(
+                      text: "Login →",
+                      onPressed: () =>
+                          Get.off(() => const BottomBar(currentIndex: 3)),
+                    ),
+                  ),
+                )),
               ],
             ),
           ),

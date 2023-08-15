@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
-import '../controllers/WishListController.dart';
+import '../controllers/WatchListController.dart';
 import '../utils/AppConst.dart';
 import '../utils/CommonStyle.dart';
 import '../utils/theme.dart';
@@ -16,7 +16,7 @@ import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
 import 'Splash.dart';
 
-WishListController wishListController = Get.put(WishListController());
+WatchListController wishListController = Get.put(WatchListController());
 LoginController loginController = Get.put(LoginController());
 
 class Account extends StatefulWidget {

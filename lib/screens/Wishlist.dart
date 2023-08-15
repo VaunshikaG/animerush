@@ -6,7 +6,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
-import '../controllers/WishListController.dart';
+import '../controllers/WatchListController.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
 import '../widgets/NoData.dart';
@@ -21,7 +21,7 @@ class Wishlist extends StatefulWidget {
 }
 
 class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin {
-  WishListController wishListController = Get.put(WishListController());
+  WatchListController wishListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
   bool showPassword = true;
@@ -57,7 +57,7 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
             return false;
           },
           child: SizedBox(
-            height: (wishListController.showLogin == true) ? double.infinity
+            height: (wishListController.showLogin.value == true) ? double.infinity
                 : MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
               child: Column(

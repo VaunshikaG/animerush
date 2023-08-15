@@ -14,6 +14,7 @@ class AppConst {
   static const String episode = "$app_url/episode-details/";
   static const String search = "$app_url/filter-details/";
   static const String userFun = "$app_url/user-function/";
+  static const String addWatch = "$app_url/add-watchlist/";
 
 
 

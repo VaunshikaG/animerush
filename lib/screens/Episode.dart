@@ -63,7 +63,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
       }
 
       epController.anime = widget.epDetails;
-      epController.episodeApiCall();
+      epController.episodeApiCall(epId: epController.animeId);
       chunks();
       animationController = AnimationController(
           duration: const Duration(milliseconds: 1800), vsync: this);
@@ -414,44 +414,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-        /*ListView.builder(
-          shrinkWrap: true,
-          itemCount: sublists.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            bool isExpanded = selectedItems.containsAll(sublists[index]);
-
-            return ListTile(
-              title: Text('${index * 50 + 1} - ${(index + 1) * 50}'),
-              onTap: () {
-                setState(() {
-                  if (isExpanded) {
-                    selectedItems.removeWhere((item) => sublists[index].contains(item));
-                  } else {
-                    selectedItems.addAll(sublists[index]);
-                  }
-                });
-                print(isExpanded);
-              },
-              tileColor: Colors.greenAccent,
-              subtitle: (isExpanded == true)
-                  ? Wrap(
-                direction: Axis.horizontal,
-
-                children: sublists[index]
-                    .map((item) => ElevatedButton(
-                  onPressed: () {
-                    print('Item ${item.epRank} pressed');
-                  },
-                  child: Text(item.epRank.toString()),
-                ))
-                    .toList(),
-              )
-                  : const Text('nothing'),
-              dense: true,
-            );
-          },
-        ),*/
+        // chunk sets
         widget.epDetails.length > 50
             ? SizedBox(
                 height: 50,
@@ -497,6 +460,8 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                 ),
               )
             : const SizedBox(),
+
+        // ep grid
         Container(
           margin: const EdgeInsets.only(top: 10),
           alignment: Alignment.topLeft,
@@ -515,6 +480,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                 onPressed: () {
                   setState(() {
                     selectedIndex = index;
+                    epController.episodeApiCall(epId: chunkList[index].id.toString());
                   });
                 },
                 side: BorderSide.none,

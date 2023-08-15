@@ -28,9 +28,9 @@ class HomeController extends GetxController {
     try {
       _apiProviders.homeApi().then((value) {
         if (value.isNotEmpty) {
-          var responsebody = json.decode(value);
-          if (responsebody["st"] == 200) {
-            HomePodo homePodo = HomePodo.fromJson(responsebody);
+          var responseBody = json.decode(value);
+          if (responseBody["st"] == 200) {
+            HomePodo homePodo = HomePodo.fromJson(responseBody);
             hideProgress();
             spotlightData = homePodo.isSpotlightData!;
             topData = homePodo.topStreamingData!;
@@ -45,7 +45,7 @@ class HomeController extends GetxController {
           } else {
             hideProgress();
             noData.value = true;
-            CustomSnackBar(responsebody["msg"]);
+            CustomSnackBar(responseBody["msg"]);
           }
         }
       });
