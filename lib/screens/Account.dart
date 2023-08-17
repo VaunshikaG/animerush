@@ -14,6 +14,7 @@ import '../utils/CommonStyle.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
+import 'Details.dart';
 import 'Splash.dart';
 
 WatchListController wishListController = Get.put(WatchListController());
@@ -35,23 +36,29 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   final _formKey6 = GlobalKey<FormState>();
   bool showPassword = true, showLog = false;
   TabController? _controller;
-  var email, userName, dateJoined;
 
   @override
   void initState() {
     log(runtimeType.toString());
-    loadData();
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      loadData();
+    });
+    _controller = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   Future<void> loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    loginController.isLoggedIn.value = prefs.getBool(AppConst.loginStatus) ?? false;
-    email = prefs.getString(AppConst.email);
-    userName = prefs.getString(AppConst.userName);
-    dateJoined = prefs.getString(AppConst.dateJoined);
-    DateTime dateTime = DateTime.parse(dateJoined.toString());
-    dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
+    Future.delayed(const Duration(seconds: 1), ()
+    {
+      loginController.isLoggedIn.value =
+          prefs.getBool(AppConst.loginStatus) ?? false;
+      // loginController.email = prefs.getString(AppConst.email) ?? '-';
+      // loginController.userName = prefs.getString(AppConst.userName) ?? '-';
+      loginController.dateJoined = prefs.getString(AppConst.dateJoined) ?? DateTime.now().toString();
+      DateTime? dateTime = DateTime.parse(loginController.dateJoined);
+      loginController.dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
+    });
   }
 
   @override
@@ -714,9 +721,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            customTile(text1: 'EMAIL ADDRESS', text2: email ?? '-'),
-            customTile(text1: 'EMAIL USERNAME', text2: userName ?? '-'),
-            customTile(text1: 'DATE JOINED', text2: dateJoined ?? '-'),
+            customTile(text1: 'EMAIL ADDRESS', text2: loginController.email),
+            customTile(text1: 'EMAIL USERNAME', text2: loginController.userName),
+            customTile(text1: 'DATE JOINED', text2: loginController.dateJoined),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: ExpansionTile(
@@ -899,6 +906,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       placeholder: "assets/img/blank.png",
                       image: continueList.anime!.aniImage ?? continueList.anime!.imageHighQuality!,
                       fit: BoxFit.fill,
+                      height: 150,
                       imageErrorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           "assets/img/blank.png",
@@ -941,11 +949,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     );
   }
 
-  @override
-  void dispose() {
-    loginController.dispose();
-    super.dispose();
-  }
 }
 
 class ContinueWatch extends StatefulWidget {
@@ -967,7 +970,9 @@ class _ContinueWatchState extends State<ContinueWatch> {
 
   Future<void> loadData() async {
     await showProgress(context, true);
+    Future.delayed(Duration(seconds: 1), () {
     wishListController.continueApi();
+    });
   }
 
   @override
@@ -997,7 +1002,7 @@ class _ContinueWatchState extends State<ContinueWatch> {
 
         return GestureDetector(
           onTap: () {
-            // Get.offAll(() => Details(id: continueList.id.toString()));
+            Get.offAll(() => Details(id: continueList.id.toString()));
           },
           child: Container(
             height: 200,

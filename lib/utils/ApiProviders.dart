@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../model/RqModels.dart';
 import '../widgets/CustomSnackbar.dart';
 import 'AppConst.dart';
 import '../widgets/Loader.dart';
 
 class ApiProviders {
-  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTE1NjUyMDEsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.SKndAX2Fheggdlg8CvZlqvUshzkJ7FBmvzpoYwCMXE4";
+  // var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTMzMTI4NDUsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.16Ljn74yBJHLJYjD61AcV1jLIoyh8BZq9-2zU8Z1igo";
 
   void catchExp(Object e) {
     hideProgress();
@@ -31,14 +32,12 @@ class ApiProviders {
   Future<String> loginApi({required LoginModel model}) async {
     Uri myUri = Uri.parse(AppConst.login);
 
-    log(model.toJson().toString());
     try {
       return http.post(
         myUri,
         body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
-        log(response.body);
         statusExp(statusCode);
         return response.body;
       });
@@ -144,16 +143,16 @@ class ApiProviders {
   }
 
   Future<String> homeApi() async {
-    // Uri myUri = Uri.parse(AppConst.home);
-    Uri myUri = Uri.parse("https://mocki.io/v1/79e0e726-396d-4c05-b355-65b792cd4415");
+    Uri myUri = Uri.parse(AppConst.home);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/79e0e726-396d-4c05-b355-65b792cd4415");
 
     Map<String, String> jsonMap = {'key': AppConst.KEY};
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // body: jsonMap,
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -165,27 +164,28 @@ class ApiProviders {
     }
   }
 
-  Future<String> detailsApi() async {
-  // Future<String> DetailsApi({required String animeId}) async {
-  //   Uri myUri = Uri.parse(AppConst.details);
-    Uri myUri = Uri.parse("https://mocki.io/v1/a77d04bc-1780-4ad4-8770-b234bf25a04b");
+  // Future<String> detailsApi() async {
+  Future<String> DetailsApi({required String animeId}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.details);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/a77d04bc-1780-4ad4-8770-b234bf25a04b");
 
-    // Map<String, String> jsonMap = {
-    //   'key': AppConst.KEY,
-    //   'id': animeId,
-    // };
+    Map<String, String> jsonMap = {
+      'key': AppConst.KEY,
+      'id': animeId,
+    };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: jsonMap,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
-        print(statusCode);
         statusExp(statusCode);
         return response.body;
       });
@@ -195,24 +195,26 @@ class ApiProviders {
     }
   }
 
-  Future<String> episodeApi() async {
-  // Future<String> EpisodeApi({required String episodeId}) async {
-  //   Uri myUri = Uri.parse(AppConst.details);
-    Uri myUri = Uri.parse("https://mocki.io/v1/ce176c4c-17dc-4900-af42-280965fee3b3");
+  // Future<String> episodeApi() async {
+  Future<String> EpisodeApi({required String episodeId}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.episode);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/ce176c4c-17dc-4900-af42-280965fee3b3");
 
-    // Map<String, String> jsonMap = {
-    //   'key': AppConst.KEY,
-    //   'id': episodeId,
-    // };
+    Map<String, String> jsonMap = {
+      'key': AppConst.KEY,
+      'id': episodeId,
+    };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: jsonMap,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -224,19 +226,21 @@ class ApiProviders {
     }
   }
 
-  Future<String> searchApi() async {
-  // Future<String> SearchApi({required SearchModel model}) async {
-  //   Uri myUri = Uri.parse(AppConst.search);
-    Uri myUri = Uri.parse("https://mocki.io/v1/1f975f19-6d43-49f3-8861-5a791d4ce71c");
+  // Future<String> searchApi() async {
+  Future<String> SearchApi({required SearchModel model}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.search);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/1f975f19-6d43-49f3-8861-5a791d4ce71c");
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: model.toJson(),
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: model.toJson(),
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -248,26 +252,28 @@ class ApiProviders {
     }
   }
 
-  Future<String> watchListApi() async {
-  // Future<String> WatchListApi({required String type}) async {
-  //   Uri myUri = Uri.parse(AppConst.watchList);
-    Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
+  // Future<String> watchListApi() async {
+  Future<String> WatchListApi({required String type}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.userFun);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
     // Uri myUri = Uri.parse("https://mocki.io/v1/bde73b40-ac75-4e7d-9779-8a8a8a4bd503");
     // Uri myUri = Uri.parse("https://mocki.io/v1/45a7acdb-209e-465a-bfa5-79bcb6c00f75");
 
     Map<String, dynamic> jsonMap = {
       'function_name': 'watch_list',
-      // 'type': type,
+      'type': type,
     };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: jsonMap,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -279,24 +285,26 @@ class ApiProviders {
     }
   }
 
-  Future<String> addToListApi() async {
-  // Future<String> addToListApi({required String type, required String animeId}) async {
-    //   Uri myUri = Uri.parse(AppConst.addWatch);
-    Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
+  // Future<String> addToListApi() async {
+  Future<String> AddToListApi({required String type, required String animeId}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.addWatch);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/7ad7e981-f972-456f-bd16-646ffd674ea4");
 
-    // Map<String, dynamic> jsonMap = {
-    //   'anime': animeId,
-    //   'type': type,
-    // };
+    Map<String, dynamic> jsonMap = {
+      'anime': animeId,
+      'type': type,
+    };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: jsonMap,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
@@ -308,24 +316,25 @@ class ApiProviders {
     }
   }
 
-  Future<String> continueApi() async {
-  // Future<String> ContinueApi({required String type}) async {
-  //   Uri myUri = Uri.parse(AppConst.watchList);
-    Uri myUri = Uri.parse("https://mocki.io/v1/0ec4af33-948d-4ef8-b5f2-6157883466ce");
+  // Future<String> continueApi() async {
+  Future<String> ContinueApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.userFun);
+    // Uri myUri = Uri.parse("https://mocki.io/v1/0ec4af33-948d-4ef8-b5f2-6157883466ce");
 
     Map<String, dynamic> jsonMap = {
       'function_name': 'continue_watching',
-      // 'type': type,
     };
 
     try {
-      return http.get(
-      // return http.post(
+      // return http.get(
+      return http.post(
         myUri,
-        // headers: <String, String>{
-        //   'Authorization': 'JWT $token',
-        // },
-        // body: jsonMap,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
       ).then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);

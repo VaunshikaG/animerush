@@ -11,12 +11,14 @@ import '../controllers/DetailsController.dart';
 import '../controllers/WatchListController.dart';
 import '../model/Chunks.dart';
 import '../utils/CommonStyle.dart';
+import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
+import 'WatchList.dart';
 
 class Details extends StatefulWidget {
   final String? id;
@@ -58,7 +60,6 @@ class _DetailsState extends State<Details> {
   @override
   void initState() {
     log(runtimeType.toString());
-    log(widget.id.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
@@ -72,9 +73,20 @@ class _DetailsState extends State<Details> {
     Future.delayed(const Duration(seconds: 1), () {
       detailsController.detailsApiCall(animeId: widget.id);
     });
+
+    // detailsController.name = detailsController.detailsData!.name ?? "-";
+    // print(detailsController.detailsData!.name);
+    // detailsController.img.value = detailsController.detailsData!.aniImage ?? detailsController.detailsData!
+    //     .imageHighQuality!;
+    // detailsController.desc = detailsController.detailsData!.description ?? "-";
+    // detailsController.year = detailsController.detailsData!.airedYear ?? "-";
+    // detailsController.otherName = detailsController.detailsData!.japaneseName ?? "-";
+    // detailsController.ep = detailsController.detailsData!.episodesTillNow ?? "-";
+    // detailsController.duration = detailsController.detailsData!.duration ?? "-";
+    // detailsController.views = detailsController.detailsData!.views.toString() ?? "-";
   }
 
-    var top = 0.0;
+  var top = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -100,14 +112,21 @@ class _DetailsState extends State<Details> {
                 },
                 child: CustomScrollView(
                   slivers: [
-                    Obx(() => CustomAppBar(
-                          title: detailsController.name ?? "-",
-                          img: detailsController.img.value,
-                          backBtn: () {
-                            Get.off(() => const BottomBar(currentIndex: 0));
-                          },
-                          wishlist: () {},
-                        )),
+                    SliverToBoxAdapter(
+                      child: Obx(() => Visibility(
+                        visible: detailsController.hasData.value,
+                        child: CustomAppBar(
+                        title: detailsController.name ?? "-",
+                        img: detailsController.img.value,
+                        backBtn: () {
+                          Get.off(() => const BottomBar(currentIndex: 0));
+                        },
+                        wishlist: () {
+                          Get.off(() => const WatchList(pg: 'detail'));
+                        },
+                      ),
+                      )),
+                    ),
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -116,8 +135,9 @@ class _DetailsState extends State<Details> {
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 15, horizontal: 15),
-                                  margin: const EdgeInsets.only(bottom: 100),
+                                  margin: const EdgeInsets.only(bottom: 150),
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -126,7 +146,7 @@ class _DetailsState extends State<Details> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
                                         child: Text(
-                                          detailsController.name,
+                                          detailsController.name ?? '-',
                                           softWrap: true,
                                           style:
                                               appTheme.textTheme.displayMedium,
@@ -143,7 +163,7 @@ class _DetailsState extends State<Details> {
 
                                       //  desc
                                       RichTextView(
-                                        text: detailsController.desc,
+                                        text: detailsController.desc ?? '-',
                                         maxLines: 4,
                                         softWrap: true,
                                         overflow: TextOverflow.ellipsis,
@@ -187,52 +207,34 @@ class _DetailsState extends State<Details> {
                                               ),
                                               onPressed: () {
                                                 Get.off(() => Episode(
-                                                  epDetails: detailsController.epDetails,
-                                                  id: widget.id,
-                                                ));
+                                                      pg: 'details',
+                                                      epDetails:
+                                                          detailsController
+                                                              .epDetails,
+                                                      aId: widget.id,
+                                                    ));
                                               },
                                               backgroundColor:
                                                   appTheme.primaryColor,
                                               shape: const StadiumBorder(),
                                               side: BorderSide.none,
-                                              labelPadding: const EdgeInsets
-                                                  .only(right: 6),
+                                              labelPadding:
+                                                  const EdgeInsets.only(
+                                                      right: 6),
                                             ),
                                             const SizedBox(width: 15),
-                                            /*ActionChip(
-                                              elevation: 3,
-                                              padding: const EdgeInsets.all(2),
-                                              avatar: CircleAvatar(
-                                                backgroundColor:
-                                                    appTheme.primaryColor,
-                                                child: Icon(
-                                                  Icons.bookmark_add_outlined,
-                                                  color: appTheme
-                                                      .scaffoldBackgroundColor,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                              label: Text(
-                                                'Add To WatchList',
-                                                style: appTheme
-                                                    .textTheme.labelSmall,
-                                              ),
-                                              onPressed: () {},
-                                              backgroundColor:
-                                                  appTheme.primaryColor,
-                                              shape: const StadiumBorder(),
-                                              side: BorderSide.none,
-                                            ),*/
                                             PopupMenuButton(
                                               onSelected: (String value) {
                                                 setState(() {
-                                                  watchListController.addToListApi(
+                                                  watchListController
+                                                      .addToListApi(
                                                     animeId: widget.id!,
                                                     type: value,
                                                   );
                                                 });
                                               },
-                                              itemBuilder: (BuildContext ctx) => [
+                                              itemBuilder: (BuildContext ctx) =>
+                                                  [
                                                 PopupMenuItem(
                                                   value: '01',
                                                   child: Text(
@@ -276,7 +278,8 @@ class _DetailsState extends State<Details> {
                                               ],
                                               padding: EdgeInsets.zero,
                                               color: appTheme.hintColor,
-                                              shadowColor: appTheme.disabledColor,
+                                              shadowColor:
+                                                  appTheme.disabledColor,
                                               child: Chip(
                                                 elevation: 3,
                                                 padding:
@@ -377,12 +380,12 @@ class _DetailsState extends State<Details> {
                                         ),
                                       ),
                                       SimilarList(
-                                        dataLength: detailsController.similarData
-                                            .length,
-                                        similarData: detailsController.similarData,
+                                        pg: 'detail',
+                                        similarData:
+                                            detailsController.similarData,
                                       ),
 
-                                      const SizedBox(height: 20),
+                                      const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
@@ -390,6 +393,24 @@ class _DetailsState extends State<Details> {
                           Obx(() => Visibility(
                                 visible: detailsController.noData.value,
                                 child: noData(context),
+                              )),
+                          Obx(() => Visibility(
+                            visible: detailsController.showLogin.value,
+                            child: CustomAppBar4(
+                              title: '',
+                              backBtn: () => Get.off(() => const BottomBar(currentIndex: 0)),
+                            ),
+                          )),
+                          Obx(() => Visibility(
+                                visible: detailsController.showLogin.value,
+                                child: Center(
+                                  heightFactor: 13,
+                                  child: elevatedButton(
+                                    text: "Login →",
+                                    onPressed: () => Get.off(
+                                        () => const BottomBar(currentIndex: 3)),
+                                  ),
+                                ),
                               )),
                         ],
                       ),

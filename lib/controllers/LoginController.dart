@@ -22,7 +22,7 @@ class LoginController extends GetxController {
       isOtp = false.obs,
       isPassword = false.obs,
       isChangePass = false.obs;
-  var message;
+  var message, email, userName, dateJoined;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -42,6 +42,8 @@ class LoginController extends GetxController {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
             LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
+            email = loginPodo.data!.email;
+            userName = loginPodo.data!.realUsername;
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
             prefs.setString(AppConst.userName, loginPodo.data!.realUsername!);
             prefs.setBool(AppConst.loginStatus, true);
@@ -51,15 +53,13 @@ class LoginController extends GetxController {
             isLoggedIn.value = true;
             Get.to(() => const BottomBar(currentIndex: 3));
             CustomSnackBar("Login Successful");
-            userNameController.clear();
-            emailController.clear();
-            passwordController.clear();
-            otpController.clear();
+            // userNameController.clear();
+            // emailController.clear();
+            // passwordController.clear();
+            // otpController.clear();
           } else if (responseBody['st'] == 101) {
-            log(responseBody);
             CustomSnackBar(responseBody['msg']);
           } else {
-            log(responseBody);
             CustomSnackBar(responseBody['msg']);
           }
         }

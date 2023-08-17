@@ -1,16 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'Home.dart';
 import 'HomeDrawer.dart';
 import 'Search.dart';
-import 'Wishlist.dart';
+import 'WatchList.dart';
 import 'Account.dart';
 
 class BottomBar extends StatefulWidget {
   final int currentIndex;
+  final String? pg;
 
-  const BottomBar({Key? key, required this.currentIndex}) : super(key: key);
+  const BottomBar({Key? key, required this.currentIndex, this.pg}) : super(key: key);
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -20,7 +23,7 @@ class _BottomBarState extends State<BottomBar> {
   final _tabs = [
     const Home(),
     const Search(),
-    const Wishlist(),
+    const WatchList(pg: ''),
     const Account()
   ];
   int _selectedTab = 0;
@@ -28,6 +31,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   void initState() {
+    log(runtimeType.toString());
     _selectedTab = widget.currentIndex;
     super.initState();
   }

@@ -10,18 +10,22 @@ import '../controllers/EpisodeController.dart';
 import '../model/DetailsPodo.dart';
 import '../utils/AppConst.dart';
 import '../model/Chunks.dart';
+import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/NoData.dart';
+import 'BottomBar.dart';
 import 'Details.dart';
 import 'Player.dart';
+import 'WatchList.dart';
 
 class Episode extends StatefulWidget {
-  final String? id;
+  final String? pg;
+  final String? aId;
   final List<EpDetails> epDetails;
   const Episode(
-      {Key? key, required this.epDetails, this.id,})
+      {Key? key, required this.epDetails, this.aId, this.pg,})
       : super(key: key);
 
   @override
@@ -56,14 +60,16 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
     Future.delayed(const Duration(seconds: 1), () {
       for (int i = 0; i < widget.epDetails.length; i++) {
         epController.animeId = widget.epDetails[i].id.toString();
-        // log(animeId.toString());
         epController.w_title = widget.epDetails[i].episodeTitle ?? "";
         epController.w_name = widget.epDetails[i].episodeName ?? "";
         epController.w_desc = widget.epDetails[i].videoDetails ?? "";
       }
+      if (widget.pg == 'details') {
+        epController.episodeApiCall(epId: widget.epDetails[0].id.toString());
+
+      }
 
       epController.anime = widget.epDetails;
-      epController.episodeApiCall(epId: epController.animeId);
       chunks();
       animationController = AnimationController(
           duration: const Duration(milliseconds: 1800), vsync: this);
@@ -112,7 +118,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.off(() => Details(id: widget.id));
+        Get.off(() => Details(id: widget.aId));
         return true;
       },
       child: Align(
@@ -130,13 +136,21 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: CustomAppBar3(
-                        title: epController.title ?? "",
+                      child: Obx(() => (epController.showLogin.value == true)
+                          ? CustomAppBar4(
+                        title: '',
                         backBtn: () {
-                          Get.off(() => Details(id: widget.id));
+                          Get.off(() => Details(id: widget.aId));
                         },
-                        wishlist: () {},
-                      ),
+                      ) : CustomAppBar3(
+                        title: epController.epData.episodeTitle.toString(),
+                        backBtn: () {
+                          Get.off(() => Details(id: widget.aId));
+                        },
+                        wishlist: () {
+                          Get.off(() => const WatchList(pg: 'detail'));
+                        },
+                      )),
                     ),
                     SliverToBoxAdapter(
                       child: Column(
@@ -147,9 +161,9 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Player(
-                                      url: epController.playerURL,
-                                      title: epController.title,
-                                      placeHolder: epController.epImg.value,
+                                      url: epController.epData.episodeLink!.file ?? "-",
+                                      title: epController.epData.episodeTitle ?? epController.w_title,
+                                      placeHolder: epController.epData.image ?? "https://animerush.in/media/image/no_poster.jpg",
                                       dwldList: epController.dwldList,
                                     ),
                                     dwld(),
@@ -176,6 +190,17 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                                 visible: epController.noData.value,
                                 child: noData(context),
                               )),
+                          Obx(() => Visibility(
+                            visible: epController.showLogin.value,
+                            child: Center(
+                              heightFactor: 13,
+                              child: elevatedButton(
+                                text: "Login →",
+                                onPressed: () =>
+                                    Get.off(() => const BottomBar(currentIndex: 3)),
+                              ),
+                            ),
+                          )),
                         ],
                       ),
                     ),
@@ -202,7 +227,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
           fit: BoxFit.cover,
           colorFilter:
               const ColorFilter.mode(Color(0xB0000000), BlendMode.darken),
-          image: NetworkImage(epController.epImg.value),
+          image: NetworkImage(epController.epData.image ?? "https://animerush.in/media/image/no_poster.jpg",),
           onError: (error, stackTrace) {
             Image.asset(
               "assets/img/icon1.png",
@@ -217,11 +242,11 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: FadeInImage.assetNetwork(
             placeholder: "assets/img/blank.png",
-            image: epController.epImg.value,
+            image: epController.epData.image.toString(),
             fit: BoxFit.cover,
             imageErrorBuilder: (context, error, stackTrace) {
               return Image.asset(
-                "assets/img/icon1.png",
+                "assets/img/blank.png",
                 fit: BoxFit.contain,
               );
             },
@@ -229,11 +254,11 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
           ),
         ),
         title: Text(
-          epController.name,
+          epController.epData.episodeName.toString(),
           style: appTheme.textTheme.bodyLarge,
         ),
         subtitle: RichTextView(
-          text: epController.desc,
+          text: epController.epData.videoDetails.toString(),
           maxLines: 4,
           softWrap: true,
           overflow: TextOverflow.ellipsis,
@@ -283,17 +308,21 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(top: 5),
             itemBuilder: (BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: ActionChip(
                   elevation: 3,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   label: Text(epController.dwldList[index].quality!),
                   labelStyle: appTheme.textTheme.labelSmall,
-                  onPressed: () {},
+                  onPressed: () {
+                    epController.downloadEp(
+                      name: epController.epData.episodeTitle.toString(),
+                      url: epController.dwldList[index].link.toString(),
+                    );
+                  },
                   backgroundColor: appTheme.primaryColor,
                   side: BorderSide.none,
                   shape: RoundedRectangleBorder(
@@ -310,100 +339,6 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  abc() {
-    return Row(
-      children: [
-        ActionChip(
-          elevation: 3,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          label: const Text('360p'),
-          onPressed: () {
-            downloadEp();
-            // downloadFile(
-            //   fileName: "One Piece Episode 1",
-            //   url: 'https://gogodownload.net/download.php?url=aHR0cHM6LyAawehyfcghysfdsDGDYdgdsfsdfwstdgdsgtert8AdrefsdsdfwerFrefdsfrersfdsrfer363435342eGM1cHBlOWVpLmdvY2RuYW5pLmNvbS91c2VyMTM0Mi9jNzUxYmFiMTkzOWEyYjgzMDIwNTY1ZTFhYzI0Mjg5Ni9FUC4xLnYxLjM2MHAubXA0P3Rva2VuPURMZDVUTUxkVGNtdTEzbnVCVmRiTmcmZXhwaXJlcz0xNjc4ODY4MzY5JmlkPTM1MTgmdGl0bGU9KDY0MHgzNjAtZ29nb2FuaW1lKW9uZS1waWVjZS1lcGlzb2RlLTEubXA0',
-            // );
-          },
-          backgroundColor: CustomTheme.themeColor1,
-          side: BorderSide.none,
-        ),
-        const SizedBox(width: 10),
-        ActionChip(
-          elevation: 3,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          label: const Text('480p'),
-          onPressed: () {},
-          backgroundColor: CustomTheme.themeColor1,
-          side: BorderSide.none,
-        ),
-        const SizedBox(width: 10),
-        ActionChip(
-          elevation: 3,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          label: const Text('720p'),
-          onPressed: () {},
-          backgroundColor: CustomTheme.themeColor1,
-          side: BorderSide.none,
-        ),
-        const SizedBox(width: 10),
-        ActionChip(
-          elevation: 3,
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          label: const Text('1080p'),
-          onPressed: () {},
-          backgroundColor: CustomTheme.themeColor1,
-          side: BorderSide.none,
-        ),
-      ],
-    );
-  }
-
-  Future<String> downloadEp() async {
-    const folderName = "AnimeRush";
-    final path = Directory("storage/emulated/0/$folderName");
-
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    if ((await path.exists())) {
-      await FlutterDownloader.enqueue(
-        headers: {
-          'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
-        },
-        url:
-            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        savedDir: path.path,
-        showNotification: true,
-        saveInPublicStorage: true,
-        openFileFromNotification: true,
-        fileName: "One Piece Episode 1.mp4",
-      );
-      return path.path;
-    } else {
-      path.create();
-      await FlutterDownloader.enqueue(
-        url:
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        savedDir: path.path,
-        showNotification: true,
-        saveInPublicStorage: true,
-        openFileFromNotification: true,
-        fileName: "One Piece Episode 1.mp4",
-      );
-      return path.path;
-    }
-    /*await FlutterDownloader.enqueue(
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        savedDir: (await getApplicationDocumentsDirectory()).path,
-        showNotification: true,
-        saveInPublicStorage: true,
-        openFileFromNotification: true,
-        fileName: "One Piece Episode 1.mp4",
-      );*/
   }
 
   Widget episodes() {
@@ -493,7 +428,7 @@ class _EpisodeState extends State<Episode> with SingleTickerProviderStateMixin {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7)),
                 label: Text(
-                  chunkList[index].epRank.toString(),
+                  chunkList[index].epRank.replaceAll('.0', '').toString(),
                   style: selectedIndex == index
                       ? appTheme.textTheme.labelSmall
                       : appTheme.textTheme.titleSmall,

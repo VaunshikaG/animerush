@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:animerush/widgets/Loader.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/CommonResponse.dart';
 import '../model/ContinueWatchPodo.dart';
-import '../model/RqModels.dart';
 import '../model/WatchListPodo.dart';
+import '../screens/BottomBar.dart';
 import '../utils/ApiProviders.dart';
 import '../utils/AppConst.dart';
 import '../widgets/CustomSnackbar.dart';
@@ -27,13 +26,13 @@ class WatchListController extends GetxController {
   int dataLength = 0;
 
   Future<void> watchApi(String type) async {
-    print(type);
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      _apiProviders.watchListApi().then((value) {
-      // _apiProviders.WatchListApi(type: type).then((value) {
+      // _apiProviders.watchListApi().then((value) {
+      _apiProviders.WatchListApi(type: type).then((value) {
         if (value.isNotEmpty) {
+          hasData.value = false;
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 100) {
@@ -42,13 +41,11 @@ class WatchListController extends GetxController {
               dataLength = watchListPodo.data!.length;
               animeList.add(watchListPodo.data![i].anime!);
             }
-            print(watchListPodo.data!.length);
-            print(watchListPodo.data![0].typeVal);
             noData.value = false;
             showLogin.value = false;
             hasData.value = true;
+            CustomSnackBar('Swipe left on anime to .');
           } else if (responseBody['st'] == 101) {
-            print('here');
             dataLength = 0;
             showLogin.value = false;
             hasData.value = false;
@@ -58,6 +55,12 @@ class WatchListController extends GetxController {
             hasData.value = false;
             noData.value = false;
             showLogin.value = true;
+          } else if (responseBody['detail'] == "Invalid Authorization header. No credentials provided.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+            hideProgress();
           }
         } else {
           CustomSnackBar('error');
@@ -70,16 +73,18 @@ class WatchListController extends GetxController {
   }
 
   Future<void> addToListApi({required String type, required String animeId}) async {
-    print(type);
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      _apiProviders.addToListApi().then((value) {
-      // _apiProviders.addToListApi(animeId: animeId, type: type).then((value) {
+      // _apiProviders.addToListApi().then((value) {
+      _apiProviders.AddToListApi(animeId: animeId, type: type).then((value) {
         if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 200) {
+            if (type.contains('False00')) {
+              Get.to(() => const BottomBar(currentIndex: 2));
+            }
             CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
             CustomSnackBar(commonResponse.msg!);
           } else if (responseBody['detail'] == "Signature has expired.") {
@@ -102,9 +107,10 @@ class WatchListController extends GetxController {
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      _apiProviders.continueApi().then((value) async {
-      // _apiProviders.ContinueApi(type: type).then((value) {
+      // _apiProviders.continueApi().then((value) async {
+      _apiProviders.ContinueApi().then((value) async {
         if (value.isNotEmpty) {
+          hasData.value = false;
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 100) {
@@ -117,7 +123,6 @@ class WatchListController extends GetxController {
             showLogin.value = false;
             hasData.value = true;
           } else if (responseBody['st'] == 101) {
-            print('here');
             dataLength = 0;
             showLogin.value = false;
             hasData.value = false;

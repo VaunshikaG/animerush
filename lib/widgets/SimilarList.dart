@@ -1,16 +1,24 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-import '../model/DetailsPodo.dart';
+import '../controllers/WatchListController.dart';
+import '../model/WatchListPodo.dart';
 import '../screens/Details.dart';
-import '../utils/theme.dart';
 
-class SimilarList extends StatelessWidget {
-  final int dataLength;
+class SimilarList extends StatefulWidget {
   final similarData;
-  // final void Function() onTap;
-  SimilarList({super.key, required this.dataLength, required this.similarData});
+  final String pg;
+  // final void Function() onRemove;
+  SimilarList({super.key, required this.similarData, required this.pg});
+
+  @override
+  State<SimilarList> createState() => _SimilarListState();
+}
+
+class _SimilarListState extends State<SimilarList> {
+  WatchListController watchListController = Get.put(WatchListController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,36 +32,36 @@ class SimilarList extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 160,
       ),
-      itemCount: similarData.length,
+      itemCount: widget.similarData.length,
       itemBuilder: (BuildContext ctx, index) {
-        final similarList = similarData[index];
+        final similarList = widget.similarData[index];
         final lang, type, status;
 
-        if(similarList.type == 'S') {
+        if (similarList.type == 'S') {
           lang = "SUB";
-        } else if(similarList.type == 'D') {
+        } else if (similarList.type == 'D') {
           lang = "DUB";
         } else {
           lang = "-";
         }
 
-        if(similarList.animeWatchType == 'ON') {
+        if (similarList.animeWatchType == 'ON') {
           type = "Onas";
-        } else if(similarList.animeWatchType == 'OV') {
+        } else if (similarList.animeWatchType == 'OV') {
           type = "Ovas";
-        } else if(similarList.animeWatchType == 'M') {
+        } else if (similarList.animeWatchType == 'M') {
           type = "Movie";
-        } else if(similarList.animeWatchType == 'SP') {
+        } else if (similarList.animeWatchType == 'SP') {
           type = "Special";
-        } else if(similarList.animeWatchType == 'S') {
+        } else if (similarList.animeWatchType == 'S') {
           type = "Series";
         } else {
           type = "-";
         }
 
-        if(similarList.status == 'C') {
+        if (similarList.status == 'C') {
           status = "Completed";
-        } else if(similarList.status == 'O') {
+        } else if (similarList.status == 'O') {
           status = "Ongoing";
         } else {
           status = "-";
@@ -63,8 +71,18 @@ class SimilarList extends StatelessWidget {
           onTap: () {
             Get.offAll(() => Details(id: similarList.id.toString()));
           },
+          onHorizontalDragEnd: (DragEndDetails) {
+            setState(() {
+              if (widget.pg == 'detail') {
+                watchListController.addToListApi(
+                  animeId: similarList.id.toString(),
+                  type: 'False00',
+                );
+              }
+            });
+          },
           child: Container(
-            height: 230,
+            height: 280,
             margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             // decoration: BoxDecoration(color: CustomTheme.grey300),
             child: Wrap(
@@ -74,8 +92,10 @@ class SimilarList extends StatelessWidget {
                     FadeInImage.assetNetwork(
                       alignment: Alignment.center,
                       placeholder: "assets/img/blank.png",
-                      image: similarList.aniImage ?? similarList.imageHighQuality!,
+                      image:
+                          similarList.aniImage ?? similarList.imageHighQuality!,
                       fit: BoxFit.fill,
+                      height: 230,
                       imageErrorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           "assets/img/blank.png",
@@ -122,16 +142,19 @@ class SimilarList extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: appTheme.textTheme.titleMedium,
                       ),
-                      subtitle: Text(
-                        "$type  •  $status  •  ${similarList.airedYear ?? "-"}",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: appTheme.textTheme.titleSmall,
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Text(
+                          "$type  •  $status  •  ${similarList.airedYear ?? "-"}",
+                          // maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: appTheme.textTheme.titleSmall,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 5),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

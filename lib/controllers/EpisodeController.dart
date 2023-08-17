@@ -1,61 +1,111 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/DetailsPodo.dart';
 import '../model/EpDetailPodo.dart';
 import '../model/VdResolutionModel.dart';
 import '../utils/ApiProviders.dart';
+import '../utils/AppConst.dart';
 import '../widgets/Loader.dart';
 
 class EpisodeController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
 
-  RxBool noData = false.obs, hasData = false.obs;
+  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
   var apiStatus = "",
       animeId = "",
-      playerURL = "",
-      epImg = "".obs,
-      title = "",
-      name = "",
-      desc = "",
       w_title = "",
       w_name = "",
       w_desc = "";
+  Data epData = Data();
   List<DownloadEpisodeLink> dwldList = [];
   List<EpDetails> anime = [];
-  List<int> idList = [];
   VdResolutionModel? vdResolutionModel;
 
   Future<void> episodeApiCall({required String epId}) async {
-    _apiProviders.episodeApi().then((value) {
-    // _apiProviders.EpisodeApi(episodeId: animeId.toString()).then((value) {
+    final prefs = await SharedPreferences.getInstance();
+    dwldList.clear();
+    anime.clear();
+    // _apiProviders.episodeApi().then((value) {
+    _apiProviders.EpisodeApi(episodeId: epId).then((value) {
       try {
         if (value.isNotEmpty) {
+          hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
-            hasData.value = true;
-            // for (int i = 0; i < epDetailPodo.data!.episodeLink!.length; i++) {
-              playerURL = epDetailPodo.data!.episodeLink!.file!;
-            // }
-            epImg.value = epDetailPodo.data!.image ?? "https://animerush.in/media/image/no_poster.jpg";
-            hideProgress();
-            title = epDetailPodo.data!.episodeTitle ?? w_title ?? "";
-            name = epDetailPodo.data!.episodeName ?? w_name ?? "";
-            desc = epDetailPodo.data!.videoDetails ?? w_desc ?? "";
+            epData = epDetailPodo.data!;
             dwldList = epDetailPodo.data!.downloadEpisodeLink!;
-          } else {
+            update([hasData.value = true, epData = epDetailPodo.data!,
+              dwldList = epDetailPodo.data!.downloadEpisodeLink!, anime], true);
+            hasData.value = true;
             hideProgress();
-            noData.value = true;
-            // CustomSnackBar(context, Text(homePodo.msg!));
+          } else if (responseBody['detail'] == "Signature has expired.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+            hideProgress();
+          } else if (responseBody['detail'] == "Invalid Authorization header. No credentials provided.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+            hideProgress();
           }
         }
       } catch (e) {
         rethrow;
       }
     });
+  }
+
+  Future<String> downloadEp({required String url, required String name}) async {
+    const folderName = "AnimeRush";
+    final path = Directory("storage/emulated/0/$folderName");
+
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    if ((await path.exists())) {
+      await FlutterDownloader.enqueue(
+        headers: {
+          'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+        },
+        url: url,
+        // "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        savedDir: path.path,
+        showNotification: true,
+        saveInPublicStorage: true,
+        openFileFromNotification: true,
+        fileName: "$name.mp4",
+        allowCellular: true,
+        requiresStorageNotLow: true,
+      );
+      return path.path;
+    } else {
+      path.create();
+      await FlutterDownloader.enqueue(
+        url: url,
+        // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        savedDir: path.path,
+        showNotification: true,
+        saveInPublicStorage: true,
+        openFileFromNotification: true,
+        fileName: "$name.mp4",
+        allowCellular: true,
+        requiresStorageNotLow: true,
+      );
+      return path.path;
+    }
   }
 
 }

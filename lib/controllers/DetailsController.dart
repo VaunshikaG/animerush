@@ -16,41 +16,40 @@ class DetailsController extends GetxController {
   RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
   bool showNextEp = true;
   int length = 0;
-  var apiStatus = "",
-      animeType = "",
-      year = "",
-      status = "",
-      img = "".obs,
-      img2 = "",
-      name = "",
-      desc = "",
-      id = "",
-      lang = "",
-      duration = "",
-      ep = "",
-      views = "",
-      studio = "",
-      otherName = "",
-      nextEp = "";
+  RxString img = ''.obs;
+  String? apiStatus,
+      animeType,
+      year,
+      status,
+      img2,
+      name,
+      desc,
+      id,
+      lang,
+      duration,
+      ep,
+      views,
+      studio,
+      otherName,
+      nextEp;
 
   List<EpDetails> epDetails = [];
   List<DetailsData> similarData = [];
   SimilarModel? similarModel;
   List<String> details = [];
+  DetailsData? detailsData;
 
   Future<void> detailsApiCall({required String? animeId}) async {
     final prefs = await SharedPreferences.getInstance();
-    epDetails.clear();
-    similarData.clear();
-    details.clear();
-    _apiProviders.detailsApi().then((value) {
-      // _apiProviders.DetailsApi(animeId: animeId!).then((value) {
+    // _apiProviders.detailsApi().then((value) {
+      _apiProviders.DetailsApi(animeId: animeId!).then((value) {
       try {
         if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             DetailsPodo detailsPodo = DetailsPodo.fromJson(responseBody);
             hasData.value = true;
+            detailsData = detailsPodo.data;
             id = detailsPodo.data!.id.toString() ?? "-";
             name = detailsPodo.data!.name ?? "-";
             img.value = detailsPodo.data!.aniImage ?? detailsPodo.data!
@@ -63,7 +62,6 @@ class DetailsController extends GetxController {
             views = detailsPodo.data!.views.toString() ?? "-";
             epDetails = detailsPodo.data!.epDetails!;
             length = detailsPodo.data!.epDetails!.length;
-            print('here');
 
             if (detailsPodo.data!.scheduleEp != null) {
               var day = detailsPodo.data!.scheduleEp!.day ?? "";
@@ -131,14 +129,14 @@ class DetailsController extends GetxController {
               lang = "-";
             }
 
-            details.add(otherName);
-            details.add(lang);
+            details.add(otherName!);
+            details.add(lang!);
             details.add("$duration min");
-            details.add(ep);
+            details.add(ep!);
             details.add(views.toString());
-            details.add(year);
-            details.add(animeType);
-            details.add(status);
+            details.add(year!);
+            details.add(animeType!);
+            details.add(status!);
             details.add(studio.toString());
             hideProgress();
           } else if (responseBody['detail'] == "Signature has expired.") {
@@ -146,14 +144,16 @@ class DetailsController extends GetxController {
             hasData.value = false;
             noData.value = false;
             showLogin.value = true;
-          } else {
             hideProgress();
-            noData.value = true;
-            // CustomSnackBar(context, Text(homePodo.msg!));
+          } else if (responseBody['detail'] == "Invalid Authorization header. No credentials provided.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            hasData.value = false;
+            noData.value = false;
+            showLogin.value = true;
+            hideProgress();
           }
         }
       } catch (e) {
-        log(e.toString());
         rethrow;
       }
     });

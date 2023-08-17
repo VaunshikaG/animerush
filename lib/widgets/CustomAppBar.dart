@@ -244,3 +244,45 @@ Widget CustomAppBar3({
     ],
   );
 }
+
+//  watchlist pg
+Widget CustomAppBar4({
+  required String title,
+  required void Function() backBtn,
+}) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: CustomTheme.black,
+    leading: FittedBox(
+      fit: BoxFit.contain,
+      child: IconButton(
+        icon: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: CustomTheme.grey3,
+            // backgroundBlendMode: BlendMode.softLight,
+          ),
+          child: Icon(
+            CupertinoIcons.left_chevron,
+            color: CustomTheme.white,
+            size: 18,
+          ),
+        ),
+        onPressed: () {
+          backBtn();
+        },
+      ),
+    ),
+    title: Text(
+      title,
+      softWrap: true,
+      maxLines: 2,
+      style: TextStyle(
+        fontSize: 14,
+        color: CustomTheme.white,
+      ),
+    ),
+  );
+}

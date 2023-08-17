@@ -276,7 +276,7 @@ class EpDetails {
   int? id;
   // int? epRank;
   // double? epRank;
-  String? epRank;
+  dynamic epRank;
   String? episodeName;
   String? episodeTitle;
   String? image;

@@ -23,7 +23,7 @@ class EpDetailPodo {
 }
 
 class Data {
-  int? epRank;
+  dynamic epRank;
   String? episodeName;
   String? episodeTitle;
   String? image;

@@ -37,7 +37,7 @@ dependencies:
   fluttertoast: ^8.2.2
   shared_preferences: ^2.2.0
   get: ^4.6.5
-
+  flutter_riverpod: ^2.3.6
 
 
 

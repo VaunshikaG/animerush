@@ -37,11 +37,11 @@ class _PlayerState extends State<Player> {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
       },
       resolutions: AppConst.exampleResolutionsUrls,
-      notificationConfiguration: const BetterPlayerNotificationConfiguration(
+      notificationConfiguration: BetterPlayerNotificationConfiguration(
         showNotification: true,
-        title: "Chainsaw Man",
+        title: widget.title,
         author: "animerush.in",
-        imageUrl: AppConst.placeHolderImg,
+        imageUrl: widget.placeHolder,
       ),
     );
 
@@ -54,7 +54,7 @@ class _PlayerState extends State<Player> {
         autoPlay: false,
         placeholderOnTop: true,
         placeholder: Image.network(
-          AppConst.placeHolderImg,
+          widget.placeHolder,
           fit: BoxFit.contain,
         ),
         controlsConfiguration: BetterPlayerControlsConfiguration(

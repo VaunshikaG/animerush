@@ -1,14 +1,13 @@
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import '../controllers/SearchController.dart';
 import '../model/RqModels.dart';
-import '../utils/AppTheme.dart';
 import '../utils/theme.dart';
+import 'Details.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer({Key? key}) : super(key: key);
@@ -269,7 +268,32 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       physics: const ClampingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         return CupertinoButton(
-                          onPressed: () => Get.back(),
+                          onPressed: () {
+                            setState(() {
+
+                              if (index == 0) {
+                                searchController.searchApiCall(pgName: "drawer", searchModel: SearchModel(
+                                  val: 'anime',
+                                  genres: '',
+                                  pageId: '',
+                                  sort: '',
+                                ));
+                              } else if (index == 1) {
+                                searchController.searchApiCall(pgName: "drawer", searchModel: SearchModel(
+                                  val: 'popular',
+                                  genres: '',
+                                  pageId: '',
+                                  sort: '',
+                                ));
+                              } else if (index == 2) {
+                                var rng = Random();
+                                int min = 1;
+                                int max = 13000;
+                                int randomNumber = min + rng.nextInt(max - min);
+                                Get.offAll(() => Details(id: randomNumber.toString()));
+                              }
+                            });
+                          },
                           color: appTheme.colorScheme.surface,
                           padding: const EdgeInsets.symmetric(vertical: 0,
                               horizontal: 17),

@@ -15,19 +15,21 @@ class elevatedButton extends StatelessWidget {
     final appTheme = Theme.of(context);
 
     return ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: CustomTheme.themeColor1,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          fixedSize: const Size(300, 45),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: CustomTheme.themeColor1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
         ),
-        child: Text(
-          text,
-          style: appTheme.textTheme.labelSmall,
-        ),
-      );
+        fixedSize: const Size(200, 45),
+        alignment: Alignment.center
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: appTheme.textTheme.labelSmall,
+      ),
+    );
   }
 }
 

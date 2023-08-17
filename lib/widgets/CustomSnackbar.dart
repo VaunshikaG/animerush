@@ -9,6 +9,7 @@ class CustomSnackBar {
       messageText: Text(
         content,
         style: TextStyle(
+          fontSize: 15,
           fontWeight: FontWeight.bold,
           color: CustomTheme.black,
         ),
@@ -21,9 +22,9 @@ class CustomSnackBar {
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
       snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
       isDismissible: false,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 6),
     );
   }
 }

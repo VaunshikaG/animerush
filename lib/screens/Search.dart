@@ -59,16 +59,18 @@ class _SearchState extends State<Search> {
     searchController.hasData.value = false;
     searchController.showChips.value = true;
     searchController.showHistory.value = true;
+
+
     //  text chip
     // genreNames = genreTitle.map((name) => GenreTitle(name)).toList();
     categoryNames = categoryData.map((map) => CategoryTitle(map['title'], map['value'])).toList();
     genreNames = genreData.map((map) => GenreTitle(map['title'], map['icon'], map['value'])).toList();
-    searchController.searchApiCall(pgName: "searchField", searchModel: SearchModel(
-          val: 'anime',
-          genres: '',
-          pageId: '1',
-          sort: '',
-        ));
+    // searchController.searchApiCall(pgName: "searchField", searchModel: SearchModel(
+    //       val: 'anime',
+    //       genres: '',
+    //       pageId: '',
+    //       sort: '',
+    //     ));
     super.initState();
   }
 
@@ -271,8 +273,7 @@ class _SearchState extends State<Search> {
                       child: Column(
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(
-                                left: 15, bottom: 10, top: 15),
+                            margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               searchController.displayName,
@@ -280,7 +281,7 @@ class _SearchState extends State<Search> {
                             ),
                           ),
                           SimilarList(
-                            dataLength: searchController.animeList.length,
+                            pg: 'search',
                             similarData: searchController.animeList,
                           ),
                         ],
@@ -293,6 +294,7 @@ class _SearchState extends State<Search> {
                 Obx(() => Visibility(
                   visible: searchController.showLogin.value,
                   child: Center(
+                    heightFactor: 13,
                     child: elevatedButton(
                       text: "Login →",
                       onPressed: () =>
@@ -306,12 +308,6 @@ class _SearchState extends State<Search> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
   }
 
   // single chip selection

@@ -7,21 +7,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
 import '../controllers/WatchListController.dart';
+import '../utils/theme.dart';
+import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomButtons.dart';
+import '../widgets/CustomSnackbar.dart';
 import '../widgets/Loader.dart';
 import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
 
-class Wishlist extends StatefulWidget {
-  const Wishlist({Key? key}) : super(key: key);
+class WatchList extends StatefulWidget {
+  final String pg;
+  const WatchList({Key? key, required this.pg}) : super(key: key);
 
   @override
-  _WishlistState createState() => _WishlistState();
+  _WatchListState createState() => _WatchListState();
 }
 
-class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin {
-  WatchListController wishListController = Get.put(WatchListController());
+class _WatchListState extends State<WatchList> with SingleTickerProviderStateMixin {
+  WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
   bool showPassword = true;
@@ -32,15 +36,19 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   void initState() {
     log(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      loadData();
+      loadData('00');
+      _controller = TabController(length: 6, vsync: this);
     });
     super.initState();
   }
 
-  Future<void> loadData() async {
-    await showProgress(context, true);
-    wishListController.watchApi('00');
+  void loadData(String value) {
+    // await showProgress(context, true);
+    Future.delayed(const Duration(seconds: 1), () {
+      watchListController.watchApi(value);
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +56,13 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width, 50),
+        child: (widget.pg == 'detail') ? CustomAppBar4(
+          title: 'WatchList',
+          backBtn: () => Get.back(),
+        ) : const SizedBox(),
+      ),
       body: SafeArea(
         // maintainBottomViewPadding: true,
         minimum: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -57,18 +72,24 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
             return false;
           },
           child: SizedBox(
-            height: (wishListController.showLogin.value == true) ? double.infinity
+            height: (watchListController.showLogin.value == true) ? double.infinity
                 : MediaQuery.of(context).size.height,
             child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(() => Visibility(
-                    visible: wishListController.hasData.value,
+                    visible: watchListController.hasData.value,
                     child: _tabSection(),
                   )),
                   Obx(() => Visibility(
-                        visible: wishListController.showLogin.value,
+                    visible: watchListController.noData.value,
+                    child: noData(context),
+                  )),
+                  Obx(() => Visibility(
+                        visible: watchListController.showLogin.value,
                         child: Center(
+                          heightFactor: 13,
                           child: elevatedButton(
                             text: "Login →",
                             onPressed: () =>
@@ -99,18 +120,19 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
               isScrollable: true,
               onTap: (index) {
                 setState(() {
+                  watchListController.animeList.clear();
                   if (index == 0) {
-                    wishListController.watchApi('00');
+                    loadData('00');
                   } else if (index == 1) {
-                    wishListController.watchApi('01');
+                    loadData('01');
                   } else if (index == 2) {
-                    wishListController.watchApi('02');
+                    loadData('02');
                   } else if (index == 3) {
-                    wishListController.watchApi('03');
+                    loadData('03');
                   } else if (index == 4) {
-                    wishListController.watchApi('04');
+                    loadData('04');
                   } else if (index == 5) {
-                    wishListController.watchApi('05');
+                    loadData('05');
                   }
                 });
               },
@@ -190,11 +212,12 @@ class _WishlistState extends State<Wishlist> with SingleTickerProviderStateMixin
   Widget wishList() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      child: wishListController.noData.value ?
-        noData(context) : SimilarList(
-        dataLength: wishListController.dataLength,
-        similarData: wishListController.animeList,
-      ),
+      child: (watchListController.noData.value == true)
+          ? noData(context)
+          : SimilarList(
+        pg: 'watch',
+              similarData: watchListController.animeList,
+            ),
     );
   }
 }

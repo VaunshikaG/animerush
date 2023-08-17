@@ -110,10 +110,10 @@ class SearchModel {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'key': 'lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc',
-      'val': val!.trim(),
-      'page_id': pageId!.trim(),
-      'sort': sort!.trim(),
-      'genres': genres!.trim(),
+      'val': val!,
+      'page_id': pageId!,
+      'sort': sort!,
+      'genres': genres!,
     };
 
     return map;
