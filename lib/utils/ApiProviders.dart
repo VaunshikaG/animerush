@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -33,10 +35,12 @@ class ApiProviders {
     Uri myUri = Uri.parse(AppConst.login);
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -51,10 +55,12 @@ class ApiProviders {
     Uri myUri = Uri.parse(AppConst.signUp);
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -69,10 +75,12 @@ class ApiProviders {
     Uri myUri = Uri.parse(AppConst.otpVerify);
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -92,10 +100,12 @@ class ApiProviders {
     };
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: requestBody,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -110,10 +120,12 @@ class ApiProviders {
     Uri myUri = Uri.parse(AppConst.changePassword);
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -124,14 +136,17 @@ class ApiProviders {
     }
   }
 
-  Future<String> profilePasswordApi({required ProfilePasswordModel model}) async {
+  Future<String> profilePasswordApi(
+      {required ProfilePasswordModel model}) async {
     Uri myUri = Uri.parse(AppConst.userFun);
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -150,10 +165,12 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         body: jsonMap,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -178,13 +195,15 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -209,13 +228,15 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -235,13 +256,15 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -268,13 +291,15 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -286,7 +311,8 @@ class ApiProviders {
   }
 
   // Future<String> addToListApi() async {
-  Future<String> AddToListApi({required String type, required String animeId}) async {
+  Future<String> AddToListApi(
+      {required String type, required String animeId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
     Uri myUri = Uri.parse(AppConst.addWatch);
@@ -299,13 +325,15 @@ class ApiProviders {
 
     try {
       // return http.get(
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -316,7 +344,6 @@ class ApiProviders {
     }
   }
 
-  // Future<String> continueApi() async {
   Future<String> ContinueApi() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
@@ -329,6 +356,35 @@ class ApiProviders {
 
     try {
       // return http.get(
+      return http
+          .post(
+        myUri,
+        headers: <String, String>{
+          'Authorization': 'JWT $token',
+        },
+        body: jsonMap,
+      )
+          .then((http.Response response) {
+        final int statusCode = response.statusCode;
+        statusExp(statusCode);
+        return response.body;
+      });
+    } catch (e) {
+      catchExp(e);
+      rethrow;
+    }
+  }
+
+  Future<String> ProfileApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
+    Uri myUri = Uri.parse(AppConst.userFun);
+
+    Map<String, dynamic> jsonMap = {
+      'function_name': 'profile_details',
+    };
+
+    try {
       return http.post(
         myUri,
         headers: <String, String>{
@@ -345,5 +401,4 @@ class ApiProviders {
       rethrow;
     }
   }
-
 }

@@ -17,13 +17,12 @@ class elevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: CustomTheme.themeColor1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        fixedSize: const Size(200, 45),
-        alignment: Alignment.center
-      ),
+          backgroundColor: CustomTheme.themeColor1,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          fixedSize: const Size(200, 45),
+          alignment: Alignment.center),
       child: Text(
         text,
         textAlign: TextAlign.center,

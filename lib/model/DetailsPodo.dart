@@ -53,31 +53,31 @@ class DetailsData {
 
   DetailsData(
       {this.id,
-        this.name,
-        this.japaneseName,
-        this.englishName,
-        this.thumbnail,
-        this.image,
-        this.imageHighQuality,
-        this.aniImage,
-        this.banner,
-        this.type,
-        this.animeWatchType,
-        this.status,
-        this.active,
-        this.episodes,
-        this.episodesTillNow,
-        this.ratingAge,
-        this.duration,
-        this.description,
-        this.airedYear,
-        this.premiered,
-        this.views,
-        this.categories,
-        this.studios,
-        this.producers,
-        this.scheduleEp,
-        this.epDetails,
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp,
+      this.epDetails,
       this.relatedAnime});
 
   DetailsData.fromJson(Map<String, dynamic> json) {
@@ -176,7 +176,8 @@ class DetailsData {
       data['ep_details'] = this.epDetails!.map((v) => v.toJson()).toList();
     }
     if (this.relatedAnime != null) {
-      data['related_anime'] = this.relatedAnime!.map((v) => v.toJson()).toList();
+      data['related_anime'] =
+          this.relatedAnime!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -284,11 +285,11 @@ class EpDetails {
 
   EpDetails(
       {this.id,
-        this.epRank,
-        this.episodeName,
-        this.episodeTitle,
-        this.image,
-        this.videoDetails});
+      this.epRank,
+      this.episodeName,
+      this.episodeTitle,
+      this.image,
+      this.videoDetails});
 
   EpDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -338,7 +339,32 @@ class RelatedAnime {
   List<Producers>? producers;
   ScheduleEp? scheduleEp;
 
-  RelatedAnime({this.id, this.name, this.japaneseName, this.englishName, this.thumbnail, this.image, this.imageHighQuality, this.aniImage, this.banner, this.type, this.animeWatchType, this.status, this.active, this.episodes, this.episodesTillNow, this.ratingAge, this.duration, this.description, this.airedYear, this.premiered, this.views, this.categories, this.studios, this.producers, this.scheduleEp});
+  RelatedAnime(
+      {this.id,
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp});
 
   RelatedAnime.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -364,17 +390,25 @@ class RelatedAnime {
     views = json['views'];
     if (json['categories'] != null) {
       categories = <Categories>[];
-      json['categories'].forEach((v) { categories!.add(Categories.fromJson(v)); });
+      json['categories'].forEach((v) {
+        categories!.add(Categories.fromJson(v));
+      });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
-      json['studios'].forEach((v) { studios!.add(Studios.fromJson(v)); });
+      json['studios'].forEach((v) {
+        studios!.add(Studios.fromJson(v));
+      });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
-      json['producers'].forEach((v) { producers!.add(Producers.fromJson(v)); });
+      json['producers'].forEach((v) {
+        producers!.add(Producers.fromJson(v));
+      });
     }
-    scheduleEp = json['schedule_ep'] != null ? ScheduleEp.fromJson(json['schedule_ep']) : null;
+    scheduleEp = json['schedule_ep'] != null
+        ? ScheduleEp.fromJson(json['schedule_ep'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

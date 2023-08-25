@@ -6,13 +6,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import '../model/EpDetailPodo.dart';
-import '../model/VdResolutionModel.dart';
 import '../utils/theme.dart';
 
 class Player extends StatefulWidget {
   final String url, placeHolder, title;
   final List<DownloadEpisodeLink> dwldList;
-  const Player({Key? key, required this.url, required this.placeHolder, required this.title, required this.dwldList}) : super(key: key);
+  const Player(
+      {Key? key,
+      required this.url,
+      required this.placeHolder,
+      required this.title,
+      required this.dwldList})
+      : super(key: key);
 
   @override
   State<Player> createState() => _PlayerState();
@@ -20,13 +25,12 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   late BetterPlayerController _betterPlayerController;
-  GlobalKey _betterPlayerKey = GlobalKey();
-  bool flag = false;
+  final GlobalKey _betterPlayerKey = GlobalKey();
 
   @override
   void initState() {
     log(runtimeType.toString());
-    super.initState();
+    log(widget.url.toString());
 
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
@@ -74,7 +78,8 @@ class _PlayerState extends State<Player> {
             BetterPlayerOverflowMenuItem(
               Icons.picture_in_picture,
               "Picture in Picture",
-              () => _betterPlayerController.enablePictureInPicture(_betterPlayerKey),
+              () => _betterPlayerController
+                  .enablePictureInPicture(_betterPlayerKey),
             ),
           ],
         ),
@@ -84,6 +89,7 @@ class _PlayerState extends State<Player> {
     _betterPlayerController.setOverriddenFit(BoxFit.contain);
     _betterPlayerController.enablePictureInPicture(_betterPlayerKey);
     _betterPlayerController.setControlsAlwaysVisible(true);
+    super.initState();
   }
 
   @override

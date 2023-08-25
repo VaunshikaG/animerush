@@ -84,22 +84,22 @@ Widget CustomAppBar({
             ),
           ),
           background:
-          // FadeInImage.assetNetwork(
-          //   image: img,
-          //   placeholder: "assets/img/blank.png",
-          //   width: double.infinity,
-          //   height: 400,
-          //   fit: BoxFit.cover,
-          //   alignment: Alignment.topCenter,
-          //   imageErrorBuilder: (context, error, stackTrace) {
-          //     return Image.network(
-          //       "https://animerush.in/media/image/no_poster.jpg",
-          //       fit: BoxFit.contain,
-          //       height: 400,
-          //     );
-          //   },
-          // ),
-          Image.network(
+              // FadeInImage.assetNetwork(
+              //   image: img,
+              //   placeholder: "assets/img/blank.png",
+              //   width: double.infinity,
+              //   height: 400,
+              //   fit: BoxFit.cover,
+              //   alignment: Alignment.topCenter,
+              //   imageErrorBuilder: (context, error, stackTrace) {
+              //     return Image.network(
+              //       "https://animerush.in/media/image/no_poster.jpg",
+              //       fit: BoxFit.contain,
+              //       height: 400,
+              //     );
+              //   },
+              // ),
+              Image.network(
             img,
             width: double.infinity,
             height: 400,
@@ -118,7 +118,6 @@ Widget CustomAppBar({
     ),
   );
 }
-
 
 //  details pg - blur_img
 Widget CustomAppBar2({
@@ -176,7 +175,6 @@ Widget CustomAppBar2({
     ],
   );
 }
-
 
 //  episode pg
 Widget CustomAppBar3({

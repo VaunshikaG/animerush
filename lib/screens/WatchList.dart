@@ -2,12 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
 import '../controllers/WatchListController.dart';
-import '../utils/theme.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/CustomSnackbar.dart';
@@ -15,16 +12,19 @@ import '../widgets/Loader.dart';
 import '../widgets/NoData.dart';
 import '../widgets/SimilarList.dart';
 import 'BottomBar.dart';
+import 'Details.dart';
 
 class WatchList extends StatefulWidget {
+  final String? aId;
   final String pg;
-  const WatchList({Key? key, required this.pg}) : super(key: key);
+  const WatchList({Key? key, required this.pg, this.aId}) : super(key: key);
 
   @override
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList> with SingleTickerProviderStateMixin {
+class _WatchListState extends State<WatchList>
+    with SingleTickerProviderStateMixin {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -42,62 +42,69 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
     super.initState();
   }
 
-  void loadData(String value) {
-    // await showProgress(context, true);
+  Future<void> loadData(String value) async {
+    await showProgress(context, true);
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
-
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 50),
-        child: (widget.pg == 'detail') ? CustomAppBar4(
-          title: 'WatchList',
-          backBtn: () => Get.back(),
-        ) : const SizedBox(),
-      ),
-      body: SafeArea(
-        // maintainBottomViewPadding: true,
-        minimum: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (overscroll) {
-            overscroll.disallowIndicator();
-            return false;
-          },
-          child: SizedBox(
-            height: (watchListController.showLogin.value == true) ? double.infinity
-                : MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(() => Visibility(
-                    visible: watchListController.hasData.value,
-                    child: _tabSection(),
-                  )),
-                  Obx(() => Visibility(
-                    visible: watchListController.noData.value,
-                    child: noData(context),
-                  )),
-                  Obx(() => Visibility(
-                        visible: watchListController.showLogin.value,
-                        child: Center(
-                          heightFactor: 13,
-                          child: elevatedButton(
-                            text: "Login →",
-                            onPressed: () =>
-                                Get.off(() => const BottomBar(currentIndex: 3)),
+    return WillPopScope(
+      onWillPop: () async {
+        Get.off(() => Details(id: widget.aId, epId: ''));
+        return true;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: PreferredSize(
+          preferredSize: Size(MediaQuery.of(context).size.width, 50),
+          child: (widget.pg == 'detail')
+              ? CustomAppBar4(
+                  title: 'WatchList',
+                  backBtn: () =>
+                      Get.off(() => Details(id: widget.aId, epId: '')),
+                )
+              : const SizedBox(),
+        ),
+        body: SafeArea(
+          // maintainBottomViewPadding: true,
+          minimum: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overscroll) {
+              overscroll.disallowIndicator();
+              return false;
+            },
+            child: SizedBox(
+              height: (watchListController.showLogin.value == true)
+                  ? double.infinity
+                  : MediaQuery.of(context).size.height,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(() => Visibility(
+                          visible: watchListController.hasData.value,
+                          child: _tabSection(),
+                        )),
+                    Obx(() => Visibility(
+                          visible: watchListController.noData.value,
+                          child: noData("Oops, failed to load data!"),
+                        )),
+                    Obx(() => Visibility(
+                          visible: watchListController.showLogin.value,
+                          child: Center(
+                            heightFactor: 13,
+                            child: elevatedButton(
+                              text: "Login →",
+                              onPressed: () => Get.off(
+                                  () => const BottomBar(currentIndex: 3)),
+                            ),
                           ),
-                        ),
-                      )),
-                ],
+                        )),
+                  ],
+                ),
               ),
             ),
           ),
@@ -212,12 +219,12 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
   Widget wishList() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      child: (watchListController.noData.value == true)
-          ? noData(context)
+      child: (watchListController.dataLength == 0)
+          ? noData("Oops, list is empty!")
           : SimilarList(
         pg: 'watch',
-              similarData: watchListController.animeList,
-            ),
+        similarData: watchListController.animeList,
+      ),
     );
   }
 }

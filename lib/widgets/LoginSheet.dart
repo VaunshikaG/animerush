@@ -59,7 +59,8 @@ Widget? loginSheet({
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  RegExp passRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                  RegExp passRegExp = RegExp(
+                      r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                   if (value!.isEmpty) {
                     return 'Please enter your password';
                     // } else if (!passRegExp.hasMatch(value)) {

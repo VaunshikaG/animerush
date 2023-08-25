@@ -181,10 +181,10 @@ class CommonStyle {
 
   static InputDecoration searchTextField(
       {String labelText = "",
-        String hintText = "",
-        required Widget suffix,
-        required Widget prefix,
-        required TextStyle? style}) {
+      String hintText = "",
+      required Widget suffix,
+      required Widget prefix,
+      required TextStyle? style}) {
     return InputDecoration(
       filled: false,
       alignLabelWithHint: true,

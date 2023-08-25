@@ -319,6 +319,7 @@ class AppTheme {
     alignment: Alignment.centerLeft,
     foregroundColor: MaterialStateProperty.all<Color>(CustomTheme.grey1),
     backgroundColor: MaterialStateProperty.all<Color>(CustomTheme.grey1),
-    textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(fontFamily: 'Quicksand')),
+    textStyle: MaterialStateProperty.all<TextStyle>(
+        const TextStyle(fontFamily: 'Quicksand')),
   );
 }

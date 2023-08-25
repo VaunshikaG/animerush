@@ -84,7 +84,8 @@ class HomePodo {
           this.isSpotlightData!.map((v) => v.toJson()).toList();
     }
     if (this.topStreamingData != null) {
-      data['top_streaming_data'] = this.topStreamingData!.map((v) => v.toJson()).toList();
+      data['top_streaming_data'] =
+          this.topStreamingData!.map((v) => v.toJson()).toList();
     }
     if (this.latestMoviesData != null) {
       data['latest_movies_data'] =
@@ -371,30 +372,30 @@ class TopStreamingData {
 
   TopStreamingData(
       {this.id,
-        this.name,
-        this.japaneseName,
-        this.englishName,
-        this.thumbnail,
-        this.image,
-        this.imageHighQuality,
-        this.aniImage,
-        this.banner,
-        this.type,
-        this.animeWatchType,
-        this.status,
-        this.active,
-        this.episodes,
-        this.episodesTillNow,
-        this.ratingAge,
-        this.duration,
-        this.description,
-        this.airedYear,
-        this.premiered,
-        this.views,
-        this.categories,
-        this.studios,
-        this.producers,
-        this.scheduleEp});
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp});
 
   TopStreamingData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -1199,30 +1200,30 @@ class RecentlyAddedDubData {
 
   RecentlyAddedDubData(
       {this.id,
-        this.name,
-        this.japaneseName,
-        this.englishName,
-        this.thumbnail,
-        this.image,
-        this.imageHighQuality,
-        this.aniImage,
-        this.banner,
-        this.type,
-        this.animeWatchType,
-        this.status,
-        this.active,
-        this.episodes,
-        this.episodesTillNow,
-        this.ratingAge,
-        this.duration,
-        this.description,
-        this.airedYear,
-        this.premiered,
-        this.views,
-        this.categories,
-        this.studios,
-        this.producers,
-        this.scheduleEp});
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp});
 
   RecentlyAddedDubData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

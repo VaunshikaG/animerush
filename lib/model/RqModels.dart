@@ -95,6 +95,7 @@ class ChangePasswordModel {
 class SearchModel {
   String? key;
   String? val;
+  String? searchKeywords;
   String? pageId;
   String? sort;
   String? genres;
@@ -102,6 +103,7 @@ class SearchModel {
   SearchModel({
     this.key,
     this.val,
+    this.searchKeywords,
     this.pageId,
     this.sort,
     this.genres,
@@ -111,6 +113,7 @@ class SearchModel {
     Map<String, dynamic> map = {
       'key': 'lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc',
       'val': val!,
+      'search-keywords': searchKeywords!,
       'page_id': pageId!,
       'sort': sort!,
       'genres': genres!,

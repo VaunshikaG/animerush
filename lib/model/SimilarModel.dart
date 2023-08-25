@@ -10,16 +10,16 @@ class SimilarModel {
   String? episodes;
   String? airedYear;
 
-  SimilarModel(
-      {this.id,
-        this.name,
-        this.imageHighQuality,
-        this.aniImage,
-        this.banner,
-        this.type,
-        this.animeWatchType,
-        this.status,
-        this.episodes,
-        this.airedYear,
-      });
+  SimilarModel({
+    this.id,
+    this.name,
+    this.imageHighQuality,
+    this.aniImage,
+    this.banner,
+    this.type,
+    this.animeWatchType,
+    this.status,
+    this.episodes,
+    this.airedYear,
+  });
 }

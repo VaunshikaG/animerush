@@ -270,37 +270,43 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         return CupertinoButton(
                           onPressed: () {
                             setState(() {
-
                               if (index == 0) {
-                                searchController.searchApiCall(pgName: "drawer", searchModel: SearchModel(
-                                  val: 'anime',
-                                  genres: '',
-                                  pageId: '',
-                                  sort: '',
-                                ));
+                                searchController.searchApiCall(
+                                    pgName: "drawer",
+                                    searchModel: SearchModel(
+                                      val: 'anime',
+                                      genres: '',
+                                      pageId: '',
+                                      sort: '',
+                                    ),
+                                    ctx: context);
                               } else if (index == 1) {
-                                searchController.searchApiCall(pgName: "drawer", searchModel: SearchModel(
-                                  val: 'popular',
-                                  genres: '',
-                                  pageId: '',
-                                  sort: '',
-                                ));
+                                searchController.searchApiCall(
+                                    pgName: "drawer",
+                                    searchModel: SearchModel(
+                                      val: 'popular',
+                                      genres: '',
+                                      pageId: '',
+                                      sort: '',
+                                    ),
+                                    ctx: context);
                               } else if (index == 2) {
                                 var rng = Random();
                                 int min = 1;
                                 int max = 13000;
                                 int randomNumber = min + rng.nextInt(max - min);
-                                Get.offAll(() => Details(id: randomNumber.toString()));
+                                Get.offAll(
+                                    () => Details(id: randomNumber.toString()));
                               }
                             });
                           },
                           color: appTheme.colorScheme.surface,
-                          padding: const EdgeInsets.symmetric(vertical: 0,
-                              horizontal: 17),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 17),
                           disabledColor: appTheme.disabledColor,
                           pressedOpacity: 0.6,
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(5)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
                           child: FittedBox(
                             fit: BoxFit.contain,
                             child: Column(
@@ -390,7 +396,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
             margin: const EdgeInsets.only(left: 10),
             alignment: Alignment.centerLeft,
             child: FilterChip(
-              label: Text(item['title']),
+              label: SizedBox(
+                width: 200,
+                child: Text(item['title']),
+              ),
               labelStyle: appTheme.textTheme.bodySmall,
               selected: searchController.categoryType.contains(item['title']),
               onSelected: (bool selected) {
@@ -404,13 +413,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     searchController.categoryType = "";
                     searchController.value1 = "";
                   }
-                  searchController.searchApiCall(pgName: "drawer",
+                  searchController.searchApiCall(
+                      pgName: "drawer",
                       searchModel: SearchModel(
                         val: searchController.value1,
                         genres: searchController.value2,
                         pageId: '1',
                         sort: '',
-                      ));
+                      ),
+                      ctx: context);
                 });
               },
               backgroundColor: appTheme.colorScheme.surface,
@@ -472,7 +483,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         genres: searchController.value2,
                         pageId: '1',
                         sort: '',
-                      ));
+                      ),
+                      ctx: context);
                 });
               },
               backgroundColor: appTheme.colorScheme.surface,
@@ -489,5 +501,4 @@ class _HomeDrawerState extends State<HomeDrawer> {
       ),
     );
   }
-
 }

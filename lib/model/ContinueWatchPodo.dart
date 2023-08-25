@@ -40,16 +40,17 @@ class ContinueData {
 
   ContinueData(
       {this.id,
-        this.user,
-        this.anime,
-        this.episode,
-        this.removed,
-        this.created});
+      this.user,
+      this.anime,
+      this.episode,
+      this.removed,
+      this.created});
 
   ContinueData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     user = json['user'];
-    anime = json['anime'] != null ? ContinueAnime.fromJson(json['anime']) : null;
+    anime =
+        json['anime'] != null ? ContinueAnime.fromJson(json['anime']) : null;
     episode = json['episode'];
     removed = json['removed'];
     created = json['created'];
@@ -98,30 +99,30 @@ class ContinueAnime {
 
   ContinueAnime(
       {this.id,
-        this.name,
-        this.japaneseName,
-        this.englishName,
-        this.thumbnail,
-        this.image,
-        this.imageHighQuality,
-        this.aniImage,
-        this.banner,
-        this.type,
-        this.animeWatchType,
-        this.status,
-        this.active,
-        this.episodes,
-        this.episodesTillNow,
-        this.ratingAge,
-        this.duration,
-        this.description,
-        this.airedYear,
-        this.premiered,
-        this.views,
-        this.categories,
-        this.studios,
-        this.producers,
-        this.scheduleEp});
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp});
 
   ContinueAnime.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 
-Widget noData(BuildContext context) {
-    final appTheme = Theme.of(context);
-
-    return Column(
+Widget noData(String text) {
+  return Center(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
           'assets/img/luffy1.png',
-          width: 200,
+          width: 160,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Text(
-          "Oops, failed to load data!",
-          style: appTheme.textTheme.displayMedium,
+          (text.isEmpty) ? "Oops, failed to load data!" : text,
+          style: const TextStyle(
+            fontSize: 17,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}

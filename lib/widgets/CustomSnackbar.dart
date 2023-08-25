@@ -20,17 +20,18 @@ class CustomSnackBar {
       ),
       borderRadius: 10,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
+      backgroundColor:
+          Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
       snackStyle: SnackStyle.FLOATING,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-      isDismissible: false,
-      duration: const Duration(seconds: 6),
+      isDismissible: true,
+      duration: const Duration(seconds: 5),
     );
   }
 }
 
 class ActionSnackBar {
-  ActionSnackBar(String content, String actionTxt,  void Function() onPressed) {
+  ActionSnackBar(String content, String actionTxt, void Function() onPressed) {
     Get.rawSnackbar(
       messageText: Text(
         content,
@@ -49,7 +50,8 @@ class ActionSnackBar {
       ),
       borderRadius: 10,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
+      backgroundColor:
+          Color.alphaBlend(const Color(0x26FFFFFF), CustomTheme.themeColor1),
       snackStyle: SnackStyle.FLOATING,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       isDismissible: false,

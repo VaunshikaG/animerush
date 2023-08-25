@@ -1,24 +1,24 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/LoginController.dart';
+import '../controllers/SearchController.dart';
 import '../controllers/WatchListController.dart';
 import '../utils/AppConst.dart';
 import '../utils/CommonStyle.dart';
 import '../utils/theme.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
+import '../widgets/NoData.dart';
 import 'Details.dart';
 import 'Splash.dart';
-
-WatchListController wishListController = Get.put(WatchListController());
-LoginController loginController = Get.put(LoginController());
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -28,6 +28,11 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
+  WatchListController watchListController = Get.put(WatchListController());
+  LoginController loginController = Get.put(LoginController());
+  Search_Controller search_controller = Get.put(Search_Controller());
+  List<DownloadTask> downloadedTasks = [];
+
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -36,48 +41,69 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   final _formKey6 = GlobalKey<FormState>();
   bool showPassword = true, showLog = false;
   TabController? _controller;
+  var email, userName, dateJoined;
 
   @override
   void initState() {
     log(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
+      // loginController.showPg.value = true;
     });
+    // loadDownloadedTasks();
     _controller = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   Future<void> loadData() async {
+    // await showProgress(context, true);
     final prefs = await SharedPreferences.getInstance();
-    Future.delayed(const Duration(seconds: 1), ()
-    {
-      loginController.isLoggedIn.value =
+    print(prefs.getBool(AppConst.loginStatus));
+    if (loginController.isUserLoggedIn.value == true) {
+      loginController.profileApi();
+    } else {
+      loginController.showPg.value = true;
+    }
+    watchListController.continueList!.clear();
+    Future.delayed(const Duration(seconds: 1), () {
+      loginController.isUserLoggedIn.value =
           prefs.getBool(AppConst.loginStatus) ?? false;
-      // loginController.email = prefs.getString(AppConst.email) ?? '-';
-      // loginController.userName = prefs.getString(AppConst.userName) ?? '-';
-      loginController.dateJoined = prefs.getString(AppConst.dateJoined) ?? DateTime.now().toString();
-      DateTime? dateTime = DateTime.parse(loginController.dateJoined);
-      loginController.dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
+    });
+  }
+
+  Future<void> loadDownloadedTasks() async {
+    downloadedTasks.clear();
+    List<DownloadTask> allTasks = (await FlutterDownloader.loadTasks())!;
+    setState(() {
+      if (allTasks.isNotEmpty) {
+        downloadedTasks = allTasks.where((task) =>
+        task.status == DownloadTaskStatus.complete || task.status == DownloadTaskStatus.running).toList();
+        // downloadedTasks = (await FlutterDownloader.loadTasks())!;
+        log('dwldList : ${downloadedTasks.length.toString()}');
+      }
+      hideProgress();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (overscroll) {
-            overscroll.disallowIndicator();
-            return false;
-          },
-          child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                // child: tabSection(),
-                child: Obx(() => (loginController.isLoggedIn.value == false) ? signup() : tabSection()),
-              ),
+      resizeToAvoidBottomInset: false,
+      body: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overscroll) {
+          overscroll.disallowIndicator();
+          return false;
+        },
+        child: Center(
+          child: Container(
+            height: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Obx(
+              () => (loginController.showPg.value == true)
+                  ? ((loginController.isUserLoggedIn.value == false)
+                      ? signup()
+                      : tabSection())
+                  : Container(),
             ),
           ),
         ),
@@ -178,12 +204,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     const SizedBox(height: 40),
                     elevatedButton(
                       text: 'Login',
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey1.currentState!.validate()) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
                           _formKey1.currentState!.save();
+                          await showProgress(context, true);
                           loginController.loginApi();
                         }
                       },
@@ -206,6 +233,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                               }
                               loginController.isLogin.value = false;
                               loginController.isSignin.value = true;
+                              loginController.userNameController.clear();
+                              loginController.emailController.clear();
+                              loginController.passwordController.clear();
                             });
                           },
                         ),
@@ -220,6 +250,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           }
                           loginController.isLogin.value = false;
                           loginController.isForgot.value = true;
+                          loginController.userNameController.clear();
+                          loginController.emailController.clear();
+                          loginController.passwordController.clear();
                         });
                       },
                     ),
@@ -276,11 +309,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     const SizedBox(height: 40),
                     elevatedButton(
                       text: 'Get Otp',
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey3.currentState!.validate()) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                             _formKey3.currentState!.save();
+                            await showProgress(context, true);
                             loginController.forgotPasswordApi();
                           }
                         }
@@ -346,7 +380,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.done,
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(AppConst.emailRegex),
+                        LengthLimitingTextInputFormatter(6),
+                        FilteringTextInputFormatter.digitsOnly,
                         FilteringTextInputFormatter.singleLineFormatter,
                       ],
                       style: appTheme.textTheme.headlineSmall,
@@ -359,11 +394,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     const SizedBox(height: 40),
                     elevatedButton(
                       text: 'Verify',
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey4.currentState!.validate()) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                             _formKey4.currentState!.save();
+                            await showProgress(context, true);
                             loginController.otpApi();
                           }
                         }
@@ -387,6 +423,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                               }
                               loginController.isOtp.value = false;
                               loginController.isLogin.value = true;
+                              loginController.userNameController.clear();
+                              loginController.emailController.clear();
+                              loginController.passwordController.clear();
                             });
                           },
                         ),
@@ -446,11 +485,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     const SizedBox(height: 40),
                     elevatedButton(
                       text: 'Submit',
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey5.currentState!.validate()) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                             _formKey5.currentState!.save();
+                            await showProgress(context, true);
                             loginController.changePasswordApi();
                           }
                         }
@@ -548,7 +588,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(AppConst.emailRegex),
                         FilteringTextInputFormatter.singleLineFormatter,
                       ],
                       style: appTheme.textTheme.headlineSmall,
@@ -606,11 +645,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     const SizedBox(height: 40),
                     elevatedButton(
                       text: 'Register',
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey1.currentState!.validate()) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                             _formKey1.currentState!.save();
+                            await showProgress(context, true);
                             loginController.signUpApi();
                           }
                         }
@@ -659,6 +699,14 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               automaticIndicatorColorAdjustment: true,
               isScrollable: true,
               labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+              onTap: (index) {
+                  if (index == 1) {
+                    watchListController.continueApi();
+                  }
+                  // else if (index == 2) {
+                  //   loadDownloadedTasks();
+                  // }
+              },
               tabs: [
                 Tab(
                   height: 35,
@@ -680,6 +728,16 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                     ),
                   ),
                 ),
+                // Tab(
+                //   height: 35,
+                //   child: Container(
+                //     alignment: Alignment.center,
+                //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                //     child: const Center(
+                //       child: Text("Downloads"),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -688,9 +746,23 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
             height: MediaQuery.of(context).size.height * 0.82,
             child: TabBarView(
               controller: _controller,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 profile(),
-                const ContinueWatch(),
+                ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Obx(() => Visibility(
+                          visible: watchListController.hasData.value,
+                          child: continueWatch(),
+                        )),
+                    Obx(() => Visibility(
+                          visible: watchListController.noData.value,
+                          child: noData("Oops, failed to load data!"),
+                        )),
+                  ],
+                ),
+                // downloads(),
               ],
             ),
           ),
@@ -701,6 +773,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
   Widget profile() {
     final appTheme = Theme.of(context);
+
+    dateJoined = loginController.message ?? DateTime.now().toString();
+    DateTime? dateTime = DateTime.parse(dateJoined);
+    dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
@@ -721,9 +797,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            customTile(text1: 'EMAIL ADDRESS', text2: loginController.email),
-            customTile(text1: 'EMAIL USERNAME', text2: loginController.userName),
-            customTile(text1: 'DATE JOINED', text2: loginController.dateJoined),
+            customTile(text1: 'EMAIL ADDRESS', text2: loginController.profileData!.email.toString()),
+            customTile(text1: 'EMAIL USERNAME', text2: loginController
+                .profileData!.realUsername.toString()),
+            customTile(text1: 'DATE JOINED', text2: dateJoined),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: ExpansionTile(
@@ -766,8 +843,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           style: appTheme.textTheme.headlineSmall,
                           decoration: CommonStyle.email_textFieldStyle(
                             style: appTheme.textTheme.headlineSmall!,
-                            labelText: "name@email.com",
-                            hintText: "name@email.com",
+                            labelText: "Current Password",
+                            hintText: "Current Password",
                           ),
                         ),
                         const SizedBox(height: 30),
@@ -799,8 +876,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           style: appTheme.textTheme.headlineSmall,
                           decoration: CommonStyle.password_textFieldStyle(
                             style: appTheme.textTheme.headlineSmall!,
-                            labelText: "Password",
-                            hintText: "Password",
+                            labelText: "New Password",
+                            hintText: "New Password",
                             suffix: IconButton(
                               onPressed: () =>
                                   setState(() => showPassword = !showPassword),
@@ -815,12 +892,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                         const SizedBox(height: 40),
                         elevatedButton(
                           text: 'Save',
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey1.currentState!.validate()) {
                               if (!FocusScope.of(context).hasPrimaryFocus) {
                                 FocusScope.of(context).unfocus();
                               }
                               _formKey1.currentState!.save();
+                              await showProgress(context, true);
                               loginController.profilePasswordApi();
                             }
                           },
@@ -869,20 +947,21 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 160,
+        mainAxisSpacing: 140,
+        crossAxisSpacing: 10,
       ),
-      itemCount: wishListController.continueList!.length,
+      itemCount: watchListController.continueList!.length,
       itemBuilder: (BuildContext ctx, index) {
-        final continueList = wishListController.continueList![index];
+        final continueList = watchListController.continueList![index];
         final lang;
 
-        if(continueList.anime!.type == 'S') {
+        if (continueList.anime!.type == 'S') {
           lang = "SUB";
-        } else if(continueList.anime!.type == 'D') {
+        } else if (continueList.anime!.type == 'D') {
           lang = "DUB";
         } else {
           lang = "-";
@@ -890,123 +969,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
         return GestureDetector(
           onTap: () {
-            // Get.offAll(() => Details(id: continueList.id.toString()));
+            Get.offAll(() => Details(
+                id: continueList.anime!.id.toString(), epId: continueList
+                .episode!.replaceAll('.0', '').toString()));
           },
           child: Container(
-            height: 200,
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            decoration: BoxDecoration(color: CustomTheme.grey300),
-            child: Wrap(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FadeInImage.assetNetwork(
-                      alignment: Alignment.center,
-                      placeholder: "assets/img/blank.png",
-                      image: continueList.anime!.aniImage ?? continueList.anime!.imageHighQuality!,
-                      fit: BoxFit.fill,
-                      height: 150,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          "assets/img/blank.png",
-                          fit: BoxFit.contain,
-                        );
-                      },
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, top: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 7),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: (lang == "SUB")
-                            ? appTheme.indicatorColor
-                            : appTheme.colorScheme.error,
-                      ),
-                      child: Text(
-                        lang,
-                        style: appTheme.textTheme.labelSmall,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Watching Ep  :   ${continueList.episode}",
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: appTheme.textTheme.titleMedium,
-                      ),
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-}
-
-class ContinueWatch extends StatefulWidget {
-  const ContinueWatch({super.key});
-
-  @override
-  State<ContinueWatch> createState() => _ContinueWatchState();
-}
-
-class _ContinueWatchState extends State<ContinueWatch> {
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      loadData();
-    });
-    super.initState();
-  }
-
-  Future<void> loadData() async {
-    await showProgress(context, true);
-    Future.delayed(Duration(seconds: 1), () {
-    wishListController.continueApi();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 130,
-      ),
-      itemCount: wishListController.continueList!.length,
-      itemBuilder: (BuildContext ctx, index) {
-        final continueList = wishListController.continueList![index];
-        final lang;
-
-        if(continueList.anime!.type == 'S') {
-          lang = "SUB";
-        } else if(continueList.anime!.type == 'D') {
-          lang = "DUB";
-        } else {
-          lang = "-";
-        }
-
-        return GestureDetector(
-          onTap: () {
-            Get.offAll(() => Details(id: continueList.id.toString()));
-          },
-          child: Container(
-            height: 200,
-            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+            height: 280,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             // decoration: BoxDecoration(color: CustomTheme.grey300),
             child: Wrap(
               children: [
@@ -1016,8 +985,10 @@ class _ContinueWatchState extends State<ContinueWatch> {
                     FadeInImage.assetNetwork(
                       alignment: Alignment.center,
                       placeholder: "assets/img/blank.png",
-                      image: continueList.anime!.aniImage ?? continueList.anime!.imageHighQuality!,
+                      image: continueList.anime!.aniImage ??
+                          continueList.anime!.imageHighQuality!,
                       fit: BoxFit.fill,
+                      height: 210,
                       imageErrorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           "assets/img/blank.png",
@@ -1041,6 +1012,13 @@ class _ContinueWatchState extends State<ContinueWatch> {
                     ),
                     ListTile(
                       title: Text(
+                        continueList.anime!.name ?? "",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: appTheme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
                         "Watching Ep  :   ${continueList.episode}",
                         softWrap: true,
                         maxLines: 2,
@@ -1052,7 +1030,7 @@ class _ContinueWatchState extends State<ContinueWatch> {
                       visualDensity: const VisualDensity(vertical: -4),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -1060,5 +1038,71 @@ class _ContinueWatchState extends State<ContinueWatch> {
       },
     );
   }
+
+  Widget downloads() {
+    final appTheme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+      child: (downloadedTasks.isNotEmpty)
+          ? ListView.builder(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              itemCount: downloadedTasks.length,
+              itemBuilder: (context, index) {
+                DownloadTask task = downloadedTasks[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.play_circle_outline,
+                      color: appTheme.iconTheme.color,
+                    ),
+                    trailing: IconButton(
+                      onPressed: () async {
+                        await FlutterDownloader.remove(
+                          taskId: task.taskId,
+                          shouldDeleteContent: true,
+                        );
+                        setState(() {
+                          loadDownloadedTasks();
+                        });
+                      },
+                      icon: Icon(
+                        Icons.delete_forever_outlined,
+                        color: appTheme.colorScheme.error,
+                        size: 20,
+                      ),
+                      alignment: Alignment.centerRight,
+                    ),
+                    title: Text(
+                      task.filename.toString(),
+                      style: appTheme.textTheme.titleSmall,
+                      softWrap: true,
+                      maxLines: 2,
+                    ),
+                    subtitle: (task.status == DownloadTaskStatus.running)
+                        ? Obx(() => LinearProgressIndicator(value:
+                    downloadedTasks[index].progress / 100))
+                        : (task.status == DownloadTaskStatus.failed) ? Text('Failed',
+                      style: appTheme.textTheme.titleSmall,
+                    ) : const SizedBox(),
+                    onTap: () async {
+                      await FlutterDownloader.open(taskId: task.taskId);
+                    },
+                    // dense: true,
+                    visualDensity: const VisualDensity(vertical: -4),
+                    tileColor: appTheme.hintColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
+                );
+              },
+            )
+          : const Center(child: Text('No downloads yet')),
+    );
+  }
 }
+
+
 

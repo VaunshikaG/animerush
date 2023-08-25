@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/HomePodo.dart';
 import '../utils/ApiProviders.dart';
@@ -24,7 +22,6 @@ class HomeController extends GetxController {
   List<RecentlyAddedDubData> dubData = [];
 
   void homeApiCall() async {
-    final prefs = await SharedPreferences.getInstance();
     try {
       _apiProviders.homeApi().then((value) {
         if (value.isNotEmpty) {
@@ -54,5 +51,4 @@ class HomeController extends GetxController {
       rethrow;
     }
   }
-
 }

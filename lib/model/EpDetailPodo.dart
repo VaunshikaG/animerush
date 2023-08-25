@@ -36,15 +36,15 @@ class Data {
 
   Data(
       {this.epRank,
-        this.episodeName,
-        this.episodeTitle,
-        this.image,
-        this.videoDetails,
-        this.gogoStreamingUrl,
-        this.webEpisodeUrl,
-        this.streamDetails,
-        this.episodeLink,
-        this.downloadEpisodeLink});
+      this.episodeName,
+      this.episodeTitle,
+      this.image,
+      this.videoDetails,
+      this.gogoStreamingUrl,
+      this.webEpisodeUrl,
+      this.streamDetails,
+      this.episodeLink,
+      this.downloadEpisodeLink});
 
   Data.fromJson(Map<String, dynamic> json) {
     epRank = json['ep_rank'];

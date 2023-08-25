@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import '../controllers/DetailsController.dart';
 import '../controllers/WatchListController.dart';
-import '../model/Chunks.dart';
 import '../utils/CommonStyle.dart';
 import '../widgets/CustomButtons.dart';
 import '../widgets/Loader.dart';
@@ -22,8 +21,9 @@ import 'WatchList.dart';
 
 class Details extends StatefulWidget {
   final String? id;
+  final String? epId;
 
-  const Details({Key? key, required this.id}) : super(key: key);
+  const Details({Key? key, required this.id, this.epId}) : super(key: key);
 
   @override
   State<Details> createState() => _DetailsState();
@@ -60,6 +60,7 @@ class _DetailsState extends State<Details> {
   @override
   void initState() {
     log(runtimeType.toString());
+    print(widget.id.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
@@ -68,22 +69,9 @@ class _DetailsState extends State<Details> {
 
   Future<void> loadData() async {
     await showProgress(context, true);
-    detailsController.hasData.value = false;
-    detailsController.noData.value = false;
-    Future.delayed(const Duration(seconds: 1), () {
+    // Future.delayed(const Duration(seconds: 1), () {
       detailsController.detailsApiCall(animeId: widget.id);
-    });
-
-    // detailsController.name = detailsController.detailsData!.name ?? "-";
-    // print(detailsController.detailsData!.name);
-    // detailsController.img.value = detailsController.detailsData!.aniImage ?? detailsController.detailsData!
-    //     .imageHighQuality!;
-    // detailsController.desc = detailsController.detailsData!.description ?? "-";
-    // detailsController.year = detailsController.detailsData!.airedYear ?? "-";
-    // detailsController.otherName = detailsController.detailsData!.japaneseName ?? "-";
-    // detailsController.ep = detailsController.detailsData!.episodesTillNow ?? "-";
-    // detailsController.duration = detailsController.detailsData!.duration ?? "-";
-    // detailsController.views = detailsController.detailsData!.views.toString() ?? "-";
+    // });
   }
 
   var top = 0.0;
@@ -94,7 +82,7 @@ class _DetailsState extends State<Details> {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.off(() => const BottomBar(currentIndex: 0));
+        Get.offAll(() => const BottomBar(currentIndex: 0));
         return true;
       },
       child: Align(
@@ -112,21 +100,31 @@ class _DetailsState extends State<Details> {
                 },
                 child: CustomScrollView(
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: Obx(() => Visibility(
-                        visible: detailsController.hasData.value,
-                        child: CustomAppBar(
-                        title: detailsController.name ?? "-",
-                        img: detailsController.img.value,
-                        backBtn: () {
-                          Get.off(() => const BottomBar(currentIndex: 0));
-                        },
-                        wishlist: () {
-                          Get.off(() => const WatchList(pg: 'detail'));
-                        },
-                      ),
-                      )),
-                    ),
+                    Obx(() => (detailsController.hasData.value == true)
+                        ? CustomAppBar(
+                            title: detailsController.name ?? "-",
+                            img: detailsController.img.value,
+                            backBtn: () {
+                              Get.offAll(() => const BottomBar(currentIndex: 0));
+                            },
+                            wishlist: () {
+                              Get.off(() => WatchList(
+                                    pg: 'detail',
+                                    aId: widget.id,
+                                  ));
+                            },
+                          )
+                        : SliverToBoxAdapter(
+                            child: Visibility(
+                              visible: detailsController.showLogin.value,
+                              child: CustomAppBar4(
+                                title: '',
+                                backBtn: () {
+                                  Get.offAll(() => const BottomBar(currentIndex: 0));
+                                },
+                              ),
+                            ),
+                          )),
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
@@ -136,30 +134,78 @@ class _DetailsState extends State<Details> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 15, horizontal: 15),
                                   margin: const EdgeInsets.only(bottom: 150),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  child: Wrap(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        WrapCrossAlignment.start,
+                                    // mainAxisAlignment: MainAxisAlignment.start,
+                                    // crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       //  title
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: Text(
+                                      ListTile(
+                                        title: Text(
                                           detailsController.name ?? '-',
                                           softWrap: true,
                                           style:
                                               appTheme.textTheme.displayMedium,
                                         ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          "HD   •   ${detailsController.status}   •   ${detailsController.animeType}",
-                                          style: appTheme.textTheme.bodySmall,
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Text(
+                                            "HD   •   ${detailsController.status}   •   ${detailsController.animeType}",
+                                            style: appTheme.textTheme.bodySmall,
+                                          ),
                                         ),
+                                        // dense: true,
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 5),
                                       ),
+
+                                      Obx(() => Visibility(
+                                            visible: detailsController
+                                                .showNextEp.value,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              child: ListTile(
+                                                leading: Image.asset(
+                                                  "assets/img/rocket.png",
+                                                  height: 30,
+                                                ),
+                                                title: Text(
+                                                  "Estimated the next episode will come at ${detailsController.nextEp}",
+                                                  textAlign: TextAlign.start,
+                                                  style: appTheme
+                                                      .textTheme.titleMedium,
+                                                ),
+                                                minLeadingWidth: 0,
+                                                trailing: IconButton(
+                                                  onPressed: () => setState(
+                                                      () => detailsController
+                                                          .showNextEp
+                                                          .value = false),
+                                                  icon: Icon(
+                                                    CupertinoIcons.clear,
+                                                    size: 14,
+                                                    color: appTheme
+                                                        .iconTheme.color,
+                                                  ),
+                                                ),
+                                                tileColor: CustomTheme.blue,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                dense: true,
+                                              ),
+                                            ),
+                                          )),
 
                                       //  desc
                                       RichTextView(
@@ -206,13 +252,23 @@ class _DetailsState extends State<Details> {
                                                     .textTheme.labelSmall,
                                               ),
                                               onPressed: () {
-                                                Get.off(() => Episode(
+                                                // setState(() {
+                                                  if (widget.epId != "") {
+                                                    Get.off(() => Episode(
                                                       pg: 'details',
-                                                      epDetails:
-                                                          detailsController
-                                                              .epDetails,
+                                                      epDetails: detailsController.epDetails,
                                                       aId: widget.id,
+                                                      epId: widget.epId,
                                                     ));
+                                                  } else {
+                                                    Get.off(() => Episode(
+                                                      pg: 'details',
+                                                      epDetails: detailsController.epDetails,
+                                                      aId: widget.id,
+                                                      epId: '',
+                                                    ));
+                                                  }
+                                                // });
                                               },
                                               backgroundColor:
                                                   appTheme.primaryColor,
@@ -312,45 +368,6 @@ class _DetailsState extends State<Details> {
                                         ),
                                       ),
 
-                                      Visibility(
-                                        visible: detailsController.showNextEp,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: ListTile(
-                                            leading: Image.asset(
-                                              "assets/img/rocket.png",
-                                              height: 30,
-                                            ),
-                                            title: Text(
-                                              "Estimated the next episode will come at ${detailsController.nextEp}",
-                                              textAlign: TextAlign.start,
-                                              style: appTheme
-                                                  .textTheme.titleMedium,
-                                            ),
-                                            minLeadingWidth: 0,
-                                            trailing: IconButton(
-                                              onPressed: () => setState(() =>
-                                                  detailsController.showNextEp =
-                                                      false),
-                                              icon: Icon(
-                                                CupertinoIcons.clear,
-                                                size: 14,
-                                                color: appTheme.iconTheme.color,
-                                              ),
-                                            ),
-                                            tileColor: CustomTheme.blue,
-                                            contentPadding:
-                                                const EdgeInsets.only(left: 10),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            dense: true,
-                                          ),
-                                        ),
-                                      ),
-
                                       // info
                                       ListView.builder(
                                         itemCount: detailTitle.length,
@@ -392,15 +409,15 @@ class _DetailsState extends State<Details> {
                               )),
                           Obx(() => Visibility(
                                 visible: detailsController.noData.value,
-                                child: noData(context),
+                                child: noData("Oops, failed to load data!"),
                               )),
-                          Obx(() => Visibility(
-                            visible: detailsController.showLogin.value,
-                            child: CustomAppBar4(
-                              title: '',
-                              backBtn: () => Get.off(() => const BottomBar(currentIndex: 0)),
-                            ),
-                          )),
+                          // Obx(() => Visibility(
+                          //   visible: detailsController.showLogin.value,
+                          //   child: CustomAppBar4(
+                          //     title: '',
+                          //     backBtn: () => Get.off(() => const BottomBar(currentIndex: 0)),
+                          //   ),
+                          // )),
                           Obx(() => Visibility(
                                 visible: detailsController.showLogin.value,
                                 child: Center(

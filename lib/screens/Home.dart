@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:animerush/screens/Category.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +25,14 @@ class _HomeState extends State<Home> {
 
   int activeindex = 0;
 
-
   @override
   void initState() {
     log(runtimeType.toString());
     homeController.hasData.value = false;
     homeController.noData.value = false;
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-    loadData();
-      });
+      loadData();
+    });
     super.initState();
   }
 
@@ -46,304 +46,342 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        SystemNavigator.pop();
-        return true;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: NotificationListener<OverscrollIndicatorNotification>(
-            onNotification: (overscroll) {
-              overscroll.disallowIndicator();
-              return false;
-            },
-            child: SizedBox(
-              height: double.infinity,
-              child: ListView(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                children: [
-                  Obx(() => Visibility(
-                    visible: homeController.hasData.value,
-                    child: Column(
-                      children: [
-                        FittedBox(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: CarouselSlider.builder(
-                              itemCount: homeController.spotlightData.length,
-                              itemBuilder: (BuildContext context, index, _) {
-                                var img =  homeController.spotlightData[index]
-                                    .banner ??
-                                    homeController.spotlightData[index].aniImage.toString();
-                                return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: EdgeInsets.zero,
-                                  decoration: BoxDecoration(
-                                    color: appTheme.splashColor,
-                                    image: DecorationImage(
-                                      image: NetworkImage(img),
-                                      fit: BoxFit.cover,
-                                      onError: (error, stackTrace) =>
-                                              Image.asset(
-                                            "assets/img/icon1.png",
-                                            fit: BoxFit.cover,
-                                          ),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15, horizontal: 10),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overscroll) {
+            overscroll.disallowIndicator();
+            return false;
+          },
+          child: SizedBox(
+            height: double.infinity,
+            child: ListView(
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+              children: [
+                Obx(() => Visibility(
+                      visible: homeController.hasData.value,
+                      child: Column(
+                        children: [
+                          FittedBox(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: CarouselSlider.builder(
+                                itemCount:
+                                    homeController.spotlightData.length,
+                                itemBuilder:
+                                    (BuildContext context, index, _) {
+                                  var img = homeController
+                                          .spotlightData[index].banner ??
+                                      homeController
+                                          .spotlightData[index].aniImage
+                                          .toString();
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    padding: EdgeInsets.zero,
                                     decoration: BoxDecoration(
-                                      color: appTheme.splashColor.withOpacity(0.5),
-                                      gradient: RadialGradient(
-                                        radius: 0.8,
-                                        center: const Alignment(0.7, 0),
-                                        colors: [
-                                          CustomTheme.transparent,
-                                          CustomTheme.transparent,
-                                          CustomTheme.transparent,
-                                          CustomTheme.black12,
-                                          // CustomTheme.black38,
-                                          CustomTheme.black54,
-                                          CustomTheme.black87,
+                                      color: appTheme.splashColor,
+                                      image: DecorationImage(
+                                        image: NetworkImage(img),
+                                        fit: BoxFit.cover,
+                                        onError: (error, stackTrace) =>
+                                            Image.asset(
+                                          "assets/img/icon1.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: appTheme.splashColor
+                                            .withOpacity(0.5),
+                                        gradient: RadialGradient(
+                                          radius: 0.8,
+                                          center: const Alignment(0.7, 0),
+                                          colors: [
+                                            CustomTheme.transparent,
+                                            CustomTheme.transparent,
+                                            CustomTheme.transparent,
+                                            CustomTheme.black12,
+                                            // CustomTheme.black38,
+                                            CustomTheme.black54,
+                                            CustomTheme.black87,
+                                          ],
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 10),
+                                            child: Text(
+                                              "#${index + 1} Spotlight",
+                                              style: appTheme
+                                                  .textTheme.titleSmall,
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 20),
+                                            child: Text(
+                                              homeController
+                                                  .spotlightData[index].name!,
+                                              style: appTheme
+                                                  .textTheme.titleMedium,
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 30,
+                                                child: CupertinoButton(
+                                                  onPressed: () {
+                                                    Get.off(() => Details(
+                                                        id: homeController
+                                                            .spotlightData[
+                                                                index]
+                                                            .id
+                                                            .toString()));
+                                                  },
+                                                  color:
+                                                      appTheme.disabledColor,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                                  disabledColor:
+                                                      appTheme.splashColor,
+                                                  pressedOpacity: 0.6,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child: SizedBox(
+                                                    width: 65,
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          CupertinoIcons
+                                                              .info_circle_fill,
+                                                          size: 15,
+                                                          color: appTheme
+                                                              .iconTheme
+                                                              .color,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          "Details",
+                                                          style: appTheme
+                                                              .textTheme
+                                                              .titleSmall,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 15),
+                                              SizedBox(
+                                                height: 30,
+                                                child: CupertinoButton(
+                                                  onPressed: () {
+                                                    Get.off(() => Details(
+                                                        id: homeController
+                                                            .spotlightData[
+                                                                index]
+                                                            .id
+                                                            .toString()));
+                                                  },
+                                                  color:
+                                                      appTheme.primaryColor,
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 10),
+                                                  disabledColor:
+                                                      appTheme.splashColor,
+                                                  pressedOpacity: 0.6,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child: SizedBox(
+                                                    width: 100,
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          CupertinoIcons
+                                                              .play_circle_fill,
+                                                          size: 15,
+                                                          color: appTheme
+                                                              .scaffoldBackgroundColor,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        Text(
+                                                          "Watch Now",
+                                                          style: appTheme
+                                                              .textTheme
+                                                              .labelSmall,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(bottom: 10),
-                                          child: Text(
-                                            "#${index + 1} Spotlight",
-                                            style: appTheme.textTheme.titleSmall,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(bottom: 20),
-                                          child: Text(
-                                            homeController.spotlightData[index].name!,
-                                            style: appTheme.textTheme.titleMedium,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              height: 30,
-                                              child: CupertinoButton(
-                                                onPressed: () {
-                                                  Get.off(() => Details(id: homeController.spotlightData[index].id.toString()));
-                                                },
-                                                color: appTheme.disabledColor,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 10),
-                                                disabledColor: appTheme.splashColor,
-                                                pressedOpacity: 0.6,
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(5)),
-                                                child: SizedBox(
-                                                  width: 65,
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        CupertinoIcons.info_circle_fill,
-                                                        size: 15,
-                                                        color: appTheme.iconTheme.color,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        "Details",
-                                                        style: appTheme.textTheme.titleSmall,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            SizedBox(
-                                              height: 30,
-                                              child: CupertinoButton(
-                                                onPressed: () {
-                                                  Get.off(() => Details(id: homeController.spotlightData[index].id.toString()));
-                                                },
-                                                color: appTheme.primaryColor,
-                                                padding: const EdgeInsets.symmetric(
-                                                    vertical: 0, horizontal: 10),
-                                                disabledColor: appTheme.splashColor,
-                                                pressedOpacity: 0.6,
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(5)),
-                                                child: SizedBox(
-                                                  width: 100,
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        CupertinoIcons.play_circle_fill,
-                                                        size: 15,
-                                                        color: appTheme.scaffoldBackgroundColor,
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text(
-                                                        "Watch Now",
-                                                        style: appTheme
-                                                            .textTheme.labelSmall,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              options: CarouselOptions(
-                                onPageChanged: (index, _) {
-                                  setState(() => activeindex = index);
+                                  );
                                 },
-                                height: 200,
-                                autoPlay: true,
-                                pageSnapping: true,
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: true,
-                                aspectRatio: 16 / 9,
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                autoPlayAnimationDuration:
-                                const Duration(milliseconds: 800),
-                                viewportFraction: 1.0,
+                                options: CarouselOptions(
+                                  onPageChanged: (index, _) {
+                                    setState(() => activeindex = index);
+                                  },
+                                  height: 200,
+                                  autoPlay: true,
+                                  pageSnapping: true,
+                                  enlargeCenterPage: true,
+                                  enableInfiniteScroll: true,
+                                  aspectRatio: 16 / 9,
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  autoPlayAnimationDuration:
+                                      const Duration(milliseconds: 800),
+                                  viewportFraction: 1.0,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          alignment: Alignment.center,
-                          child: AnimatedSmoothIndicator(
-                            curve: Curves.easeInCirc,
-                            activeIndex: activeindex,
-                            axisDirection: Axis.horizontal,
-                            count: homeController.spotlightData.length,
-                            effect: ExpandingDotsEffect(
-                              dotHeight: 3,
-                              dotWidth: 18,
-                              activeDotColor: appTheme.primaryColor,
-                              dotColor: appTheme.colorScheme.secondary,
+                          Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            alignment: Alignment.center,
+                            child: AnimatedSmoothIndicator(
+                              curve: Curves.easeInCirc,
+                              activeIndex: activeindex,
+                              axisDirection: Axis.horizontal,
+                              count: homeController.spotlightData.length,
+                              effect: ExpandingDotsEffect(
+                                dotHeight: 3,
+                                dotWidth: 18,
+                                activeDotColor: appTheme.primaryColor,
+                                dotColor: appTheme.colorScheme.secondary,
+                              ),
                             ),
                           ),
-                        ),
 
-                        //  trending
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Trending",
-                            style: appTheme.textTheme.bodyLarge,
-                          ),
-                        ),
-                        trending(),
-
-                        //  types
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          alignment: Alignment.centerLeft,
-                          child: ListTile(
-                            leading: Text(
-                              "Special",
+                          //  trending
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Trending",
                               style: appTheme.textTheme.bodyLarge,
                             ),
-                            trailing: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "View all >",
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                            ),
-                            tileColor: appTheme.hintColor,
-                            visualDensity: VisualDensity.compact,
                           ),
-                        ),
-                        specials(),
+                          trending(),
 
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          alignment: Alignment.centerLeft,
-                          child: ListTile(
-                            leading: Text(
-                              "Movies",
-                              style: appTheme.textTheme.bodyLarge,
-                            ),
-                            trailing: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "View all >",
+                          //  types
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                            alignment: Alignment.centerLeft,
+                            child: ListTile(
+                              leading: Text(
+                                "Special",
                                 style: appTheme.textTheme.bodyLarge,
                               ),
+                              trailing: TextButton(
+                                onPressed: () {
+                                  Get.off(() => const Category(category: 'specials'));
+                                },
+                                child: Text(
+                                  "View all >",
+                                  style: appTheme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              tileColor: appTheme.hintColor,
+                              visualDensity: VisualDensity.compact,
                             ),
-                            tileColor: appTheme.hintColor,
-                            visualDensity: VisualDensity.compact,
                           ),
-                        ),
-                        movies(),
+                          specials(),
 
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          alignment: Alignment.centerLeft,
-                          child: ListTile(
-                            leading: Text(
-                              "ONA",
-                              style: appTheme.textTheme.bodyLarge,
-                            ),
-                            trailing: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "View all >",
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                            alignment: Alignment.centerLeft,
+                            child: ListTile(
+                              leading: Text(
+                                "Movies",
                                 style: appTheme.textTheme.bodyLarge,
                               ),
+                              trailing: TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "View all >",
+                                  style: appTheme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              tileColor: appTheme.hintColor,
+                              visualDensity: VisualDensity.compact,
                             ),
-                            tileColor: appTheme.hintColor,
-                            visualDensity: VisualDensity.compact,
                           ),
-                        ),
-                        ona(),
+                          movies(),
 
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                          alignment: Alignment.centerLeft,
-                          child: ListTile(
-                            leading: Text(
-                              "OVA",
-                              style: appTheme.textTheme.bodyLarge,
-                            ),
-                            trailing: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "View all >",
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                            alignment: Alignment.centerLeft,
+                            child: ListTile(
+                              leading: Text(
+                                "ONA",
                                 style: appTheme.textTheme.bodyLarge,
                               ),
+                              trailing: TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "View all >",
+                                  style: appTheme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              tileColor: appTheme.hintColor,
+                              visualDensity: VisualDensity.compact,
                             ),
-                            tileColor: appTheme.hintColor,
-                            visualDensity: VisualDensity.compact,
                           ),
-                        ),
-                        ova(),
-                      ],
-                    ),
-                  )),
-                  Obx(() => Visibility(
-                    visible: homeController.noData.value,
-                    child: noData(context),
-                  )),
-                ],
-              ),
+                          ona(),
+
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                            alignment: Alignment.centerLeft,
+                            child: ListTile(
+                              leading: Text(
+                                "OVA",
+                                style: appTheme.textTheme.bodyLarge,
+                              ),
+                              trailing: TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "View all >",
+                                  style: appTheme.textTheme.bodyLarge,
+                                ),
+                              ),
+                              tileColor: appTheme.hintColor,
+                              visualDensity: VisualDensity.compact,
+                            ),
+                          ),
+                          ova(),
+                        ],
+                      ),
+                    )),
+                Obx(() => Visibility(
+                      visible: homeController.noData.value,
+                      child: noData("Oops, failed to load data!"),
+                    )),
+              ],
             ),
           ),
         ),
@@ -365,7 +403,8 @@ class _HomeState extends State<Home> {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              Get.off(() => Details(id: homeController.topData[index].id.toString()));
+              Get.off(() =>
+                  Details(id: homeController.topData[index].id.toString()));
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -423,7 +462,8 @@ class _HomeState extends State<Home> {
                       fit: BoxFit.fill,
                       child: FadeInImage.assetNetwork(
                         placeholder: "assets/img/blank.png",
-                        image: homeController.topData[index].aniImage.toString(),
+                        image:
+                            homeController.topData[index].aniImage.toString(),
                         imageErrorBuilder: (context, error, stackTrace) {
                           return Image.asset(
                             "assets/img/blank.png",
@@ -454,29 +494,32 @@ class _HomeState extends State<Home> {
         physics: const ClampingScrollPhysics(),
         itemCount: homeController.specialData.length,
         itemBuilder: (BuildContext listCtx, int index) {
-          if(homeController.specialData[index].animeWatchType == 'SP') {
+          if (homeController.specialData[index].animeWatchType == 'SP') {
             homeController.animeType = "Special";
           } else {
             homeController.animeType = "-";
           }
 
-          if(homeController.specialData[index].status == 'C') {
+          if (homeController.specialData[index].status == 'C') {
             homeController.status = "Completed";
-          } else if(homeController.specialData[index].status == 'O') {
+          } else if (homeController.specialData[index].status == 'O') {
             homeController.status = "Ongoing";
           } else {
             homeController.status = "-";
           }
           return ListTile(
             onTap: () {
-              Get.off(() => Details(id: homeController.specialData[index].id.toString()));
+              Get.off(() =>
+                  Details(id: homeController.specialData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
+                image: homeController.moviesData[index].aniImage ??=
+                    homeController.moviesData[index].imageHighQuality
+                        .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/img/blank.png",
@@ -504,7 +547,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             dense: true,
-            tileColor: (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
+            tileColor:
+                (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           );
@@ -524,29 +568,32 @@ class _HomeState extends State<Home> {
         physics: const ClampingScrollPhysics(),
         itemCount: homeController.moviesData.length,
         itemBuilder: (BuildContext listCtx, int index) {
-          if(homeController.moviesData[index].animeWatchType == 'M') {
+          if (homeController.moviesData[index].animeWatchType == 'M') {
             homeController.animeType = "Movie";
           } else {
             homeController.animeType = "-";
           }
 
-          if(homeController.moviesData[index].status == 'C') {
+          if (homeController.moviesData[index].status == 'C') {
             homeController.status = "Completed";
-          } else if(homeController.moviesData[index].status == 'O') {
+          } else if (homeController.moviesData[index].status == 'O') {
             homeController.status = "Ongoing";
           } else {
             homeController.status = "-";
           }
           return ListTile(
             onTap: () {
-              Get.off(() => Details(id: homeController.moviesData[index].id.toString()));
+              Get.off(() =>
+                  Details(id: homeController.moviesData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
+                image: homeController.moviesData[index].aniImage ??=
+                    homeController.moviesData[index].imageHighQuality
+                        .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/img/blank.png",
@@ -571,7 +618,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             dense: true,
-            tileColor: (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
+            tileColor:
+                (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           );
@@ -591,29 +639,32 @@ class _HomeState extends State<Home> {
         physics: const ClampingScrollPhysics(),
         itemCount: homeController.onasData.length,
         itemBuilder: (BuildContext listCtx, int index) {
-          if(homeController.onasData[index].animeWatchType == 'ON') {
+          if (homeController.onasData[index].animeWatchType == 'ON') {
             homeController.animeType = "Onas";
           } else {
             homeController.animeType = "-";
           }
 
-          if(homeController.onasData[index].status == 'C') {
+          if (homeController.onasData[index].status == 'C') {
             homeController.status = "Completed";
-          } else if(homeController.onasData[index].status == 'O') {
+          } else if (homeController.onasData[index].status == 'O') {
             homeController.status = "Ongoing";
           } else {
             homeController.status = "-";
           }
           return ListTile(
             onTap: () {
-              Get.off(() => Details(id: homeController.onasData[index].id.toString()));
+              Get.off(() =>
+                  Details(id: homeController.onasData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
+                image: homeController.moviesData[index].aniImage ??=
+                    homeController.moviesData[index].imageHighQuality
+                        .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/img/blank.png",
@@ -638,7 +689,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             dense: true,
-            tileColor: (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
+            tileColor:
+                (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           );
@@ -658,29 +710,32 @@ class _HomeState extends State<Home> {
         physics: const ClampingScrollPhysics(),
         itemCount: homeController.ovasData.length,
         itemBuilder: (BuildContext listCtx, int index) {
-          if(homeController.ovasData[index].animeWatchType == 'OV') {
+          if (homeController.ovasData[index].animeWatchType == 'OV') {
             homeController.animeType = "Ovas";
           } else {
             homeController.animeType = "-";
           }
 
-          if(homeController.ovasData[index].status == 'C') {
+          if (homeController.ovasData[index].status == 'C') {
             homeController.status = "Completed";
-          } else if(homeController.ovasData[index].status == 'O') {
+          } else if (homeController.ovasData[index].status == 'O') {
             homeController.status = "Ongoing";
           } else {
             homeController.status = "-";
           }
           return ListTile(
             onTap: () {
-              Get.off(() => Details(id: homeController.ovasData[index].id.toString()));
+              Get.off(() =>
+                  Details(id: homeController.ovasData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??= homeController.moviesData[index].imageHighQuality.toString(),
+                image: homeController.moviesData[index].aniImage ??=
+                    homeController.moviesData[index].imageHighQuality
+                        .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   return Image.asset(
                     "assets/img/blank.png",
@@ -705,7 +760,8 @@ class _HomeState extends State<Home> {
               ),
             ),
             dense: true,
-            tileColor: (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
+            tileColor:
+                (index % 2 == 0) ? appTheme.disabledColor : appTheme.hintColor,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           );
@@ -713,5 +769,4 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
 }

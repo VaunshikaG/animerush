@@ -8,7 +8,6 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     splashScreen: (context) => Splash(),
   };
-
 }
 
 // Navigator.pushNamed(context, AppRoutes.splashScreen);

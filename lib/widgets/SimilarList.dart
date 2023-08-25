@@ -1,11 +1,13 @@
+// ignore_for_file: unused_import
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/WatchListController.dart';
-import '../model/WatchListPodo.dart';
 import '../screens/Details.dart';
+import 'NoData.dart';
 
 class SimilarList extends StatefulWidget {
   final similarData;

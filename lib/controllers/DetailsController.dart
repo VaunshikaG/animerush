@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,8 +12,10 @@ import '../widgets/Loader.dart';
 class DetailsController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
 
-  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
-  bool showNextEp = true;
+  RxBool noData = false.obs,
+      hasData = false.obs,
+      showLogin = false.obs,
+      showNextEp = true.obs;
   int length = 0;
   RxString img = ''.obs;
   String? apiStatus,
@@ -42,24 +43,25 @@ class DetailsController extends GetxController {
   Future<void> detailsApiCall({required String? animeId}) async {
     final prefs = await SharedPreferences.getInstance();
     // _apiProviders.detailsApi().then((value) {
-      _apiProviders.DetailsApi(animeId: animeId!).then((value) {
+    _apiProviders.DetailsApi(animeId: animeId!).then((value) {
       try {
         if (value.isNotEmpty) {
+          hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             DetailsPodo detailsPodo = DetailsPodo.fromJson(responseBody);
             hasData.value = true;
             detailsData = detailsPodo.data;
-            id = detailsPodo.data!.id.toString() ?? "-";
+            id = detailsPodo.data!.id.toString();
             name = detailsPodo.data!.name ?? "-";
-            img.value = detailsPodo.data!.aniImage ?? detailsPodo.data!
-                .imageHighQuality!;
+            img.value = detailsPodo.data!.aniImage ??
+                detailsPodo.data!.imageHighQuality!;
             desc = detailsPodo.data!.description ?? "-";
             year = detailsPodo.data!.airedYear ?? "-";
             otherName = detailsPodo.data!.japaneseName ?? "-";
             ep = detailsPodo.data!.episodesTillNow ?? "-";
             duration = detailsPodo.data!.duration ?? "-";
-            views = detailsPodo.data!.views.toString() ?? "-";
+            views = detailsPodo.data!.views.toString();
             epDetails = detailsPodo.data!.epDetails!;
             length = detailsPodo.data!.epDetails!.length;
 
@@ -68,13 +70,13 @@ class DetailsController extends GetxController {
               var date = detailsPodo.data!.scheduleEp!.date ?? "";
               var time = detailsPodo.data!.scheduleEp!.time ?? "";
               if (day.isEmpty || date.isEmpty || time.isEmpty) {
-                showNextEp = false;
+                showNextEp.value = false;
               } else {
                 nextEp = "$day $date $time";
-                showNextEp = true;
+                showNextEp.value = true;
               }
             } else {
-              showNextEp = true;
+              showNextEp.value = true;
               nextEp = "-";
             }
 
@@ -89,10 +91,12 @@ class DetailsController extends GetxController {
                 id: detailsPodo.data!.relatedAnime![i].id,
                 name: detailsPodo.data!.relatedAnime![i].name,
                 aniImage: detailsPodo.data!.relatedAnime![i].aniImage,
-                imageHighQuality: detailsPodo.data!.relatedAnime![i].imageHighQuality,
+                imageHighQuality:
+                    detailsPodo.data!.relatedAnime![i].imageHighQuality,
                 banner: detailsPodo.data!.relatedAnime![i].banner,
                 type: detailsPodo.data!.relatedAnime![i].type,
-                animeWatchType: detailsPodo.data!.relatedAnime![i].animeWatchType,
+                animeWatchType:
+                    detailsPodo.data!.relatedAnime![i].animeWatchType,
                 status: detailsPodo.data!.relatedAnime![i].status,
                 airedYear: detailsPodo.data!.relatedAnime![i].airedYear,
                 episodes: detailsPodo.data!.relatedAnime![i].episodes,
@@ -145,7 +149,8 @@ class DetailsController extends GetxController {
             noData.value = false;
             showLogin.value = true;
             hideProgress();
-          } else if (responseBody['detail'] == "Invalid Authorization header. No credentials provided.") {
+          } else if (responseBody['detail'] ==
+              "Invalid Authorization header. No credentials provided.") {
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;
             noData.value = false;

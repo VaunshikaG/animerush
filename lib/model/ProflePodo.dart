@@ -1,20 +1,23 @@
-class LoginPodo {
+class ProflePodo {
   int? st;
   String? msg;
-  Data? data;
+  String? functionName;
+  ProfileData? data;
 
-  LoginPodo({this.st, this.msg, this.data});
+  ProflePodo({this.st, this.msg, this.functionName, this.data});
 
-  LoginPodo.fromJson(Map<String, dynamic> json) {
+  ProflePodo.fromJson(Map<String, dynamic> json) {
     st = json['st'];
     msg = json['msg'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    functionName = json['function_name'];
+    data = json['data'] != null ? new ProfileData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['st'] = this.st;
     data['msg'] = this.msg;
+    data['function_name'] = this.functionName;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -22,43 +25,39 @@ class LoginPodo {
   }
 }
 
-class Data {
+class ProfileData {
   int? id;
   String? username;
   String? realUsername;
   String? email;
   bool? emailVerifiedStatus;
   String? created;
-  String? jwtToken;
 
-  Data(
+  ProfileData(
       {this.id,
-      this.username,
-      this.realUsername,
-      this.email,
-      this.emailVerifiedStatus,
-      this.created,
-      this.jwtToken});
+        this.username,
+        this.realUsername,
+        this.email,
+        this.emailVerifiedStatus,
+        this.created});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ProfileData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     username = json['username'];
     realUsername = json['real_username'];
     email = json['email'];
     emailVerifiedStatus = json['email_verified_status'];
     created = json['created'];
-    jwtToken = json['jwt_token'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['username'] = this.username;
     data['real_username'] = this.realUsername;
     data['email'] = this.email;
     data['email_verified_status'] = this.emailVerifiedStatus;
     data['created'] = this.created;
-    data['jwt_token'] = this.jwtToken;
     return data;
   }
 }

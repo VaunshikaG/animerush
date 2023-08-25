@@ -15,7 +15,9 @@ import '../widgets/CustomSnackbar.dart';
 
 class WatchListController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
-  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
+  RxBool noData = false.obs,
+      hasData = false.obs,
+      showLogin = false.obs;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -26,6 +28,7 @@ class WatchListController extends GetxController {
   int dataLength = 0;
 
   Future<void> watchApi(String type) async {
+    // hasData.value = false;
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
@@ -34,28 +37,35 @@ class WatchListController extends GetxController {
         if (value.isNotEmpty) {
           hasData.value = false;
           var responseBody = json.decode(value);
-          hideProgress();
           if (responseBody['st'] == 100) {
             WatchListPodo watchListPodo = WatchListPodo.fromJson(responseBody);
             for (int i = 0; i < watchListPodo.data!.length; i++) {
               dataLength = watchListPodo.data!.length;
               animeList.add(watchListPodo.data![i].anime!);
             }
+            hasData.value = true;
             noData.value = false;
             showLogin.value = false;
-            hasData.value = true;
-            CustomSnackBar('Swipe left on anime to .');
+            hideProgress();
+            if (type == '00') {
+              CustomSnackBar('Swipe left on anime to .');
+            }
           } else if (responseBody['st'] == 101) {
             dataLength = 0;
+            animeList = [];
             showLogin.value = false;
-            hasData.value = false;
-            noData.value = true;
+            noData.value = false;
+            hasData.value = true;
+            hideProgress();
+            // CustomSnackBar(responseBody['msg']);
           } else if (responseBody['detail'] == "Signature has expired.") {
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;
             noData.value = false;
             showLogin.value = true;
-          } else if (responseBody['detail'] == "Invalid Authorization header. No credentials provided.") {
+            hideProgress();
+          } else if (responseBody['detail'] ==
+              "Invalid Authorization header. No credentials provided.") {
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;
             noData.value = false;
@@ -72,7 +82,8 @@ class WatchListController extends GetxController {
     }
   }
 
-  Future<void> addToListApi({required String type, required String animeId}) async {
+  Future<void> addToListApi(
+      {required String type, required String animeId}) async {
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
@@ -85,7 +96,8 @@ class WatchListController extends GetxController {
             if (type.contains('False00')) {
               Get.to(() => const BottomBar(currentIndex: 2));
             }
-            CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
+            CommonResponse commonResponse =
+                CommonResponse.fromJson(responseBody);
             CustomSnackBar(commonResponse.msg!);
           } else if (responseBody['detail'] == "Signature has expired.") {
             prefs.setBool(AppConst.loginStatus, false);
@@ -107,7 +119,6 @@ class WatchListController extends GetxController {
     animeList.clear();
     final prefs = await SharedPreferences.getInstance();
     try {
-      // _apiProviders.continueApi().then((value) async {
       _apiProviders.ContinueApi().then((value) async {
         if (value.isNotEmpty) {
           hasData.value = false;
@@ -115,13 +126,50 @@ class WatchListController extends GetxController {
           hideProgress();
           if (responseBody['st'] == 100) {
             ContinueWatchPodo continueWatchPodo = ContinueWatchPodo.fromJson(responseBody);
-            for (int i = 0; i < continueWatchPodo.data!.length; i++) {
-              dataLength = continueList!.length;
-              continueList = continueWatchPodo.data;
-            }
+            dataLength = continueList!.length;
+            continueList = continueWatchPodo.data;
+            noData.value = false;
+            hasData.value = true;
+            hideProgress();
+          } else if (responseBody['st'] == 101) {
+            dataLength = 0;
+            hasData.value = false;
+            noData.value = true;
+          } else if (responseBody['detail'] == "Signature has expired.") {
+            prefs.setBool(AppConst.loginStatus, false);
+            await prefs.clear();
+            // Get.deleteAll();
+            hasData.value = false;
+            noData.value = false;
+            Get.off(() => const BottomBar(currentIndex: 3));
+          }
+        } else {
+          CustomSnackBar('error');
+        }
+      });
+    } catch (e) {
+      hideProgress();
+      rethrow;
+    }
+  }
+
+  Future<void> profileApi() async {
+    animeList.clear();
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      _apiProviders.ProfileApi().then((value) async {
+        if (value.isNotEmpty) {
+          // hasData.value = false;
+          var responseBody = json.decode(value);
+          hideProgress();
+          if (responseBody['st'] == 100) {
+            ContinueWatchPodo continueWatchPodo = ContinueWatchPodo.fromJson(responseBody);
+            dataLength = continueList!.length;
+            continueList = continueWatchPodo.data;
             noData.value = false;
             showLogin.value = false;
             hasData.value = true;
+            hideProgress();
           } else if (responseBody['st'] == 101) {
             dataLength = 0;
             showLogin.value = false;
@@ -144,5 +192,4 @@ class WatchListController extends GetxController {
       rethrow;
     }
   }
-
 }

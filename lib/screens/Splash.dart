@@ -3,7 +3,6 @@ import 'package:animerush/screens/BottomBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
 
@@ -12,7 +11,6 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {

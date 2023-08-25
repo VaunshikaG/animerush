@@ -31,13 +31,22 @@ class Data {
   String? val;
   int? maxPageCounter;
 
-  Data({this.displayContentName, this.animeList, this.nextPage, this.currentPage, this.previousPage, this.val, this.maxPageCounter});
+  Data(
+      {this.displayContentName,
+      this.animeList,
+      this.nextPage,
+      this.currentPage,
+      this.previousPage,
+      this.val,
+      this.maxPageCounter});
 
   Data.fromJson(Map<String, dynamic> json) {
     displayContentName = json['display_content_name'];
     if (json['anime_list'] != null) {
       animeList = <AnimeList>[];
-      json['anime_list'].forEach((v) { animeList!.add(AnimeList.fromJson(v)); });
+      json['anime_list'].forEach((v) {
+        animeList!.add(AnimeList.fromJson(v));
+      });
     }
     nextPage = json['next_page'];
     currentPage = json['current_page'];
@@ -88,7 +97,32 @@ class AnimeList {
   List<Producers>? producers;
   ScheduleEp? scheduleEp;
 
-  AnimeList({this.id, this.name, this.japaneseName, this.englishName, this.thumbnail, this.image, this.imageHighQuality, this.aniImage, this.banner, this.type, this.animeWatchType, this.status, this.active, this.episodes, this.episodesTillNow, this.ratingAge, this.duration, this.description, this.airedYear, this.premiered, this.views, this.categories, this.studios, this.producers, this.scheduleEp});
+  AnimeList(
+      {this.id,
+      this.name,
+      this.japaneseName,
+      this.englishName,
+      this.thumbnail,
+      this.image,
+      this.imageHighQuality,
+      this.aniImage,
+      this.banner,
+      this.type,
+      this.animeWatchType,
+      this.status,
+      this.active,
+      this.episodes,
+      this.episodesTillNow,
+      this.ratingAge,
+      this.duration,
+      this.description,
+      this.airedYear,
+      this.premiered,
+      this.views,
+      this.categories,
+      this.studios,
+      this.producers,
+      this.scheduleEp});
 
   AnimeList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -114,17 +148,25 @@ class AnimeList {
     views = json['views'];
     if (json['categories'] != null) {
       categories = <Categories>[];
-      json['categories'].forEach((v) { categories!.add(Categories.fromJson(v)); });
+      json['categories'].forEach((v) {
+        categories!.add(Categories.fromJson(v));
+      });
     }
     if (json['studios'] != null) {
       studios = <Studios>[];
-      json['studios'].forEach((v) { studios!.add(Studios.fromJson(v)); });
+      json['studios'].forEach((v) {
+        studios!.add(Studios.fromJson(v));
+      });
     }
     if (json['producers'] != null) {
       producers = <Producers>[];
-      json['producers'].forEach((v) { producers!.add(Producers.fromJson(v)); });
+      json['producers'].forEach((v) {
+        producers!.add(Producers.fromJson(v));
+      });
     }
-    scheduleEp = json['schedule_ep'] != null ? ScheduleEp.fromJson(json['schedule_ep']) : null;
+    scheduleEp = json['schedule_ep'] != null
+        ? ScheduleEp.fromJson(json['schedule_ep'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -172,7 +214,8 @@ class Categories {
   String? categoryName;
   String? categoryNameVal;
 
-  Categories({this.anime, this.category, this.categoryName, this.categoryNameVal});
+  Categories(
+      {this.anime, this.category, this.categoryName, this.categoryNameVal});
 
   Categories.fromJson(Map<String, dynamic> json) {
     anime = json['anime'];
