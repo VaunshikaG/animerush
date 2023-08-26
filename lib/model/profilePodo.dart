@@ -1,12 +1,12 @@
-class ProflePodo {
+class ProfilePodo {
   int? st;
   String? msg;
   String? functionName;
   ProfileData? data;
 
-  ProflePodo({this.st, this.msg, this.functionName, this.data});
+  ProfilePodo({this.st, this.msg, this.functionName, this.data});
 
-  ProflePodo.fromJson(Map<String, dynamic> json) {
+  ProfilePodo.fromJson(Map<String, dynamic> json) {
     st = json['st'];
     msg = json['msg'];
     functionName = json['function_name'];

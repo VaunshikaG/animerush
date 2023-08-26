@@ -1,7 +1,10 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:animerush/screens/BottomBar.dart';
+import 'package:animerush/screens/bottomBar.dart';
+import 'package:animerush/screens/auth.dart';
+import 'package:animerush/utils/appConst.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -11,13 +14,27 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  bool isLoggedIn = false;
+
   @override
   void initState() {
+    isLoggedIn = false;
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(() => const BottomBar(currentIndex: 0));
+      navigatePg();
     });
     super.initState();
   }
+
+  Future<void> navigatePg() async {
+    final prefs = await SharedPreferences.getInstance();
+    isLoggedIn = prefs.getBool(AppConst.loginStatus)!;
+    if (!isLoggedIn) {
+      Get.off(() => const Auth());
+    } else if (isLoggedIn) {
+      Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: true));
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

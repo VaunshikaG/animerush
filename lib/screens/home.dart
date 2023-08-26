@@ -1,17 +1,21 @@
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:animerush/screens/Category.dart';
+import 'package:animerush/screens/category.dart';
+import 'package:animerush/utils/appConst.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../controllers/HomeController.dart';
-import '../widgets/Loader.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../controllers/homeController.dart';
+import '../widgets/loader.dart';
 import '../utils/theme.dart';
-import '../widgets/NoData.dart';
-import 'Details.dart';
+import '../widgets/noData.dart';
+import 'bottomBar.dart';
+import 'details.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -137,105 +141,53 @@ class _HomeState extends State<Home> {
                                                   .textTheme.titleMedium,
                                             ),
                                           ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                height: 30,
-                                                child: CupertinoButton(
-                                                  onPressed: () {
-                                                    Get.off(() => Details(
-                                                        id: homeController
-                                                            .spotlightData[
-                                                                index]
-                                                            .id
-                                                            .toString()));
-                                                  },
-                                                  color:
-                                                      appTheme.disabledColor,
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 0,
-                                                      horizontal: 10),
-                                                  disabledColor:
-                                                      appTheme.splashColor,
-                                                  pressedOpacity: 0.6,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(5)),
-                                                  child: SizedBox(
-                                                    width: 65,
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          CupertinoIcons
-                                                              .info_circle_fill,
-                                                          size: 15,
-                                                          color: appTheme
-                                                              .iconTheme
-                                                              .color,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        Text(
-                                                          "Details",
-                                                          style: appTheme
-                                                              .textTheme
-                                                              .titleSmall,
-                                                        ),
-                                                      ],
+                                          SizedBox(
+                                            height: 30,
+                                            child: CupertinoButton(
+                                              onPressed: () {
+                                                Get.off(() => Details(
+                                                    id: homeController
+                                                        .spotlightData[
+                                                    index]
+                                                        .id
+                                                        .toString()));
+                                              },
+                                              color:
+                                              appTheme.disabledColor,
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                  vertical: 0,
+                                                  horizontal: 10),
+                                              disabledColor:
+                                              appTheme.splashColor,
+                                              pressedOpacity: 0.6,
+                                              borderRadius:
+                                              const BorderRadius.all(
+                                                  Radius.circular(5)),
+                                              child: SizedBox(
+                                                width: 65,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      CupertinoIcons
+                                                          .info_circle_fill,
+                                                      size: 15,
+                                                      color: appTheme
+                                                          .iconTheme
+                                                          .color,
                                                     ),
-                                                  ),
+                                                    const SizedBox(
+                                                        width: 5),
+                                                    Text(
+                                                      "Details",
+                                                      style: appTheme
+                                                          .textTheme
+                                                          .titleSmall,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(width: 15),
-                                              SizedBox(
-                                                height: 30,
-                                                child: CupertinoButton(
-                                                  onPressed: () {
-                                                    Get.off(() => Details(
-                                                        id: homeController
-                                                            .spotlightData[
-                                                                index]
-                                                            .id
-                                                            .toString()));
-                                                  },
-                                                  color:
-                                                      appTheme.primaryColor,
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical: 0,
-                                                      horizontal: 10),
-                                                  disabledColor:
-                                                      appTheme.splashColor,
-                                                  pressedOpacity: 0.6,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(5)),
-                                                  child: SizedBox(
-                                                    width: 100,
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          CupertinoIcons
-                                                              .play_circle_fill,
-                                                          size: 15,
-                                                          color: appTheme
-                                                              .scaffoldBackgroundColor,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        Text(
-                                                          "Watch Now",
-                                                          style: appTheme
-                                                              .textTheme
-                                                              .labelSmall,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -321,7 +273,9 @@ class _HomeState extends State<Home> {
                                 style: appTheme.textTheme.bodyLarge,
                               ),
                               trailing: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.off(() => const Category(category: 'movies'));
+                                },
                                 child: Text(
                                   "View all >",
                                   style: appTheme.textTheme.bodyLarge,
@@ -342,7 +296,9 @@ class _HomeState extends State<Home> {
                                 style: appTheme.textTheme.bodyLarge,
                               ),
                               trailing: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.off(() => const Category(category: 'ona'));
+                                },
                                 child: Text(
                                   "View all >",
                                   style: appTheme.textTheme.bodyLarge,
@@ -363,7 +319,9 @@ class _HomeState extends State<Home> {
                                 style: appTheme.textTheme.bodyLarge,
                               ),
                               trailing: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.off(() => const Category(category: 'ova'));
+                                },
                                 child: Text(
                                   "View all >",
                                   style: appTheme.textTheme.bodyLarge,

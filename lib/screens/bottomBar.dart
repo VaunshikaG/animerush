@@ -3,18 +3,21 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'Home.dart';
-import 'HomeDrawer.dart';
-import 'Search.dart';
-import 'WatchList.dart';
-import 'Account.dart';
+import '../controllers/versionController.dart';
+import '../widgets/customButtons.dart';
+import 'home.dart';
+import 'homeDrawer.dart';
+import 'search.dart';
+import 'watchList.dart';
+import 'account.dart';
 
 class BottomBar extends StatefulWidget {
   final int currentIndex;
-  final String? pg;
+  final bool checkVersion;
 
-  const BottomBar({Key? key, required this.currentIndex, this.pg})
+  const BottomBar({Key? key, required this.currentIndex, required this.checkVersion})
       : super(key: key);
 
   @override
@@ -22,21 +25,31 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  VersionController versionController = Get.put(VersionController());
+
   final _tabs = [
     const Home(),
     const Search(),
     const WatchList(pg: ''),
     const Account()
   ];
-  int _selectedTab = 0;
+  RxInt _selectedTab = 0.obs;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     log(runtimeType.toString());
-    _selectedTab = widget.currentIndex;
+    log(widget.checkVersion.toString());
+    _selectedTab.value = widget.currentIndex;
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      if (widget.checkVersion == true) {
+        Future.delayed(const Duration(seconds: 1), () =>
+        versionController.appVersionApiCall(context));
+      }
+    });
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +81,7 @@ class _BottomBarState extends State<BottomBar> {
         ),
         drawerEdgeDragWidth: 50,
         endDrawer: const HomeDrawer(),
-        body: SafeArea(child: _tabs[_selectedTab]),
+        body: SafeArea(child: _tabs[_selectedTab.value]),
         bottomNavigationBar: Container(
           color: appTheme.scaffoldBackgroundColor,
           padding: const EdgeInsets.all(8),
@@ -101,10 +114,10 @@ class _BottomBarState extends State<BottomBar> {
                 text: 'Account',
               ),
             ],
-            selectedIndex: _selectedTab,
+            selectedIndex: _selectedTab.value,
             onTabChange: (index) {
               setState(() {
-                _selectedTab = index;
+                _selectedTab.value = index;
               });
             },
           ),

@@ -11,20 +11,21 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controllers/DwldController.dart';
-import '../controllers/EpisodeController.dart';
-import '../model/DetailsPodo.dart';
-import '../utils/AppConst.dart';
-import '../widgets/CustomButtons.dart';
-import '../widgets/Loader.dart';
+import '../controllers/dwldController.dart';
+import '../controllers/episodeController.dart';
+import '../model/detailsPodo.dart';
+import '../utils/appConst.dart';
+import '../widgets/customButtons.dart';
+import '../widgets/loader.dart';
 import '../utils/theme.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/NoData.dart';
-import 'Account.dart';
-import 'BottomBar.dart';
-import 'Details.dart';
-import 'Player.dart';
-import 'WatchList.dart';
+import '../widgets/customAppBar.dart';
+import '../widgets/noData.dart';
+import 'account.dart';
+import 'bottomBar.dart';
+import 'details.dart';
+import 'player.dart';
+import 'watchList.dart';
+import 'auth.dart';
 
 class Episode extends StatefulWidget {
   final String? pg;
@@ -43,7 +44,7 @@ class Episode extends StatefulWidget {
   State<Episode> createState() => _EpisodeState();
 }
 
-class _EpisodeState extends State<Episode> {
+class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   DwldController dwldController = DwldController();
   EpisodeController epController = Get.put(EpisodeController());
 
@@ -63,17 +64,13 @@ class _EpisodeState extends State<Episode> {
   void initState() {
     log(runtimeType.toString());
     log(widget.epDetails[0].id.toString());
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
     dwldController.bindBackgroundIsolate();
     IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = DownloadTaskStatus(data[1]);
-      int progress = data[2];
-      setState((){ });
-    });
+    _port.listen((dynamic data) {});
 
     FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
@@ -249,8 +246,7 @@ class _EpisodeState extends State<Episode> {
                                       heightFactor: 13,
                                       child: elevatedButton(
                                         text: "Login →",
-                                        onPressed: () => Get.off(() =>
-                                            const BottomBar(currentIndex: 3)),
+                                        onPressed: () => Get.offAll(() => const Auth()),
                                       ),
                                     ),
                                   ],
@@ -473,11 +469,12 @@ class _EpisodeState extends State<Episode> {
               return ActionChip(
                 onPressed: () async {
                   await showProgress(context, true);
-                  setState(() {
-                    selectedIndex = index;
-                    print(chunkList[index].id.toString());
-                    epController.episodeApiCall(epId: chunkList[index].id.toString());
-                  });
+                  selectedIndex = index;
+                  print(chunkList[index].id.toString());
+                  epController.betterPlayerController.dispose();
+                  epController.betterPlayerController.clearCache();
+                  epController.episodeApiCall(
+                      epId: chunkList[index].id.toString());
                 },
                 side: BorderSide.none,
                 disabledColor: appTheme.colorScheme.secondary,
@@ -540,7 +537,27 @@ class _EpisodeState extends State<Episode> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        epController.betterPlayerController.setControlsAlwaysVisible(true);
+        break;
+      case AppLifecycleState.inactive:
+        epController.betterPlayerController.pause();
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
+  }
+
+  @override
   void dispose() {
+    epController.betterPlayerController.clearCache();
+    epController.betterPlayerController.dispose();
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }

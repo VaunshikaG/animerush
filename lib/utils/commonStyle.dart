@@ -2,7 +2,7 @@ import 'package:animerush/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'AppConst.dart';
+import 'appConst.dart';
 
 class CommonStyle {
   static InputDecoration textFieldStyle1(

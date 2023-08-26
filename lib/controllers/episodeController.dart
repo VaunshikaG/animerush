@@ -12,14 +12,14 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/DetailsPodo.dart';
-import '../model/EpDetailPodo.dart';
-import '../model/VdResolutionModel.dart';
-import '../utils/ApiProviders.dart';
-import '../utils/AppConst.dart';
+import '../model/detailsPodo.dart';
+import '../model/epDetailPodo.dart';
+import '../model/vdResolutionModel.dart';
+import '../utils/apiProviders.dart';
+import '../utils/appConst.dart';
 import '../utils/theme.dart';
-import '../widgets/Loader.dart';
-import 'DwldController.dart';
+import '../widgets/loader.dart';
+import 'dwldController.dart';
 
 class EpisodeController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
@@ -55,30 +55,46 @@ class EpisodeController extends GetxController {
             dwldList = epDetailPodo.data!.downloadEpisodeLink;
             log(epDetailPodo.data!.downloadEpisodeLink!.length.toString());
             vdUrl = epDetailPodo.data!.episodeLink!.file;
-            BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-              BetterPlayerDataSourceType.network,
-              epDetailPodo.data!.episodeLink!.file.toString(),
-              videoFormat: BetterPlayerVideoFormat.hls,
-              headers: {
-                'User-Agent':
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
-              },
-              // resolutions: AppConst.exampleResolutionsUrls,
-              resolutions: Map.fromEntries(
-                epDetailPodo.data!.downloadEpisodeLink!.map(
-                      (link) => MapEntry(link.quality!, link.link!),
+            betterPlayerController = BetterPlayerController(
+              betterPlayerDataSource: BetterPlayerDataSource(
+                bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+                  minBufferMs: 60000,
+                  maxBufferMs: 555000,
+                ),
+                cacheConfiguration: const BetterPlayerCacheConfiguration(
+                  useCache: true,
+                  preCacheSize: 400000,
+                  maxCacheSize: 400000,
+                  maxCacheFileSize: 400000,
+                ),
+                BetterPlayerDataSourceType.network,
+                epDetailPodo.data!.episodeLink!.file.toString(),
+                videoFormat: BetterPlayerVideoFormat.hls,
+                headers: {
+                  'User-Agent':
+                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+                },
+                resolutions: Map.fromEntries(
+                  epDetailPodo.data!.downloadEpisodeLink!.map(
+                        (link) => MapEntry(link.quality!, link.link!),
+                  ),
+                ),
+                notificationConfiguration: BetterPlayerNotificationConfiguration(
+                  showNotification: true,
+                  title: epDetailPodo.data!.episodeTitle.toString(),
+                  author: "animerush.in",
+                  imageUrl: epDetailPodo.data!.image ??
+                      "https://animerush.in/media/image/no_poster.jpg",
                 ),
               ),
-              notificationConfiguration: BetterPlayerNotificationConfiguration(
-                showNotification: true,
-                title: epDetailPodo.data!.episodeTitle.toString(),
-                author: "animerush.in",
-                imageUrl: epDetailPodo.data!.image ??
-                    "https://animerush.in/media/image/no_poster.jpg",
-              ),
-            );
-            betterPlayerController = BetterPlayerController(
               BetterPlayerConfiguration(
+                autoDetectFullscreenAspectRatio: false,
+                handleLifecycle: true,
+                autoDetectFullscreenDeviceOrientation: true,
+                allowedScreenSleep: false,
+                autoDispose: true,
+                fullScreenByDefault: false,
+                fullScreenAspectRatio: 16 / 9,
                 deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
                 aspectRatio: 16 / 9,
                 fit: BoxFit.contain,
@@ -103,6 +119,8 @@ class EpisodeController extends GetxController {
                   pipMenuIcon: Icons.picture_in_picture,
                   enablePip: true,
                   enableRetry: true,
+                  enableQualities: false,
+                  enableSubtitles: false,
                   overflowMenuCustomItems: [
                     BetterPlayerOverflowMenuItem(
                       Icons.picture_in_picture,
@@ -113,11 +131,11 @@ class EpisodeController extends GetxController {
                   ],
                 ),
               ),
-              betterPlayerDataSource: dataSource,
             );
             betterPlayerController.setOverriddenFit(BoxFit.contain);
             betterPlayerController.enablePictureInPicture(betterPlayerKey);
             betterPlayerController.setControlsAlwaysVisible(true);
+
             loading.value = false;
             showPg.value = true;
             hasData.value = true;

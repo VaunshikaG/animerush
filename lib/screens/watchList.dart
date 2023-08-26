@@ -3,16 +3,17 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/LoginController.dart';
-import '../controllers/WatchListController.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomButtons.dart';
-import '../widgets/CustomSnackbar.dart';
-import '../widgets/Loader.dart';
-import '../widgets/NoData.dart';
-import '../widgets/SimilarList.dart';
-import 'BottomBar.dart';
-import 'Details.dart';
+import '../controllers/loginController.dart';
+import '../controllers/watchListController.dart';
+import '../widgets/customAppBar.dart';
+import '../widgets/customButtons.dart';
+import '../widgets/customSnackbar.dart';
+import '../widgets/loader.dart';
+import '../widgets/noData.dart';
+import '../widgets/similarList.dart';
+import 'bottomBar.dart';
+import 'details.dart';
+import 'auth.dart';
 
 class WatchList extends StatefulWidget {
   final String? aId;
@@ -98,8 +99,7 @@ class _WatchListState extends State<WatchList>
                             heightFactor: 13,
                             child: elevatedButton(
                               text: "Login →",
-                              onPressed: () => Get.off(
-                                  () => const BottomBar(currentIndex: 3)),
+                              onPressed: () => Get.offAll(() => const Auth()),
                             ),
                           ),
                         )),
@@ -220,7 +220,7 @@ class _WatchListState extends State<WatchList>
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: (watchListController.dataLength == 0)
-          ? noData("Oops, list is empty!")
+          ? noData("Oops, no data found!")
           : SimilarList(
         pg: 'watch',
         similarData: watchListController.animeList,

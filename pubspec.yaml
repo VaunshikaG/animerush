@@ -6,11 +6,10 @@ description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 0.0.1+1
 
 environment:
-  sdk: '>=2.19.4 <3.0.0'
-#  sdk: '>=3.0.5 <4.0.0'
+  sdk: '>=2.19.6 <3.0.0'
 
 dependencies:
   flutter:
@@ -38,7 +37,8 @@ dependencies:
   shared_preferences: ^2.2.0
   get: ^4.6.5
   flutter_riverpod: ^2.3.6
-
+  url_launcher: ^6.1.12
+  package_info_plus: any
 
 
 dev_dependencies:

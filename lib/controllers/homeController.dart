@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import '../model/HomePodo.dart';
-import '../utils/ApiProviders.dart';
-import '../widgets/CustomSnackbar.dart';
-import '../widgets/Loader.dart';
+import '../model/homePodo.dart';
+import '../utils/apiProviders.dart';
+import '../widgets/customSnackbar.dart';
+import '../widgets/loader.dart';
 
 class HomeController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();

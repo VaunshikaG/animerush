@@ -1,16 +1,17 @@
 import 'dart:developer';
 
-import 'package:animerush/widgets/CustomSnackbar.dart';
+import 'package:animerush/widgets/customSnackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/SearchController.dart';
-import '../model/RqModels.dart';
-import '../widgets/CustomButtons.dart';
-import '../widgets/Loader.dart';
-import '../widgets/NoData.dart';
-import '../widgets/SimilarList.dart';
-import 'BottomBar.dart';
+import '../controllers/searchController.dart';
+import '../model/rqModels.dart';
+import '../widgets/customButtons.dart';
+import '../widgets/loader.dart';
+import '../widgets/noData.dart';
+import '../widgets/similarList.dart';
+import 'bottomBar.dart';
+import 'auth.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -129,6 +130,11 @@ class _SearchState extends State<Search> {
                               ctx: context);
                         }
                       });
+
+                      searchController.value1 = "";
+                      searchController.categoryType = "";
+                      searchController.value2 = "";
+                      searchController.genreType = "";
                     },
                     style: appTheme.textTheme.titleMedium,
                     prefixIcon: Icon(
@@ -214,8 +220,7 @@ class _SearchState extends State<Search> {
                     heightFactor: 13,
                     child: elevatedButton(
                       text: "Login →",
-                      onPressed: () =>
-                          Get.off(() => const BottomBar(currentIndex: 3)),
+                      onPressed: () => Get.offAll(() => const Auth()),
                     ),
                   ),
                 )),
@@ -261,6 +266,7 @@ class _SearchState extends State<Search> {
                           genres: searchController.value2,
                           pageId: '1',
                           sort: '',
+                          searchKeywords: searchController.searchText.text,
                         ),
                         ctx: context);
                   }
@@ -338,6 +344,7 @@ class _SearchState extends State<Search> {
                               genres: searchController.value2,
                               pageId: '1',
                               sort: '',
+                              searchKeywords: searchController.searchText.text,
                             ),
                             ctx: context);
                       }
@@ -397,6 +404,7 @@ class _SearchState extends State<Search> {
                     genres: searchController.value2,
                     pageId: '1',
                     sort: '',
+                    searchKeywords: '',
                   ),
                   ctx: context);
             });
@@ -468,6 +476,7 @@ class _SearchState extends State<Search> {
                     genres: searchController.value2,
                     pageId: '1',
                     sort: '',
+                    searchKeywords: '',
                   ),
                   ctx: context);
             });

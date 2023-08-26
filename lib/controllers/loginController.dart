@@ -3,19 +3,20 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:animerush/utils/AppConst.dart';
-import 'package:animerush/widgets/Loader.dart';
+import 'package:animerush/utils/appConst.dart';
+import 'package:animerush/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/CommonResponse.dart';
-import '../model/LoginPodo.dart';
-import '../model/ProflePodo.dart';
-import '../model/RqModels.dart';
-import '../screens/BottomBar.dart';
-import '../utils/ApiProviders.dart';
-import '../widgets/CustomSnackbar.dart';
+import '../model/commonResponse.dart';
+import '../model/continueWatchPodo.dart';
+import '../model/loginPodo.dart';
+import '../model/profilePodo.dart';
+import '../model/rqModels.dart';
+import '../screens/bottomBar.dart';
+import '../utils/apiProviders.dart';
+import '../widgets/customSnackbar.dart';
 
 class LoginController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
@@ -27,13 +28,12 @@ class LoginController extends GetxController {
       isPassword = false.obs,
       isChangePass = false.obs,
       showPg = false.obs;
+
   var message;
-  ProfileData? profileData;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
   TextEditingController otpController = TextEditingController();
 
   Future<void> loginApi() async {
@@ -50,12 +50,11 @@ class LoginController extends GetxController {
           if (responseBody['st'] == 100) {
             prefs.setBool(AppConst.loginStatus, true);
             showPg.value = false;
-            profileApi();
             LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
             isLogin.value = false;
             isUserLoggedIn.value = true;
-            Get.to(() => const BottomBar(currentIndex: 3));
+            Get.to(() => const BottomBar(currentIndex: 3, checkVersion: false));
             CustomSnackBar("Login Successful");
             // userNameController.clear();
             // emailController.clear();
@@ -91,7 +90,6 @@ class LoginController extends GetxController {
             CustomSnackBar(message);
             isSignin.value = false;
             isLogin.value = true;
-            // Get.offAll(const BottomBar(currentIndex: 3));
             userNameController.clear();
             emailController.clear();
             passwordController.clear();
@@ -207,57 +205,4 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> profilePasswordApi() async {
-    try {
-      ProfilePasswordModel passwordModel = ProfilePasswordModel(
-        currentPassword: passwordController.text,
-        newPassword: newPasswordController.text,
-      );
-      _apiProviders.profilePasswordApi(model: passwordModel).then((value) {
-        if (value.isNotEmpty) {
-          var responseBody = json.decode(value);
-          if (responseBody['st'] == 100) {
-            // CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
-            newPasswordController.clear();
-            passwordController.clear();
-            CustomSnackBar(responseBody['msg']);
-          } else {
-            CustomSnackBar(responseBody['msg']);
-          }
-        }
-      });
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> profileApi() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      _apiProviders.ProfileApi().then((value) async {
-        if (value.isNotEmpty) {
-          var responseBody = json.decode(value);
-          hideProgress();
-          if (responseBody['st'] == 100) {
-            ProflePodo proflePodo = ProflePodo.fromJson(responseBody);
-            profileData = proflePodo.data;
-            message = profileData!.created.toString();
-            showPg.value = true;
-            hideProgress();
-          } else if (responseBody['detail'] == "Signature has expired.") {
-            prefs.setBool(AppConst.loginStatus, false);
-            await prefs.clear();
-            // Get.deleteAll();
-            showPg.value = true;
-            isLogin.value = true;
-          }
-        } else {
-          CustomSnackBar('error');
-        }
-      });
-    } catch (e) {
-      hideProgress();
-      rethrow;
-    }
-  }
 }

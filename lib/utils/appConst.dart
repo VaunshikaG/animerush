@@ -1,8 +1,13 @@
 class AppConst {
+
+  static const APP_STORE_URL = '';
+  static const PLAY_STORE_URL = '';
+
   static const String KEY = "lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc";
   static const String app_url = "https://animerush.in/api";
   // static const String app_url = "http://10.0.0.4:9923/api";
 
+  static const String verion = "$app_url/website-details/";
   static const String signUp = "$app_url/sign-up/";
   static const String otpVerify = "$app_url/verify-otp/";
   static const String forgotPassword = "$app_url/forgot-password/";

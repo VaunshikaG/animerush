@@ -1,23 +1,24 @@
 import 'dart:developer';
 import 'dart:ui';
-import 'package:animerush/screens/Episode.dart';
-import 'package:animerush/utils/AppConst.dart';
+import 'package:animerush/screens/episode.dart';
+import 'package:animerush/utils/appConst.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import '../controllers/DetailsController.dart';
-import '../controllers/WatchListController.dart';
-import '../utils/CommonStyle.dart';
-import '../widgets/CustomButtons.dart';
-import '../widgets/Loader.dart';
+import '../controllers/detailsController.dart';
+import '../controllers/watchListController.dart';
+import '../utils/commonStyle.dart';
+import '../widgets/customButtons.dart';
+import '../widgets/loader.dart';
 import '../utils/theme.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/NoData.dart';
-import '../widgets/SimilarList.dart';
-import 'BottomBar.dart';
-import 'WatchList.dart';
+import '../widgets/customAppBar.dart';
+import '../widgets/noData.dart';
+import '../widgets/similarList.dart';
+import 'bottomBar.dart';
+import 'watchList.dart';
+import 'auth.dart';
 
 class Details extends StatefulWidget {
   final String? id;
@@ -50,7 +51,6 @@ class _DetailsState extends State<Details> {
     "Language",
     "Duration",
     "Episodes",
-    "Views",
     "Release Year",
     "Type",
     "Status",
@@ -82,7 +82,7 @@ class _DetailsState extends State<Details> {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.offAll(() => const BottomBar(currentIndex: 0));
+        Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
         return true;
       },
       child: Align(
@@ -105,7 +105,7 @@ class _DetailsState extends State<Details> {
                             title: detailsController.name ?? "-",
                             img: detailsController.img.value,
                             backBtn: () {
-                              Get.offAll(() => const BottomBar(currentIndex: 0));
+                              Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
                             },
                             wishlist: () {
                               Get.off(() => WatchList(
@@ -120,7 +120,7 @@ class _DetailsState extends State<Details> {
                               child: CustomAppBar4(
                                 title: '',
                                 backBtn: () {
-                                  Get.offAll(() => const BottomBar(currentIndex: 0));
+                                  Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
                                 },
                               ),
                             ),
@@ -415,7 +415,7 @@ class _DetailsState extends State<Details> {
                           //   visible: detailsController.showLogin.value,
                           //   child: CustomAppBar4(
                           //     title: '',
-                          //     backBtn: () => Get.off(() => const BottomBar(currentIndex: 0)),
+                          //     backBtn: () => Get.off(() => const BottomBar(currentIndex: 0, checkVersion: false)),
                           //   ),
                           // )),
                           Obx(() => Visibility(
@@ -424,8 +424,7 @@ class _DetailsState extends State<Details> {
                                   heightFactor: 13,
                                   child: elevatedButton(
                                     text: "Login →",
-                                    onPressed: () => Get.off(
-                                        () => const BottomBar(currentIndex: 3)),
+                                    onPressed: () => Get.offAll(() => const Auth()),
                                   ),
                                 ),
                               )),

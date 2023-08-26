@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../utils/CommonStyle.dart';
+import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
-import 'CustomButtons.dart';
+import 'customButtons.dart';
 
 Widget? loginSheet({
   appTheme,

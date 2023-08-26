@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/SearchController.dart';
-import '../model/RqModels.dart';
+import '../controllers/searchController.dart';
+import '../model/rqModels.dart';
 import '../utils/theme.dart';
-import 'Details.dart';
+import 'bottomBar.dart';
+import 'details.dart';
 
 class HomeDrawer extends StatefulWidget {
   const HomeDrawer({Key? key}) : super(key: key);
@@ -202,6 +203,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   @override
   void initState() {
+    print(runtimeType.toString());
     super.initState();
   }
 
@@ -278,6 +280,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                       genres: '',
                                       pageId: '',
                                       sort: '',
+                                      searchKeywords: '',
                                     ),
                                     ctx: context);
                               } else if (index == 1) {
@@ -288,6 +291,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                       genres: '',
                                       pageId: '',
                                       sort: '',
+                                      searchKeywords: '',
                                     ),
                                     ctx: context);
                               } else if (index == 2) {
@@ -420,6 +424,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         genres: searchController.value2,
                         pageId: '1',
                         sort: '',
+                        searchKeywords: '',
                       ),
                       ctx: context);
                 });
@@ -466,7 +471,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               ),
               selected: searchController.genreType.contains(item['title']),
               onSelected: (bool selected) {
-                setState(() {
+                // setState(() {
                   if (selected) {
                     searchController.genreType = item['title'];
                     if (searchController.genreType == item['title']) {
@@ -476,16 +481,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     searchController.genreType = "";
                     searchController.value2 = "";
                   }
-                  searchController.searchApiCall(
-                      pgName: "drawer",
-                      searchModel: SearchModel(
-                        val: searchController.value1,
-                        genres: searchController.value2,
-                        pageId: '1',
-                        sort: '',
-                      ),
-                      ctx: context);
-                });
+                  if (searchController.value2.isNotEmpty) {
+                    searchController.searchApiCall(
+                        pgName: "drawer",
+                        searchModel: SearchModel(
+                          val: searchController.value1,
+                          genres: searchController.value2,
+                          pageId: '1',
+                          sort: '',
+                          searchKeywords: '',
+                        ),
+                        ctx: context);
+                  }
+                // });
               },
               backgroundColor: appTheme.colorScheme.surface,
               disabledColor: appTheme.colorScheme.surface,

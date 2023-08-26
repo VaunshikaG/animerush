@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:animerush/utils/AppConst.dart';
+import 'package:animerush/utils/appConst.dart';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import '../model/EpDetailPodo.dart';
+import '../model/epDetailPodo.dart';
 import '../utils/theme.dart';
 
 class Player extends StatefulWidget {

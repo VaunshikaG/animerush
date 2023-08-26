@@ -126,13 +126,6 @@ class AppTheme {
     splashColor: CustomTheme.transparent,
     hoverColor: CustomTheme.themeColor2,
     indicatorColor: Colors.cyan,
-    appBarTheme: AppBarTheme(
-      backgroundColor: CustomTheme.black,
-    ),
-    drawerTheme: DrawerThemeData(
-      backgroundColor: CustomTheme.grey1,
-      surfaceTintColor: CustomTheme.grey1,
-    ),
     colorScheme: ColorScheme.dark(
       brightness: Brightness.dark,
       primary: CustomTheme.themeColor1,
@@ -226,6 +219,13 @@ class AppTheme {
       ),
       indicatorColor: CustomTheme.themeColor1,
       labelPadding: const EdgeInsets.symmetric(horizontal: 5),
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: CustomTheme.black,
+    ),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: CustomTheme.grey1,
+      surfaceTintColor: CustomTheme.grey1,
     ),
     expansionTileTheme: ExpansionTileThemeData(
       iconColor: CustomTheme.grey1,

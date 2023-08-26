@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/DetailsPodo.dart';
-import '../model/SimilarModel.dart';
-import '../utils/ApiProviders.dart';
-import '../utils/AppConst.dart';
-import '../widgets/Loader.dart';
+import '../model/detailsPodo.dart';
+import '../model/similarModel.dart';
+import '../utils/apiProviders.dart';
+import '../utils/appConst.dart';
+import '../widgets/loader.dart';
 
 class DetailsController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
@@ -137,7 +137,6 @@ class DetailsController extends GetxController {
             details.add(lang!);
             details.add("$duration min");
             details.add(ep!);
-            details.add(views.toString());
             details.add(year!);
             details.add(animeType!);
             details.add(status!);

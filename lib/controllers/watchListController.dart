@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:animerush/widgets/Loader.dart';
+import 'package:animerush/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/CommonResponse.dart';
-import '../model/ContinueWatchPodo.dart';
-import '../model/WatchListPodo.dart';
-import '../screens/BottomBar.dart';
-import '../utils/ApiProviders.dart';
-import '../utils/AppConst.dart';
-import '../widgets/CustomSnackbar.dart';
+import '../model/commonResponse.dart';
+import '../model/continueWatchPodo.dart';
+import '../model/watchListPodo.dart';
+import '../screens/bottomBar.dart';
+import '../utils/apiProviders.dart';
+import '../utils/appConst.dart';
+import '../widgets/customSnackbar.dart';
 
 class WatchListController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
@@ -24,7 +24,7 @@ class WatchListController extends GetxController {
   TextEditingController passwordController = TextEditingController();
 
   List<Anime> animeList = [];
-  List<ContinueData>? continueList = [];
+  List<ContinueData> continueList = [];
   int dataLength = 0;
 
   Future<void> watchApi(String type) async {
@@ -94,7 +94,7 @@ class WatchListController extends GetxController {
           hideProgress();
           if (responseBody['st'] == 200) {
             if (type.contains('False00')) {
-              Get.to(() => const BottomBar(currentIndex: 2));
+              Get.to(() => const BottomBar(currentIndex: 2, checkVersion: false));
             }
             CommonResponse commonResponse =
                 CommonResponse.fromJson(responseBody);
@@ -115,81 +115,4 @@ class WatchListController extends GetxController {
     }
   }
 
-  Future<void> continueApi() async {
-    animeList.clear();
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      _apiProviders.ContinueApi().then((value) async {
-        if (value.isNotEmpty) {
-          hasData.value = false;
-          var responseBody = json.decode(value);
-          hideProgress();
-          if (responseBody['st'] == 100) {
-            ContinueWatchPodo continueWatchPodo = ContinueWatchPodo.fromJson(responseBody);
-            dataLength = continueList!.length;
-            continueList = continueWatchPodo.data;
-            noData.value = false;
-            hasData.value = true;
-            hideProgress();
-          } else if (responseBody['st'] == 101) {
-            dataLength = 0;
-            hasData.value = false;
-            noData.value = true;
-          } else if (responseBody['detail'] == "Signature has expired.") {
-            prefs.setBool(AppConst.loginStatus, false);
-            await prefs.clear();
-            // Get.deleteAll();
-            hasData.value = false;
-            noData.value = false;
-            Get.off(() => const BottomBar(currentIndex: 3));
-          }
-        } else {
-          CustomSnackBar('error');
-        }
-      });
-    } catch (e) {
-      hideProgress();
-      rethrow;
-    }
-  }
-
-  Future<void> profileApi() async {
-    animeList.clear();
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      _apiProviders.ProfileApi().then((value) async {
-        if (value.isNotEmpty) {
-          // hasData.value = false;
-          var responseBody = json.decode(value);
-          hideProgress();
-          if (responseBody['st'] == 100) {
-            ContinueWatchPodo continueWatchPodo = ContinueWatchPodo.fromJson(responseBody);
-            dataLength = continueList!.length;
-            continueList = continueWatchPodo.data;
-            noData.value = false;
-            showLogin.value = false;
-            hasData.value = true;
-            hideProgress();
-          } else if (responseBody['st'] == 101) {
-            dataLength = 0;
-            showLogin.value = false;
-            hasData.value = false;
-            noData.value = true;
-          } else if (responseBody['detail'] == "Signature has expired.") {
-            prefs.setBool(AppConst.loginStatus, false);
-            await prefs.clear();
-            // Get.deleteAll();
-            hasData.value = false;
-            noData.value = false;
-            showLogin.value = true;
-          }
-        } else {
-          CustomSnackBar('error');
-        }
-      });
-    } catch (e) {
-      hideProgress();
-      rethrow;
-    }
-  }
 }
