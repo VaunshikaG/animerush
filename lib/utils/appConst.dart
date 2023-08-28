@@ -30,6 +30,8 @@ class AppConst {
   static const String apiStatus = "api_status";
   static const String dateJoined = "date_joined";
 
+  static const int duration = 1800;
+
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex =
       RegExp(r'^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');

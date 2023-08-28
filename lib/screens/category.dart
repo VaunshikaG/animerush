@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:animerush/screens/bottomBar.dart';
+import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
+import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/noData.dart';
@@ -21,44 +23,21 @@ class Category extends StatefulWidget {
   State<Category> createState() => _CategoryState();
 }
 
-ScrollController scrollController = ScrollController();
 
 class _CategoryState extends State<Category> {
+  // ScrollController scrollController = ScrollController();
   Search_Controller searchController = Get.put(Search_Controller());
-  int _pageNumber = 0;
-
-  void _scrollListener() {
-    if (scrollController.position.extentAfter == 0) {
-      setState(() {
-        _pageNumber++;
-        searchController.isListLoading.value = true;
-        searchController.searchApiCall(
-            pgName: "category",
-            searchModel: SearchModel(
-              val: widget.category,
-              genres: '',
-              pageId: _pageNumber.toString(),
-              sort: '',
-              searchKeywords: '',
-            ),
-            ctx: context);
-      });
-    }
-  }
 
   @override
   void initState() {
     log(runtimeType.toString());
-    _pageNumber = 1;
-    searchController.isListLoading.value = false;
-    scrollController = ScrollController()..addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       searchController.searchApiCall(
           pgName: "searchField",
           searchModel: SearchModel(
             val: widget.category,
             genres: '',
-            pageId: _pageNumber.toString(),
+            pageId: '1',
             sort: '',
             searchKeywords: '',
           ),
@@ -77,9 +56,6 @@ class _CategoryState extends State<Category> {
         return true;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        extendBodyBehindAppBar: true,
-        extendBody: true,
         appBar: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, 50),
           child: CustomAppBar4(
@@ -92,56 +68,114 @@ class _CategoryState extends State<Category> {
             overscroll.disallowIndicator();
             return false;
           },
-          child: Scrollbar(
-            scrollbarOrientation: ScrollbarOrientation.right,
-            thumbVisibility: true,
-            interactive: true,
-            // controller: scrollController,
-            child: SingleChildScrollView(
-              // controller: scrollController,
-              child: Column(
-                children: [
-                  Center(
-                    child: Obx(() => Visibility(
-                      visible: searchController.hasData.value,
-                      child: searchController.isPageLoading.value
-                          ? SizedBox(
-                            height: 55,
-                            width: 30,
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: RefreshProgressIndicator(
-                                backgroundColor: Colors.transparent,
-                                color: appTheme.primaryColor,
-                              ),
-                            ),
-                          )
-                          : Container(
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                Obx(() => Visibility(
+                  visible: searchController.hasData.value,
+                  child: Container(
                         alignment: Alignment.topCenter,
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            child: SimilarList(
-                        pg: 'category',
-                        similarData: searchController.animeList,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: Column(
+                          children: [
+                            SimilarList(
+                              pg: 'category',
+                              similarData: searchController.animeList,
+                            ),
+                            ListTile(
+                              leading: (searchController.previousPg =='1')
+                                  ? const SizedBox.shrink() : ElevatedButton.icon(
+                                onPressed: () {
+                                  searchController.searchApiCall(
+                                      pgName: "pagination",
+                                      searchModel: SearchModel(
+                                        val: searchController.value1,
+                                        genres: searchController.value2,
+                                        searchKeywords: searchController.searchText.text,
+                                        pageId: searchController.previousPg.toString(),
+                                        sort: '',
+                                      ),
+                                      ctx: context);
+                                },
+                                label: Text(
+                                  searchController.previousPg.toString(),
+                                  style: appTheme.textTheme.titleSmall,
+                                ),
+                                icon: Icon(
+                                  Icons.fast_rewind_outlined,
+                                  size: 18,
+                                  color: appTheme.iconTheme.color,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  side: BorderSide.none,
+                                  backgroundColor: appTheme.hintColor,
+                                ),
+                              ),
+                              title: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  side: BorderSide.none,
+                                  backgroundColor: appTheme.scaffoldBackgroundColor,
+                                ),
+                                child: Text(
+                                  searchController.currentPg.toString(),
+                                  style: appTheme.textTheme.titleSmall,
+                                ),
+                              ),
+                              trailing: (searchController.maxPg == searchController.currentPg)
+                                  ? const SizedBox.shrink() : ElevatedButton.icon(
+                                onPressed: () {
+                                  searchController.searchApiCall(
+                                      pgName: "pagination",
+                                      searchModel: SearchModel(
+                                        val: searchController.value1,
+                                        genres: searchController.value2,
+                                        searchKeywords: searchController.searchText.text,
+                                        pageId: searchController.nextPg.toString(),
+                                        sort: '',
+                                      ),
+                                      ctx: context);
+                                },
+                                label: Text(
+                                  searchController.nextPg.toString(),
+                                  style: appTheme.textTheme.titleSmall,
+                                ),
+                                icon: Icon(
+                                  Icons.fast_forward_outlined,
+                                  size: 18,
+                                  color: appTheme.iconTheme.color,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  side: BorderSide.none,
+                                  backgroundColor: appTheme.hintColor,
+                                ),
+                              ),
+                              dense: true,
+                            ),
+                          ],
+                        ),
                       ),
-                          ),
                     )),
-                  ),
-                  Obx(() => Visibility(
-                    visible: searchController.noData.value,
-                    child: noData("Oops, failed to load data!"),
-                  )),
-                  Obx(() => Visibility(
-                    visible: searchController.showLogin.value,
-                    child: Center(
-                      heightFactor: 13,
-                      child: elevatedButton(
-                        text: "Login →",
-                        onPressed: () => Get.offAll(() => const Auth()),
-                      ),
+                Obx(() => Visibility(
+                  visible: searchController.noData.value,
+                  child: noData("Oops, failed to load data!"),
+                )),
+                Obx(() => Visibility(
+                  visible: searchController.showLogin.value,
+                  child: Center(
+                    heightFactor: 13,
+                    child: elevatedButton(
+                      text: "Login →",
+                      onPressed: () => Get.offAll(() => const Auth()),
                     ),
-                  )),
-                ],
-              ),
+                  ),
+                )),
+              ],
             ),
           ),
         ),

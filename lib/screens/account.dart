@@ -5,20 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/accountController.dart';
-import '../controllers/loginController.dart';
-import '../controllers/searchController.dart';
-import '../controllers/versionController.dart';
-import '../controllers/watchListController.dart';
 import '../utils/appConst.dart';
 import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
+import '../widgets/animeAnimation.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
+import '../widgets/similarList.dart';
+import 'bottomBar.dart';
 import 'details.dart';
 import 'splash.dart';
 import 'auth.dart';
@@ -31,27 +30,31 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
-  VersionController versionController = Get.put(VersionController());
   AccountController accountController = Get.put(AccountController());
   List<DownloadTask> downloadedTasks = [];
 
   final _formKey6 = GlobalKey<FormState>();
   TabController? _controller;
   bool showPassword = true;
+  PackageInfo packageInfo =
+  PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
   @override
   void initState() {
+    _controller = TabController(length: 2, vsync: this);
     log(runtimeType.toString());
+    log(versionController.packageInfo.version.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
     // loadDownloadedTasks();
-    _controller = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   Future<void> loadData() async {
     await showProgress(context, true);
+    WidgetsFlutterBinding.ensureInitialized();
+    packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();
   }
 
@@ -94,7 +97,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           automaticIndicatorColorAdjustment: true,
                           isScrollable: true,
                           labelPadding: const EdgeInsets.symmetric(horizontal: 5),
-                          onTap: (index) {
+                          onTap: (index) async {
+                            await showProgress(context, true);
+
                             if (index == 1) {
                               accountController.continueApi();
                             }
@@ -330,6 +335,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                   // loginController.isLoggedIn.value = true;
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear();
+                  prefs.setBool(AppConst.loginStatus, false);
                   Get.deleteAll();
                   Get.offAll(() => const Splash());
                 },
@@ -350,7 +356,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
             Center(
               child: Text(
                 // 'App version 0.0.1',
-                'App version ${versionController.packageInfo!.version}',
+                'App version ${packageInfo.version}',
                 style: appTheme.textTheme.titleSmall,
                 textAlign: TextAlign.center,
               ),
@@ -362,107 +368,9 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   }
 
   Widget continueWatch() {
-    final appTheme = Theme.of(context);
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Flexible(
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 140,
-            ),
-            itemCount: accountController.continueList.length,
-            itemBuilder: (BuildContext ctx, index) {
-              final continueList = accountController.continueList[index];
-              final lang;
-
-              if (continueList.anime!.type == 'S') {
-                lang = "SUB";
-              } else if (continueList.anime!.type == 'D') {
-                lang = "DUB";
-              } else {
-                lang = "-";
-              }
-
-              return GestureDetector(
-                onTap: () {
-                  Get.offAll(() => Details(
-                      id: continueList.anime!.id.toString(), epId: continueList
-                      .episode!.replaceAll('.0', '').toString()));
-                },
-                child: Container(
-                  height: 280,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                  // decoration: BoxDecoration(color: CustomTheme.grey300),
-                  child: Wrap(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FadeInImage.assetNetwork(
-                            alignment: Alignment.center,
-                            placeholder: "assets/img/blank.png",
-                            image: continueList.anime!.aniImage ??
-                                continueList.anime!.imageHighQuality!,
-                            fit: BoxFit.fill,
-                            height: 230,
-                            imageErrorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                "assets/img/blank.png",
-                                fit: BoxFit.contain,
-                              );
-                            },
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 5, top: 10),
-                            padding: const EdgeInsets.symmetric(horizontal: 7),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: (lang == "SUB")
-                                  ? appTheme.indicatorColor
-                                  : appTheme.colorScheme.error,
-                            ),
-                            child: Text(
-                              lang,
-                              style: appTheme.textTheme.labelSmall,
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              continueList.anime!.name ?? "",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: appTheme.textTheme.titleMedium,
-                            ),
-                            subtitle: Text(
-                              "Watching Ep  :   ${continueList.episode}",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: appTheme.textTheme.titleSmall,
-                            ),
-                            dense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                            visualDensity: const VisualDensity(vertical: -4),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-      ],
+    return SimilarList(
+      pg: 'continue',
+      similarData: accountController.continueList,
     );
   }
 

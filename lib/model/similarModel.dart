@@ -9,6 +9,7 @@ class SimilarModel {
   String? status;
   String? episodes;
   String? airedYear;
+  String? episode;
 
   SimilarModel({
     this.id,
@@ -20,6 +21,7 @@ class SimilarModel {
     this.animeWatchType,
     this.status,
     this.episodes,
+    this.episode,
     this.airedYear,
   });
 }

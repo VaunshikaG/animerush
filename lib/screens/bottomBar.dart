@@ -13,6 +13,8 @@ import 'search.dart';
 import 'watchList.dart';
 import 'account.dart';
 
+VersionController versionController = Get.put(VersionController());
+
 class BottomBar extends StatefulWidget {
   final int currentIndex;
   final bool checkVersion;
@@ -25,7 +27,6 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  VersionController versionController = Get.put(VersionController());
 
   final _tabs = [
     const Home(),
@@ -33,14 +34,14 @@ class _BottomBarState extends State<BottomBar> {
     const WatchList(pg: ''),
     const Account()
   ];
-  RxInt _selectedTab = 0.obs;
+  int _selectedTab = 0;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     log(runtimeType.toString());
     log(widget.checkVersion.toString());
-    _selectedTab.value = widget.currentIndex;
+    _selectedTab = widget.currentIndex;
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       if (widget.checkVersion == true) {
         Future.delayed(const Duration(seconds: 1), () =>
@@ -81,7 +82,7 @@ class _BottomBarState extends State<BottomBar> {
         ),
         drawerEdgeDragWidth: 50,
         endDrawer: const HomeDrawer(),
-        body: SafeArea(child: _tabs[_selectedTab.value]),
+        body: SafeArea(child: _tabs[_selectedTab]),
         bottomNavigationBar: Container(
           color: appTheme.scaffoldBackgroundColor,
           padding: const EdgeInsets.all(8),
@@ -114,10 +115,10 @@ class _BottomBarState extends State<BottomBar> {
                 text: 'Account',
               ),
             ],
-            selectedIndex: _selectedTab.value,
+            selectedIndex: _selectedTab,
             onTabChange: (index) {
               setState(() {
-                _selectedTab.value = index;
+                _selectedTab = index;
               });
             },
           ),

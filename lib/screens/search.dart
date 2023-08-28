@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:animerush/widgets/animeAnimation.dart';
 import 'package:animerush/widgets/customSnackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
+import '../utils/appConst.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
@@ -20,9 +23,10 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
+Search_Controller searchController = Get.put(Search_Controller());
+ScrollController scrollController = ScrollController();
+
 class _SearchState extends State<Search> {
-  Search_Controller searchController = Get.put(Search_Controller());
-  ScrollController scrollController = ScrollController();
 
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
@@ -85,6 +89,19 @@ class _SearchState extends State<Search> {
     genreNames = genreData
         .map((map) => GenreTitle(map['title'], map['icon'], map['value']))
         .toList();
+
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      searchController.searchApiCall(
+          pgName: "searchField",
+          searchModel: SearchModel(
+            val: 'anime',
+            searchKeywords: '',
+            genres: '',
+            pageId: '1',
+            sort: '',
+          ),
+          ctx: context);
+    });
     super.initState();
   }
 
@@ -103,8 +120,7 @@ class _SearchState extends State<Search> {
           controller: scrollController,
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context)
-              .viewPadding.bottom),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
           children: [
             (searchController.showLogin.value == true)
                 ? const SizedBox()
@@ -206,6 +222,79 @@ class _SearchState extends State<Search> {
                       SimilarList(
                         pg: 'search',
                         similarData: searchController.animeList,
+                      ),
+                      ListTile(
+                        leading: (searchController.previousPg =='1')
+                        ? const SizedBox.shrink() : ElevatedButton.icon(
+                          onPressed: () {
+                            searchController.searchApiCall(
+                                pgName: "pagination",
+                                searchModel: SearchModel(
+                                  val: searchController.value1,
+                                  genres: searchController.value2,
+                                  searchKeywords: searchController.searchText.text,
+                                  pageId: searchController.previousPg.toString(),
+                                  sort: '',
+                                ),
+                                ctx: context);
+                          },
+                          label: Text(
+                            searchController.previousPg.toString(),
+                            style: appTheme.textTheme.titleSmall,
+                          ),
+                          icon: Icon(
+                            Icons.fast_rewind_outlined,
+                            size: 18,
+                            color: appTheme.iconTheme.color,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide.none,
+                            backgroundColor: appTheme.hintColor,
+                          ),
+                        ),
+                        title: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide.none,
+                            backgroundColor: appTheme.scaffoldBackgroundColor,
+                          ),
+                          child: Text(
+                            searchController.currentPg.toString(),
+                            style: appTheme.textTheme.titleSmall,
+                          ),
+                        ),
+                        trailing: (searchController.maxPg == searchController.currentPg)
+                            ? const SizedBox.shrink() : ElevatedButton.icon(
+                          onPressed: () {
+                            searchController.searchApiCall(
+                                pgName: "pagination",
+                                searchModel: SearchModel(
+                                  val: searchController.value1,
+                                  genres: searchController.value2,
+                                  searchKeywords: searchController.searchText.text,
+                                  pageId: searchController.nextPg.toString(),
+                                  sort: '',
+                                ),
+                                ctx: context);
+                          },
+                          label: Text(
+                            searchController.nextPg.toString(),
+                            style: appTheme.textTheme.titleSmall,
+                          ),
+                          icon: Icon(
+                            Icons.fast_forward_outlined,
+                            size: 18,
+                            color: appTheme.iconTheme.color,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            side: BorderSide.none,
+                            backgroundColor: appTheme.hintColor,
+                          ),
+                        ),
+                        dense: true,
                       ),
                     ],
                   ),

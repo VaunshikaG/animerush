@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
+import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/customSnackbar.dart';
@@ -24,8 +25,7 @@ class WatchList extends StatefulWidget {
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList>
-    with SingleTickerProviderStateMixin {
+class _WatchListState extends State<WatchList> {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -38,7 +38,6 @@ class _WatchListState extends State<WatchList>
     log(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData('00');
-      _controller = TabController(length: 6, vsync: this);
     });
     super.initState();
   }

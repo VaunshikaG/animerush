@@ -1,5 +1,6 @@
 import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/splash.dart';
+import 'package:animerush/utils/appRoutes.dart';
 import 'package:animerush/utils/appTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       home: const Splash(),
       // home: const BottomBar(currentIndex: 2, checkVersion: false),
+      // getPages: AppRoutes.pages,
     );
   }
 }

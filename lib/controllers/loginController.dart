@@ -54,7 +54,7 @@ class LoginController extends GetxController {
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
             isLogin.value = false;
             isUserLoggedIn.value = true;
-            Get.to(() => const BottomBar(currentIndex: 3, checkVersion: false));
+            Get.to(() => const BottomBar(currentIndex: 0, checkVersion: false));
             CustomSnackBar("Login Successful");
             // userNameController.clear();
             // emailController.clear();

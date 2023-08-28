@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:animerush/screens/account.dart';
+import 'package:animerush/screens/search.dart';
+import 'package:animerush/screens/watchList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +21,7 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  Search_Controller searchController = Get.put(Search_Controller());
+  // Search_Controller searchController = Get.put(Search_Controller());
 
   List<String> menu = [
     "Anime",
@@ -163,42 +166,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
     {"title": "Racing", "value": "racing"},
   ];
 
-  List<String> categoryTitle = [
-    "Movies",
-    "TV Series",
-    "OVAs",
-    "ONAs",
-    "Specials",
-    "Completed",
-    "Ongoing",
-    "Subbed",
-    "Dubbed",
-  ];
-  List<String> genreTitle = [
-    "Comedy",
-    "Harem",
-    "Romance",
-    "School",
-    "Seinen",
-    "Action",
-    "Fantasy",
-    "Shoujo",
-    "Parody",
-    "Shounen",
-    "Super Power",
-    "Slice Of Life",
-    "Kids",
-    "Mecha",
-    "Police",
-    "Psychological",
-    "Sci-Fi",
-    "Sports",
-    "Drama",
-    "Mystery",
-    "Supernatural",
-    "Vampire",
-  ];
-
   List<String> categoryFilter = [];
 
   @override
@@ -218,166 +185,251 @@ class _HomeDrawerState extends State<HomeDrawer> {
           return false;
         },
         child: Container(
-          alignment: Alignment.topLeft,
-          height: MediaQuery.of(context).size.height / 1,
+          alignment: Alignment.topRight,
+          height: MediaQuery.of(context).size.height,
           width: 250,
           child: Drawer(
             shape: const Border.symmetric(vertical: BorderSide()),
             // backgroundColor: appTheme.colorScheme.surface,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 15, top: 10),
-                    width: 120,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: appTheme.colorScheme.error,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
-                      ),
-                      child: FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              CupertinoIcons.chevron_left,
-                              size: 16,
-                              color: appTheme.iconTheme.color,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              "Close menu",
-                              style: appTheme.textTheme.bodySmall,
-                            ),
-                          ],
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 15, top: 10),
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: appTheme.colorScheme.error,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 10),
+                        ),
+                        child: FittedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(
+                                CupertinoIcons.chevron_left,
+                                size: 16,
+                                color: appTheme.iconTheme.color,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "Close menu",
+                                style: appTheme.textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 70,
-                    width: 250,
-                    color: appTheme.disabledColor,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: ListView.builder(
-                      itemCount: menu.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      physics: const ClampingScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return CupertinoButton(
-                          onPressed: () {
-                            setState(() {
-                              if (index == 0) {
-                                searchController.searchApiCall(
-                                    pgName: "drawer",
-                                    searchModel: SearchModel(
-                                      val: 'anime',
-                                      genres: '',
-                                      pageId: '',
-                                      sort: '',
-                                      searchKeywords: '',
-                                    ),
-                                    ctx: context);
-                              } else if (index == 1) {
-                                searchController.searchApiCall(
-                                    pgName: "drawer",
-                                    searchModel: SearchModel(
-                                      val: 'popular',
-                                      genres: '',
-                                      pageId: '',
-                                      sort: '',
-                                      searchKeywords: '',
-                                    ),
-                                    ctx: context);
-                              } else if (index == 2) {
-                                var rng = Random();
-                                int min = 1;
-                                int max = 13000;
-                                int randomNumber = min + rng.nextInt(max - min);
-                                Get.offAll(
-                                    () => Details(id: randomNumber.toString()));
-                              }
-                            });
-                          },
-                          color: appTheme.colorScheme.surface,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 17),
-                          disabledColor: appTheme.disabledColor,
-                          pressedOpacity: 0.6,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5)),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  menuIcon[index],
-                                  color: appTheme.iconTheme.color,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  menu[index],
-                                  style: appTheme.textTheme.titleSmall,
-                                ),
-                              ],
+                    /*Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: appTheme.scaffoldBackgroundColor,
+                        child: Image.asset(
+                          "assets/img/profile.png",
+                          alignment: Alignment.center,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text(
+                        'Account',
+                        style: appTheme.textTheme.titleSmall,
+                      ),
+                      onTap: () {
+                        Get.off(() => const Account());
+                      },
+                      dense: true,
+                      tileColor: appTheme.hintColor,
+                      style: ListTileStyle.drawer,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    const SizedBox(height: 10),
+                    ListTile(
+                      title: Text(
+                        'Search',
+                        style: appTheme.textTheme.titleSmall,
+                      ),
+                      onTap: () {
+                        Get.off(() => const Search());
+                      },
+                      dense: true,
+                      tileColor: appTheme.hintColor,
+                      style: ListTileStyle.drawer,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    const SizedBox(height: 10),
+                    ListTile(
+                      title: Text(
+                        'Watchlist',
+                        style: appTheme.textTheme.titleSmall,
+                      ),
+                      onTap: () {
+                        Get.off(() => const WatchList(pg: ''));
+                      },
+                      dense: true,
+                      tileColor: appTheme.hintColor,
+                      style: ListTileStyle.drawer,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),*/
+                    const SizedBox(height: 15),
+                    FittedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CupertinoButton(
+                            onPressed: () {
+                              searchController.searchApiCall(
+                                  pgName: "drawer",
+                                  searchModel: SearchModel(
+                                    val: 'anime',
+                                    genres: '',
+                                    pageId: '',
+                                    sort: '',
+                                    searchKeywords: '',
+                                  ),
+                                  ctx: context);
+                            },
+                            color: appTheme.hintColor,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 17),
+                            disabledColor: appTheme.disabledColor,
+                            pressedOpacity: 0.6,
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.square_grid_2x2_fill,
+                                    color: appTheme.iconTheme.color,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Anime',
+                                    style: appTheme.textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      },
+                          const SizedBox(width: 10),
+                          CupertinoButton(
+                            onPressed: () {
+                              searchController.searchApiCall(
+                                  pgName: "drawer",
+                                  searchModel: SearchModel(
+                                    val: 'popular',
+                                    genres: '',
+                                    pageId: '',
+                                    sort: '',
+                                    searchKeywords: '',
+                                  ),
+                                  ctx: context);
+                              },
+                            color: appTheme.hintColor,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 17),
+                            disabledColor: appTheme.disabledColor,
+                            pressedOpacity: 0.6,
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.star_fill,
+                                    color: appTheme.iconTheme.color,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Popular',
+                                    style: appTheme.textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          CupertinoButton(
+                            onPressed: () {
+                              var rng = Random();
+                              int min = 1;
+                              int max = 13000;
+                              int randomNumber = min + rng.nextInt(max - min);
+                              Get.offAll(
+                                      () => Details(id: randomNumber.toString()));
+                              },
+                            color: appTheme.hintColor,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 17),
+                            disabledColor: appTheme.disabledColor,
+                            pressedOpacity: 0.6,
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.shuffle,
+                                    color: appTheme.iconTheme.color,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Random',
+                                    style: appTheme.textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  /*ListView.builder(
-                    itemCount: title.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const ClampingScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return OutlinedButton(
-                        onPressed: () {},
-                        style: AppTheme.outlinedBtn1,
-                        child: Text(
-                          title[index],
+                    /*Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      child: ExpansionTile(
+                        title: Text(
+                          'Anime types',
                           style: appTheme.textTheme.titleSmall,
                         ),
-                      );
-                    },
-                  ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    gridDelegate:
-                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 6 / 2,
-                      crossAxisSpacing: 0,
-                      mainAxisSpacing: 0,
+                        collapsedIconColor: appTheme.colorScheme.background,
+                        iconColor: appTheme.colorScheme.background,
+                        children: [
+                          categoryChips(),
+                        ],
+                      ),
                     ),
-                    itemCount: genre.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext ctx, index) {
-                      return OutlinedButton(
-                        onPressed: () {},
-                        style: AppTheme.outlinedBtn1,
-                        child: Text(
-                          genre[index],
-                          softWrap: true,
-                          style: TextStyle(
-                            fontSize: 14.5,
-                            color: ColorList[index % ColorList.length],
-                          ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: ExpansionTile(
+                        title: Text(
+                          'Genre types',
+                          style: appTheme.textTheme.titleSmall,
                         ),
-                      );
-                    },
-                  ),*/
-                  categoryChips(),
-                  genreChips(),
-                ],
+                        collapsedIconColor: appTheme.colorScheme.background,
+                        iconColor: appTheme.colorScheme.background,
+                        children: [
+                          genreChips(),
+                        ],
+                      ),
+                    ),*/
+                    categoryChips(),
+                    genreChips(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -394,6 +446,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: categoryData.length,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           final item = categoryData[index];
           return Container(
@@ -427,6 +480,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         searchKeywords: '',
                       ),
                       ctx: context);
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const BottomBar(currentIndex: 1, checkVersion: false)));
                 });
               },
               backgroundColor: appTheme.colorScheme.surface,
@@ -450,9 +504,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
       height: MediaQuery.of(context).size.height,
       child: GridView.builder(
         shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 6 / 2,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 6 / 2.3,
         ),
         scrollDirection: Axis.vertical,
         itemCount: genreData.length,
@@ -460,7 +514,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         itemBuilder: (BuildContext context, int index) {
           final item = genreData[index];
           return Container(
-            margin: const EdgeInsets.only(left: 10),
+            margin: const EdgeInsets.only(left: 5),
             alignment: Alignment.centerLeft,
             child: FilterChip(
               label: Text(item['title']),

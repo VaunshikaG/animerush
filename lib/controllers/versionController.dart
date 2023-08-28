@@ -15,7 +15,8 @@ import '../utils/appConst.dart';
 class VersionController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
 
-  PackageInfo? packageInfo;
+  PackageInfo packageInfo =
+      PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
   Future<void> appVersionApiCall(BuildContext context) async {
     WidgetsFlutterBinding.ensureInitialized();

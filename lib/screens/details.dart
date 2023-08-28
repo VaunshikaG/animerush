@@ -131,14 +131,11 @@ class _DetailsState extends State<Details> {
                           Obx(() => Visibility(
                                 visible: detailsController.hasData.value,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 15),
-                                  margin: const EdgeInsets.only(bottom: 150),
-                                  child: Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    // mainAxisAlignment: MainAxisAlignment.start,
-                                    // crossAxisAlignment: CrossAxisAlignment.start,
+                                  padding: const EdgeInsets.symmetric(vertical: 15),
+                                  // margin: const EdgeInsets.only(bottom: 150),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       //  title
                                       ListTile(
@@ -165,11 +162,9 @@ class _DetailsState extends State<Details> {
                                             visible: detailsController
                                                 .showNextEp.value,
                                             child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 10),
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              margin: const EdgeInsets.only
+                                                (bottom: 10,left: 10, right:10),
                                               child: ListTile(
                                                 leading: Image.asset(
                                                   "assets/img/rocket.png",
@@ -208,25 +203,28 @@ class _DetailsState extends State<Details> {
                                           )),
 
                                       //  desc
-                                      RichTextView(
-                                        text: detailsController.desc ?? '-',
-                                        maxLines: 4,
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: appTheme.textTheme.titleSmall,
-                                        truncate: true,
-                                        viewLessText: 'less',
-                                        linkStyle: TextStyle(
-                                          fontSize: 13,
-                                          color: CustomTheme.blue,
-                                          fontFamily: AppConst.FONT,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: RichTextView(
+                                          text: detailsController.desc ?? '-',
+                                          maxLines: 4,
+                                          softWrap: true,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: appTheme.textTheme.titleSmall,
+                                          truncate: true,
+                                          viewLessText: 'less',
+                                          linkStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: CustomTheme.blue,
+                                            fontFamily: AppConst.FONT,
+                                          ),
+                                          supportedTypes: const [],
                                         ),
-                                        supportedTypes: const [],
                                       ),
 
                                       //  btns
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 10),
+                                        padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -388,8 +386,7 @@ class _DetailsState extends State<Details> {
 
                                       // similar list
                                       Container(
-                                        margin: const EdgeInsets.only(
-                                            left: 15, bottom: 10),
+                                        margin: const EdgeInsets.only(left: 15, bottom: 10),
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           "Similar Anime",
@@ -401,8 +398,6 @@ class _DetailsState extends State<Details> {
                                         similarData:
                                             detailsController.similarData,
                                       ),
-
-                                      const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
@@ -411,13 +406,6 @@ class _DetailsState extends State<Details> {
                                 visible: detailsController.noData.value,
                                 child: noData("Oops, failed to load data!"),
                               )),
-                          // Obx(() => Visibility(
-                          //   visible: detailsController.showLogin.value,
-                          //   child: CustomAppBar4(
-                          //     title: '',
-                          //     backBtn: () => Get.off(() => const BottomBar(currentIndex: 0, checkVersion: false)),
-                          //   ),
-                          // )),
                           Obx(() => Visibility(
                                 visible: detailsController.showLogin.value,
                                 child: Center(

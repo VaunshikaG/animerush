@@ -58,6 +58,7 @@ class ApiProviders {
       )
           .then((http.Response response) {
         final int statusCode = response.statusCode;
+        print(statusCode);
         statusExp(statusCode);
         return response.body;
       });
