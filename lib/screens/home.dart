@@ -81,115 +81,77 @@ class _HomeState extends State<Home> {
                                       homeController
                                           .spotlightData[index].aniImage
                                           .toString();
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.zero,
-                                    decoration: BoxDecoration(
-                                      color: appTheme.splashColor,
-                                      image: DecorationImage(
-                                        image: NetworkImage(img),
-                                        fit: BoxFit.cover,
-                                        onError: (error, stackTrace) =>
-                                            Image.asset(
-                                          "assets/img/icon1.png",
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.off(() => Details(
+                                          id: homeController
+                                              .spotlightData[
+                                          index]
+                                              .id
+                                              .toString()));
+                                    },
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 10),
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.zero,
                                       decoration: BoxDecoration(
-                                        color: appTheme.splashColor
-                                            .withOpacity(0.5),
-                                        gradient: RadialGradient(
-                                          radius: 0.8,
-                                          center: const Alignment(0.7, 0),
-                                          colors: [
-                                            CustomTheme.transparent,
-                                            CustomTheme.transparent,
-                                            CustomTheme.transparent,
-                                            CustomTheme.black12,
-                                            // CustomTheme.black38,
-                                            CustomTheme.black54,
-                                            CustomTheme.black87,
-                                          ],
+                                        color: appTheme.splashColor,
+                                        image: DecorationImage(
+                                          image: NetworkImage(img),
+                                          fit: BoxFit.cover,
+                                          onError: (error, stackTrace) =>
+                                              Image.asset(
+                                            "assets/img/icon1.png",
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                bottom: 10),
-                                            child: Text(
-                                              "#${index + 1} Spotlight",
-                                              style: appTheme
-                                                  .textTheme.titleSmall,
-                                            ),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15, horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: appTheme.splashColor
+                                              .withOpacity(0.5),
+                                          gradient: RadialGradient(
+                                            radius: 0.8,
+                                            center: const Alignment(0.7, 0),
+                                            colors: [
+                                              CustomTheme.transparent,
+                                              CustomTheme.transparent,
+                                              CustomTheme.transparent,
+                                              CustomTheme.black12,
+                                              // CustomTheme.black38,
+                                              CustomTheme.black54,
+                                              CustomTheme.black87,
+                                            ],
                                           ),
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                bottom: 20),
-                                            child: Text(
-                                              homeController
-                                                  .spotlightData[index].name!,
-                                              style: appTheme
-                                                  .textTheme.titleMedium,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            child: CupertinoButton(
-                                              onPressed: () {
-                                                Get.off(() => Details(
-                                                    id: homeController
-                                                        .spotlightData[
-                                                    index]
-                                                        .id
-                                                        .toString()));
-                                              },
-                                              color:
-                                              appTheme.disabledColor,
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                  vertical: 0,
-                                                  horizontal: 10),
-                                              disabledColor:
-                                              appTheme.splashColor,
-                                              pressedOpacity: 0.6,
-                                              borderRadius:
-                                              const BorderRadius.all(
-                                                  Radius.circular(5)),
-                                              child: SizedBox(
-                                                width: 65,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      CupertinoIcons
-                                                          .info_circle_fill,
-                                                      size: 15,
-                                                      color: appTheme
-                                                          .iconTheme
-                                                          .color,
-                                                    ),
-                                                    const SizedBox(
-                                                        width: 5),
-                                                    Text(
-                                                      "Details",
-                                                      style: appTheme
-                                                          .textTheme
-                                                          .titleSmall,
-                                                    ),
-                                                  ],
-                                                ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              child: Text(
+                                                "#${index + 1} Spotlight",
+                                                style: appTheme
+                                                    .textTheme.titleSmall,
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 20),
+                                              child: Text(
+                                                homeController
+                                                    .spotlightData[index].name!,
+                                                style: appTheme
+                                                    .textTheme.titleMedium,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
