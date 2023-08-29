@@ -547,7 +547,7 @@ class _SearchState extends State<Search> {
           labelStyle: appTheme.textTheme.titleSmall,
           selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) async {
-            await showProgress(context, true);
+            await showProgress(context, false);
             setState(() {
               if (selected) {
                 searchController.genreType = item.title;

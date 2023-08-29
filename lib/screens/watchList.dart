@@ -43,7 +43,7 @@ class _WatchListState extends State<WatchList> {
   }
 
   Future<void> loadData(String value) async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
     });

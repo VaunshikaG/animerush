@@ -83,7 +83,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     epController.hasData.value = false;
     epController.noData.value = false;
     Future.delayed(const Duration(seconds: 0), () {
@@ -468,7 +468,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
             itemBuilder: (context, index) {
               return ActionChip(
                 onPressed: () async {
-                  await showProgress(context, true);
+                  await showProgress(context, false);
                   selectedIndex = index;
                   print(chunkList[index].id.toString());
                   epController.betterPlayerController.dispose();

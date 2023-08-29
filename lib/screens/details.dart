@@ -68,7 +68,7 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     // Future.delayed(const Duration(seconds: 1), () {
       detailsController.detailsApiCall(animeId: widget.id);
     // });
