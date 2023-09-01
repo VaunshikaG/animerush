@@ -52,7 +52,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, false);
+    await showProgress(context, true);
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();
@@ -98,7 +98,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                           isScrollable: true,
                           labelPadding: const EdgeInsets.symmetric(horizontal: 5),
                           onTap: (index) async {
-                            await showProgress(context, false);
+                            await showProgress(context, true);
 
                             if (index == 1) {
                               accountController.continueApi();
@@ -314,7 +314,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                                 FocusScope.of(context).unfocus();
                               }
                               _formKey6.currentState!.save();
-                              await showProgress(context, false);
+                              await showProgress(context, true);
                               accountController.profilePasswordApi();
                             }
                           },

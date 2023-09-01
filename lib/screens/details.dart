@@ -68,7 +68,7 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, false);
+    await showProgress(context, true);
     // Future.delayed(const Duration(seconds: 1), () {
       detailsController.detailsApiCall(animeId: widget.id);
     // });
@@ -82,6 +82,7 @@ class _DetailsState extends State<Details> {
 
     return WillPopScope(
       onWillPop: () async {
+        // Get.back();
         Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
         return true;
       },
@@ -105,7 +106,8 @@ class _DetailsState extends State<Details> {
                             title: detailsController.name ?? "-",
                             img: detailsController.img.value,
                             backBtn: () {
-                              Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
+                              Get.back();
+                              // Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
                             },
                             wishlist: () {
                               Get.off(() => WatchList(
@@ -120,6 +122,7 @@ class _DetailsState extends State<Details> {
                               child: CustomAppBar4(
                                 title: '',
                                 backBtn: () {
+                                  // Get.back();
                                   Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
                                 },
                               ),
@@ -158,7 +161,7 @@ class _DetailsState extends State<Details> {
                                             const EdgeInsets.only(left: 5),
                                       ),
 
-                                      Obx(() => Visibility(
+                                      /*Obx(() => Visibility(
                                             visible: detailsController
                                                 .showNextEp.value,
                                             child: Container(
@@ -200,7 +203,7 @@ class _DetailsState extends State<Details> {
                                                 dense: true,
                                               ),
                                             ),
-                                          )),
+                                          )),*/
 
                                       //  desc
                                       Padding(

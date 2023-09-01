@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, false);
+    await showProgress(context, true);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
   }

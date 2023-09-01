@@ -26,6 +26,7 @@ class DetailsData {
   int? id;
   String? name;
   String? japaneseName;
+  String? synonyms;
   String? englishName;
   String? thumbnail;
   String? image;
@@ -41,6 +42,7 @@ class DetailsData {
   String? ratingAge;
   String? duration;
   String? description;
+  String? descriptionClear;
   String? airedYear;
   String? premiered;
   int? views;
@@ -55,6 +57,7 @@ class DetailsData {
       {this.id,
       this.name,
       this.japaneseName,
+      this.synonyms,
       this.englishName,
       this.thumbnail,
       this.image,
@@ -70,6 +73,7 @@ class DetailsData {
       this.ratingAge,
       this.duration,
       this.description,
+      this.descriptionClear,
       this.airedYear,
       this.premiered,
       this.views,
@@ -84,6 +88,7 @@ class DetailsData {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
+    synonyms = json['synonyms'];
     englishName = json['english_name'];
     thumbnail = json['thumbnail'];
     image = json['image'];
@@ -99,6 +104,7 @@ class DetailsData {
     ratingAge = json['rating_age'];
     duration = json['duration'];
     description = json['description'];
+    descriptionClear = json['description_clear'];
     airedYear = json['aired_year'];
     premiered = json['premiered'];
     views = json['views'];
@@ -142,6 +148,7 @@ class DetailsData {
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
+    data['synonyms'] = this.synonyms;
     data['english_name'] = this.englishName;
     data['thumbnail'] = this.thumbnail;
     data['image'] = this.image;
@@ -157,6 +164,7 @@ class DetailsData {
     data['rating_age'] = this.ratingAge;
     data['duration'] = this.duration;
     data['description'] = this.description;
+    data['description_clear'] = this.descriptionClear;
     data['aired_year'] = this.airedYear;
     data['premiered'] = this.premiered;
     data['views'] = this.views;

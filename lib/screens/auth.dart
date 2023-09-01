@@ -149,7 +149,7 @@ class _AuthState extends State<Auth> {
                                       FocusScope.of(context).unfocus();
                                     }
                                     _formKey1.currentState!.save();
-                                    await showProgress(context, false);
+                                    await showProgress(context, true);
                                     loginController.loginApi();
                                   }
                                 },
@@ -258,7 +258,7 @@ class _AuthState extends State<Auth> {
                                         .hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
                                       _formKey3.currentState!.save();
-                                      await showProgress(context, false);
+                                      await showProgress(context, true);
                                       loginController.forgotPasswordApi();
                                     }
                                   }
@@ -345,7 +345,7 @@ class _AuthState extends State<Auth> {
                                         .hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
                                       _formKey4.currentState!.save();
-                                      await showProgress(context, false);
+                                      await showProgress(context, true);
                                       loginController.otpApi();
                                     }
                                   }
@@ -440,7 +440,7 @@ class _AuthState extends State<Auth> {
                                         .hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
                                       _formKey5.currentState!.save();
-                                      await showProgress(context, false);
+                                      await showProgress(context, true);
                                       loginController.changePasswordApi();
                                     }
                                   }
@@ -607,7 +607,7 @@ class _AuthState extends State<Auth> {
                                         .hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
                                       _formKey1.currentState!.save();
-                                      await showProgress(context, false);
+                                      await showProgress(context, true);
                                       loginController.signUpApi();
                                     }
                                   }

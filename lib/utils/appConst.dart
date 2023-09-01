@@ -29,6 +29,8 @@ class AppConst {
   static const String otp = "otp";
   static const String apiStatus = "api_status";
   static const String dateJoined = "date_joined";
+  static const String homeApi = "home_api";
+  static const String profileApi = "profile_api";
 
   static const int duration = 1800;
 

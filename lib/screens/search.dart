@@ -90,18 +90,18 @@ class _SearchState extends State<Search> {
         .map((map) => GenreTitle(map['title'], map['icon'], map['value']))
         .toList();
 
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      searchController.searchApiCall(
-          pgName: "searchField",
-          searchModel: SearchModel(
-            val: 'anime',
-            searchKeywords: '',
-            genres: '',
-            pageId: '1',
-            sort: '',
-          ),
-          ctx: context);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+    //     searchController.searchApiCall(
+    //         pgName: "",
+    //         searchModel: SearchModel(
+    //           val: 'anime',
+    //           searchKeywords: '',
+    //           genres: '',
+    //           pageId: '1',
+    //           sort: '',
+    //         ),
+    //         ctx: context);
+    // });
     super.initState();
   }
 
@@ -224,7 +224,7 @@ class _SearchState extends State<Search> {
                         similarData: searchController.animeList,
                       ),
                       ListTile(
-                        leading: (searchController.previousPg =='1')
+                        leading: (searchController.previousPg.contains('1'))
                         ? const SizedBox.shrink() : ElevatedButton.icon(
                           onPressed: () {
                             searchController.searchApiCall(
@@ -342,12 +342,12 @@ class _SearchState extends State<Search> {
                     if (searchController.categoryType == item['title']) {
                       searchController.value1 = item['value'];
                     }
-                    searchController.isSelected.value = true;
                   } else {
                     searchController.categoryType = "";
                     searchController.value1 = "";
                   }
                   if (searchController.value1.isNotEmpty) {
+                    searchController.isSelected.value = true;
                     searchController.searchApiCall(
                         pgName: "chips",
                         searchModel: SearchModel(
@@ -418,14 +418,13 @@ class _SearchState extends State<Search> {
               selected: searchController.genreType.contains(item['title']),
               onSelected: (bool selected) {
                 setState(() {
-                  if (searchController.isSelected.value == true) {
-                    if (selected) {
-                      searchController.genreType = item['title'];
-                      if (searchController.genreType == item['title']) {
-                        searchController.value2 = item['value'];
-                      }
-                      if (searchController.value2.isNotEmpty) {
-
+                  if (selected) {
+                    searchController.genreType = item['title'];
+                    if (searchController.genreType == item['title']) {
+                      searchController.value2 = item['value'];
+                    }
+                    if (searchController.value2.isNotEmpty) {
+                      if (searchController.isSelected.value == true) {
                         searchController.searchApiCall(
                             pgName: "chips",
                             searchModel: SearchModel(
@@ -436,14 +435,24 @@ class _SearchState extends State<Search> {
                               searchKeywords: searchController.searchText.text,
                             ),
                             ctx: context);
+                      } else {
+                        searchController.searchApiCall(
+                            pgName: "chips",
+                            searchModel: SearchModel(
+                              val: 'anime',
+                              genres: searchController.value2,
+                              pageId: '1',
+                              sort: '',
+                              searchKeywords: searchController.searchText.text,
+                            ),
+                            ctx: context);
                       }
-                    } else {
-                      searchController.genreType = "";
-                      searchController.value2 = "";
                     }
                   } else {
-                    CustomSnackBar('Select anime type');
+                    searchController.genreType = "";
+                    searchController.value2 = "";
                   }
+
                 });
               },
               backgroundColor: appTheme.disabledColor,
@@ -547,7 +556,7 @@ class _SearchState extends State<Search> {
           labelStyle: appTheme.textTheme.titleSmall,
           selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) async {
-            await showProgress(context, false);
+            await showProgress(context, true);
             setState(() {
               if (selected) {
                 searchController.genreType = item.title;

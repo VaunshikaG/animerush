@@ -105,7 +105,7 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
           animation: controller,
           child: GestureDetector(
             onTap: () {
-              Get.offAll(() => Details(id: similarList.id.toString()));
+              Get.off(() => Details(id: similarList.id.toString()));
             },
             onHorizontalDragEnd: (DragEndDetails) {
               setState(() {

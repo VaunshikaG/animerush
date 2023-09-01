@@ -41,8 +41,8 @@ class _BottomBarState extends State<BottomBar> {
   void initState() {
     log(runtimeType.toString());
     log(widget.checkVersion.toString());
-    _selectedTab = widget.currentIndex;
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      _selectedTab = widget.currentIndex;
       if (widget.checkVersion == true) {
         Future.delayed(const Duration(seconds: 1), () =>
         versionController.appVersionApiCall(context));

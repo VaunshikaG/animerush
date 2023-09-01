@@ -43,7 +43,7 @@ class _WatchListState extends State<WatchList> {
   }
 
   Future<void> loadData(String value) async {
-    await showProgress(context, false);
+    await showProgress(context, true);
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
     });
@@ -198,8 +198,8 @@ class _WatchListState extends State<WatchList> {
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.82,
             child: TabBarView(
-              controller: _controller,
               physics: const NeverScrollableScrollPhysics(),
+              controller: _controller,
               children: [
                 wishList(),
                 wishList(),

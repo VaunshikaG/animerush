@@ -25,6 +25,7 @@ class VersionPodo {
 class Data {
   String? name;
   String? domain;
+  String? apkUrl;
   String? version;
   bool? showLogin;
   String? webCode;
@@ -42,6 +43,7 @@ class Data {
   Data(
       {this.name,
         this.domain,
+        this.apkUrl,
         this.version,
         this.showLogin,
         this.webCode,
@@ -59,6 +61,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     domain = json['domain'];
+    apkUrl = json['apk_url'];
     version = json['version'];
     showLogin = json['show_login'];
     webCode = json['web_code'];
@@ -78,6 +81,7 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['domain'] = this.domain;
+    data['apk_url'] = this.apkUrl;
     data['version'] = this.version;
     data['show_login'] = this.showLogin;
     data['web_code'] = this.webCode;

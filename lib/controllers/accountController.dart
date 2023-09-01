@@ -10,6 +10,7 @@ import '../model/profilePodo.dart';
 import '../model/rqModels.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
+import '../utils/localStorge.dart';
 import '../widgets/customSnackbar.dart';
 import '../widgets/loader.dart';
 
@@ -54,31 +55,66 @@ class AccountController extends GetxController {
   Future<void> profileApi() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      _apiProviders.ProfileApi().then((value) async {
-        if (value.isNotEmpty) {
-          var responseBody = json.decode(value);
-          if (responseBody['st'] == 100) {
-            ProfilePodo profilePodo = ProfilePodo.fromJson(responseBody);
-            email = profilePodo.data!.email.toString();
-            userName = profilePodo.data!.realUsername.toString();
-            dateJoined = profilePodo.data!.created ?? DateTime.now().toString();
-            DateTime? dateTime = DateTime.parse(dateJoined);
-            dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
+      DateTime lastApiCall =
+          DateTime.parse(prefs.getString(AppConst.profileApi) ?? '1970-01-01');
+      DateTime now = DateTime.now();
+      if (now.isAfter(DateTime(now.year, now.month, now.day, 12, 0, 0)) &&
+          lastApiCall.day != now.day) {
+        _apiProviders.ProfileApi().then((value) async {
+          /*if (value.isNotEmpty) {
+            var responseBody = json.decode(value);
+            if (responseBody['st'] == 100) {
+              ProfilePodo profilePodo = ProfilePodo.fromJson(responseBody);
+              email = profilePodo.data!.email.toString();
+              userName = profilePodo.data!.realUsername.toString();
+              dateJoined =
+                  profilePodo.data!.created ?? DateTime.now().toString();
+              DateTime? dateTime = DateTime.parse(dateJoined);
+              dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
 
-            noData.value = false;
-            hasData.value = true;
-            hideProgress();
-          } else if (responseBody['detail'] == "Signature has expired.") {
-            prefs.setBool(AppConst.loginStatus, false);
-            await prefs.clear();
-            hasData.value = false;
-            noData.value = false;
-            showLogin.value = true;
-          }
-        } else {
-          CustomSnackBar('error');
+              noData.value = false;
+              hasData.value = true;
+              hideProgress();
+            } else if (responseBody['detail'] == "Signature has expired.") {
+              prefs.setBool(AppConst.loginStatus, false);
+              await prefs.clear();
+              hasData.value = false;
+              noData.value = false;
+              showLogin.value = true;
+            }
+          } else {
+            CustomSnackBar('error');
+          }*/
+        });
+        await prefs.setString(AppConst.profileApi, now.toString());
+      }
+
+
+      // Retrieve JSON data
+      var retrievedProfileData = await ProfileStorage().getProfile();
+      if (retrievedProfileData.toString().isNotEmpty) {
+        var responseBody = json.decode(retrievedProfileData.toString());
+        if (responseBody["st"] == 100) {
+          ProfilePodo profilePodo = ProfilePodo.fromJson(responseBody);
+          email = profilePodo.data!.email.toString();
+          userName = profilePodo.data!.realUsername.toString();
+          dateJoined =
+              profilePodo.data!.created ?? DateTime.now().toString();
+          DateTime? dateTime = DateTime.parse(dateJoined);
+          dateJoined = DateFormat('dd MMM yyyy').format(dateTime);
+
+          noData.value = false;
+          hasData.value = true;
+          hideProgress();
+        } else if (responseBody['detail'] == "Signature has expired.") {
+          prefs.setBool(AppConst.loginStatus, false);
+          await prefs.clear();
+          hasData.value = false;
+          noData.value = false;
+          showLogin.value = true;
         }
-      });
+      }
+
     } catch (e) {
       hideProgress();
       rethrow;

@@ -56,9 +56,9 @@ class DetailsController extends GetxController {
             name = detailsPodo.data!.name ?? "-";
             img.value = detailsPodo.data!.aniImage ??
                 detailsPodo.data!.imageHighQuality!;
-            desc = detailsPodo.data!.description ?? "-";
+            desc = detailsPodo.data!.descriptionClear ?? "-";
             year = detailsPodo.data!.airedYear ?? "-";
-            otherName = detailsPodo.data!.japaneseName ?? "-";
+            otherName = detailsPodo.data!.synonyms ?? "-";
             ep = detailsPodo.data!.episodesTillNow ?? "-";
             duration = detailsPodo.data!.duration ?? "-";
             views = detailsPodo.data!.views.toString();
@@ -133,7 +133,7 @@ class DetailsController extends GetxController {
               lang = "-";
             }
 
-            details.add(otherName!);
+            details.add(detailsPodo.data!.synonyms.toString());
             details.add(lang!);
             details.add("$duration min");
             details.add(ep!);

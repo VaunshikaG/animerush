@@ -48,14 +48,6 @@ class Search_Controller extends GetxController {
     await showProgress(ctx, true);
     final prefs = await SharedPreferences.getInstance();
 
-    if (searchModel.val!.isEmpty) {
-      searchModel.val = 'anime';
-    } else if (searchModel.genres!.isEmpty) {
-      searchModel.genres = '';
-    } else if (searchModel.searchKeywords!.isEmpty) {
-      searchModel.searchKeywords = '';
-    } else
-    print(searchModel.toJson());
     _apiProviders.SearchApi(model: searchModel).then((value) {
       try {
         if (value.isNotEmpty) {
@@ -106,7 +98,7 @@ class Search_Controller extends GetxController {
               "Invalid Authorization header. No credentials provided.") {
             Get.back();
             // scaffoldKey.currentState!.closeDrawer();
-            Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
+            // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
             print('here');
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;

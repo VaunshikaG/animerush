@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
 import '../utils/theme.dart';
+import '../widgets/customSnackbar.dart';
 import 'bottomBar.dart';
 import 'details.dart';
 
@@ -480,6 +481,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         searchKeywords: '',
                       ),
                       ctx: context);
+                  searchController.isSelected.value = true;
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const BottomBar(currentIndex: 1, checkVersion: false)));
                 });
               },
@@ -526,28 +528,42 @@ class _HomeDrawerState extends State<HomeDrawer> {
               selected: searchController.genreType.contains(item['title']),
               onSelected: (bool selected) {
                 // setState(() {
-                  if (selected) {
-                    searchController.genreType = item['title'];
-                    if (searchController.genreType == item['title']) {
-                      searchController.value2 = item['value'];
-                    }
-                  } else {
-                    searchController.genreType = "";
-                    searchController.value2 = "";
+                if (selected) {
+                  searchController.genreType = item['title'];
+                  if (searchController.genreType == item['title']) {
+                    searchController.value2 = item['value'];
                   }
                   if (searchController.value2.isNotEmpty) {
-                    searchController.searchApiCall(
-                        pgName: "drawer",
-                        searchModel: SearchModel(
-                          val: searchController.value1,
-                          genres: searchController.value2,
-                          pageId: '1',
-                          sort: '',
-                          searchKeywords: '',
-                        ),
-                        ctx: context);
+                    if (searchController.isSelected.value == true) {
+                      searchController.searchApiCall(
+                          pgName: "chips",
+                          searchModel: SearchModel(
+                            val: searchController.value1,
+                            genres: searchController.value2,
+                            pageId: '1',
+                            sort: '',
+                            searchKeywords: searchController.searchText.text,
+                          ),
+                          ctx: context);
+                    } else {
+                      searchController.searchApiCall(
+                          pgName: "chips",
+                          searchModel: SearchModel(
+                            val: 'anime',
+                            genres: searchController.value2,
+                            pageId: '1',
+                            sort: '',
+                            searchKeywords: searchController.searchText.text,
+                          ),
+                          ctx: context);
+                    }
                   }
+                } else {
+                  searchController.genreType = "";
+                  searchController.value2 = "";
+                }
                 // });
+
               },
               backgroundColor: appTheme.colorScheme.surface,
               disabledColor: appTheme.colorScheme.surface,

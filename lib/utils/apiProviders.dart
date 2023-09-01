@@ -10,6 +10,7 @@ import '../model/rqModels.dart';
 import '../widgets/customSnackbar.dart';
 import 'appConst.dart';
 import '../widgets/loader.dart';
+import 'localStorge.dart';
 
 class ApiProviders {
   // var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTMzMTI4NDUsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.16Ljn74yBJHLJYjD61AcV1jLIoyh8BZq9-2zU8Z1igo";
@@ -180,14 +181,14 @@ class ApiProviders {
     Map<String, String> jsonMap = {'key': AppConst.KEY};
 
     try {
-      return http
-          .post(
+      return http.post(
         myUri,
         body: jsonMap,
-      )
-          .then((http.Response response) {
+      ).then((http.Response response) async {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
+        // Store JSON data
+        await HomeStorage().storeHomeData(response.body);
         return response.body;
       });
     } catch (e) {
@@ -386,9 +387,12 @@ class ApiProviders {
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) {
+      ).then((http.Response response) async {
         final int statusCode = response.statusCode;
+        print(statusCode);
         statusExp(statusCode);
+        // Store JSON data
+        await ProfileStorage().storeProfile(response.body);
         return response.body;
       });
     } catch (e) {
