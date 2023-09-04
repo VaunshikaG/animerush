@@ -35,11 +35,11 @@ class ProfileData {
 
   ProfileData(
       {this.id,
-        this.username,
-        this.realUsername,
-        this.email,
-        this.emailVerifiedStatus,
-        this.created});
+      this.username,
+      this.realUsername,
+      this.email,
+      this.emailVerifiedStatus,
+      this.created});
 
   ProfileData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

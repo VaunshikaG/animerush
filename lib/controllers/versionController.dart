@@ -31,14 +31,17 @@ class VersionController extends GetxController {
           if (responseBody['st'] == 100) {
             VersionPodo versionPodo = VersionPodo.fromJson(responseBody);
             hideProgress();
-            if (versionPodo.data!.version!.isNotEmpty && versionPodo.data!.version != packageInfo!.version) {
+            if (versionPodo.data!.version!.isNotEmpty &&
+                versionPodo.data!.version != packageInfo.version) {
               Get.defaultDialog(
                 title: "New Update Available",
-                middleText: "A newer version of app available please update it now.",
+                middleText:
+                    "A newer version of app available please update it now.",
                 titleStyle: appTheme.textTheme.bodyLarge,
                 middleTextStyle: appTheme.textTheme.labelSmall,
                 confirm: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 150, maxHeight: 40),
+                  constraints:
+                      const BoxConstraints(maxWidth: 150, maxHeight: 40),
                   child: elevatedButton(
                     text: 'Update Now',
                     onPressed: () {
@@ -60,7 +63,6 @@ class VersionController extends GetxController {
         }
       });
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
@@ -71,5 +73,4 @@ class VersionController extends GetxController {
       throw 'Could not launch $strUrl';
     }
   }
-
 }

@@ -60,7 +60,6 @@ class _DetailsState extends State<Details> {
   @override
   void initState() {
     log(runtimeType.toString());
-    print(widget.id.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
@@ -68,9 +67,9 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     // Future.delayed(const Duration(seconds: 1), () {
-      detailsController.detailsApiCall(animeId: widget.id);
+    detailsController.detailsApiCall(animeId: widget.id);
     // });
   }
 
@@ -106,8 +105,9 @@ class _DetailsState extends State<Details> {
                             title: detailsController.name ?? "-",
                             img: detailsController.img.value,
                             backBtn: () {
-                              Get.back();
-                              // Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
+                              // Get.back();
+                              Get.offAll(() => const BottomBar(
+                                  currentIndex: 0, checkVersion: false));
                             },
                             wishlist: () {
                               Get.off(() => WatchList(
@@ -122,8 +122,9 @@ class _DetailsState extends State<Details> {
                               child: CustomAppBar4(
                                 title: '',
                                 backBtn: () {
-                                  // Get.back();
-                                  Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
+                                  Get.back();
+                                  Get.offAll(() => const BottomBar(
+                                      currentIndex: 0, checkVersion: false));
                                 },
                               ),
                             ),
@@ -134,11 +135,13 @@ class _DetailsState extends State<Details> {
                           Obx(() => Visibility(
                                 visible: detailsController.hasData.value,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 15),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
                                   // margin: const EdgeInsets.only(bottom: 150),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       //  title
                                       ListTile(
@@ -207,7 +210,8 @@ class _DetailsState extends State<Details> {
 
                                       //  desc
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
                                         child: RichTextView(
                                           text: detailsController.desc ?? '-',
                                           maxLines: 4,
@@ -227,7 +231,8 @@ class _DetailsState extends State<Details> {
 
                                       //  btns
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 5, 0, 0),
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -254,21 +259,25 @@ class _DetailsState extends State<Details> {
                                               ),
                                               onPressed: () {
                                                 // setState(() {
-                                                  if (widget.epId != "") {
-                                                    Get.off(() => Episode(
-                                                      pg: 'details',
-                                                      epDetails: detailsController.epDetails,
-                                                      aId: widget.id,
-                                                      epId: widget.epId,
-                                                    ));
-                                                  } else {
-                                                    Get.off(() => Episode(
-                                                      pg: 'details',
-                                                      epDetails: detailsController.epDetails,
-                                                      aId: widget.id,
-                                                      epId: '',
-                                                    ));
-                                                  }
+                                                if (widget.epId != "") {
+                                                  Get.off(() => Episode(
+                                                        pg: 'details',
+                                                        epDetails:
+                                                            detailsController
+                                                                .epDetails,
+                                                        aId: widget.id,
+                                                        epId: widget.epId,
+                                                      ));
+                                                } else {
+                                                  Get.off(() => Episode(
+                                                        pg: 'details',
+                                                        epDetails:
+                                                            detailsController
+                                                                .epDetails,
+                                                        aId: widget.id,
+                                                        epId: '',
+                                                      ));
+                                                }
                                                 // });
                                               },
                                               backgroundColor:
@@ -389,7 +398,8 @@ class _DetailsState extends State<Details> {
 
                                       // similar list
                                       Container(
-                                        margin: const EdgeInsets.only(left: 15, bottom: 10),
+                                        margin: const EdgeInsets.only(
+                                            left: 15, bottom: 10),
                                         alignment: Alignment.centerLeft,
                                         child: Text(
                                           "Similar Anime",
@@ -415,7 +425,8 @@ class _DetailsState extends State<Details> {
                                   heightFactor: 13,
                                   child: elevatedButton(
                                     text: "Login →",
-                                    onPressed: () => Get.offAll(() => const Auth()),
+                                    onPressed: () =>
+                                        Get.offAll(() => const Auth()),
                                   ),
                                 ),
                               )),

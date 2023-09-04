@@ -46,14 +46,14 @@ class LoginController extends GetxController {
       _apiProviders.loginApi(model: loginModel).then((value) {
         if (value.isNotEmpty) {
           var responseBody = json.decode(value);
-          hideProgress();
           if (responseBody['st'] == 100) {
-            prefs.setBool(AppConst.loginStatus, true);
             showPg.value = false;
-            LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
-            prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
+            prefs.setBool(AppConst.loginStatus, true);
             isLogin.value = false;
             isUserLoggedIn.value = true;
+            LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
+            prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
+            hideProgress();
             Get.to(() => const BottomBar(currentIndex: 0, checkVersion: false));
             CustomSnackBar("Login Successful");
             // userNameController.clear();
@@ -204,5 +204,4 @@ class LoginController extends GetxController {
       rethrow;
     }
   }
-
 }

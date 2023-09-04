@@ -27,7 +27,6 @@ Search_Controller searchController = Get.put(Search_Controller());
 ScrollController scrollController = ScrollController();
 
 class _SearchState extends State<Search> {
-
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
     {'title': 'TV Series', 'value': 'tv'},
@@ -120,7 +119,8 @@ class _SearchState extends State<Search> {
           controller: scrollController,
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom),
           children: [
             (searchController.showLogin.value == true)
                 ? const SizedBox()
@@ -208,96 +208,159 @@ class _SearchState extends State<Search> {
                 )),
             Obx(() => Visibility(
                   visible: searchController.hasData.value,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          searchController.displayName,
-                          style: appTheme.textTheme.bodyLarge,
-                        ),
-                      ),
-                      SimilarList(
-                        pg: 'search',
-                        similarData: searchController.animeList,
-                      ),
-                      ListTile(
-                        leading: (searchController.previousPg.contains('1'))
-                        ? const SizedBox.shrink() : ElevatedButton.icon(
-                          onPressed: () {
-                            searchController.searchApiCall(
-                                pgName: "pagination",
-                                searchModel: SearchModel(
-                                  val: searchController.value1,
-                                  genres: searchController.value2,
-                                  searchKeywords: searchController.searchText.text,
-                                  pageId: searchController.previousPg.toString(),
-                                  sort: '',
+                  child: searchController.animeList.isNotEmpty
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                searchController.displayName,
+                                style: appTheme.textTheme.bodyLarge,
+                              ),
+                            ),
+                            SimilarList(
+                              pg: 'search',
+                              similarData: searchController.animeList,
+                            ),
+                            ListTile(
+                              leading: (searchController.previousPg ==
+                                      searchController.currentPg)
+                                  ? const SizedBox.shrink()
+                                  : ElevatedButton.icon(
+                                      onPressed: () {
+                                        if (searchController
+                                            .value2.isNotEmpty) {
+                                          if (searchController
+                                                  .isSelected.value ==
+                                              true) {
+                                            searchController.searchApiCall(
+                                                pgName: "pagination",
+                                                searchModel: SearchModel(
+                                                  val: searchController.value1,
+                                                  genres:
+                                                      searchController.value2,
+                                                  searchKeywords:
+                                                      searchController
+                                                          .searchText.text,
+                                                  pageId: searchController
+                                                      .previousPg
+                                                      .toString(),
+                                                  sort: '',
+                                                ),
+                                                ctx: context);
+                                          } else {
+                                            searchController.searchApiCall(
+                                                pgName: "pagination",
+                                                searchModel: SearchModel(
+                                                  val: 'anime',
+                                                  genres:
+                                                      searchController.value2,
+                                                  searchKeywords:
+                                                      searchController
+                                                          .searchText.text,
+                                                  pageId: searchController
+                                                      .nextPg
+                                                      .toString(),
+                                                  sort: '',
+                                                ),
+                                                ctx: context);
+                                          }
+                                        }
+                                      },
+                                      label: Text(
+                                        searchController.previousPg.toString(),
+                                        style: appTheme.textTheme.titleSmall,
+                                      ),
+                                      icon: Icon(
+                                        Icons.fast_rewind_outlined,
+                                        size: 18,
+                                        color: appTheme.iconTheme.color,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        side: BorderSide.none,
+                                        backgroundColor: appTheme.hintColor,
+                                      ),
+                                    ),
+                              title: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  side: BorderSide.none,
+                                  backgroundColor:
+                                      appTheme.scaffoldBackgroundColor,
                                 ),
-                                ctx: context);
-                          },
-                          label: Text(
-                            searchController.previousPg.toString(),
-                            style: appTheme.textTheme.titleSmall,
-                          ),
-                          icon: Icon(
-                            Icons.fast_rewind_outlined,
-                            size: 18,
-                            color: appTheme.iconTheme.color,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            side: BorderSide.none,
-                            backgroundColor: appTheme.hintColor,
-                          ),
-                        ),
-                        title: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            side: BorderSide.none,
-                            backgroundColor: appTheme.scaffoldBackgroundColor,
-                          ),
-                          child: Text(
-                            searchController.currentPg.toString(),
-                            style: appTheme.textTheme.titleSmall,
-                          ),
-                        ),
-                        trailing: (searchController.maxPg == searchController.currentPg)
-                            ? const SizedBox.shrink() : ElevatedButton.icon(
-                          onPressed: () {
-                            searchController.searchApiCall(
-                                pgName: "pagination",
-                                searchModel: SearchModel(
-                                  val: searchController.value1,
-                                  genres: searchController.value2,
-                                  searchKeywords: searchController.searchText.text,
-                                  pageId: searchController.nextPg.toString(),
-                                  sort: '',
+                                child: Text(
+                                  searchController.currentPg.toString(),
+                                  style: appTheme.textTheme.titleSmall,
                                 ),
-                                ctx: context);
-                          },
-                          label: Text(
-                            searchController.nextPg.toString(),
-                            style: appTheme.textTheme.titleSmall,
-                          ),
-                          icon: Icon(
-                            Icons.fast_forward_outlined,
-                            size: 18,
-                            color: appTheme.iconTheme.color,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            side: BorderSide.none,
-                            backgroundColor: appTheme.hintColor,
-                          ),
-                        ),
-                        dense: true,
-                      ),
-                    ],
-                  ),
+                              ),
+                              trailing: (searchController.maxPg ==
+                                      searchController.currentPg)
+                                  ? const SizedBox.shrink()
+                                  : ElevatedButton.icon(
+                                      onPressed: () {
+                                        if (searchController
+                                            .value2.isNotEmpty) {
+                                          if (searchController
+                                                  .isSelected.value ==
+                                              true) {
+                                            searchController.searchApiCall(
+                                                pgName: "pagination",
+                                                searchModel: SearchModel(
+                                                  val: searchController.value1,
+                                                  genres:
+                                                      searchController.value2,
+                                                  searchKeywords:
+                                                      searchController
+                                                          .searchText.text,
+                                                  pageId: searchController
+                                                      .nextPg
+                                                      .toString(),
+                                                  sort: '',
+                                                ),
+                                                ctx: context);
+                                          } else {
+                                            searchController.searchApiCall(
+                                                pgName: "pagination",
+                                                searchModel: SearchModel(
+                                                  val: 'anime',
+                                                  genres:
+                                                      searchController.value2,
+                                                  searchKeywords:
+                                                      searchController
+                                                          .searchText.text,
+                                                  pageId: searchController
+                                                      .nextPg
+                                                      .toString(),
+                                                  sort: '',
+                                                ),
+                                                ctx: context);
+                                          }
+                                        }
+                                      },
+                                      label: Text(
+                                        searchController.nextPg.toString(),
+                                        style: appTheme.textTheme.titleSmall,
+                                      ),
+                                      icon: Icon(
+                                        Icons.fast_forward_outlined,
+                                        size: 18,
+                                        color: appTheme.iconTheme.color,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        side: BorderSide.none,
+                                        backgroundColor: appTheme.hintColor,
+                                      ),
+                                    ),
+                              dense: true,
+                            ),
+                          ],
+                        )
+                      : noData("Oops, no data found!"),
                 )),
             Obx(() => Visibility(
                   visible: searchController.noData.value,
@@ -452,7 +515,6 @@ class _SearchState extends State<Search> {
                     searchController.genreType = "";
                     searchController.value2 = "";
                   }
-
                 });
               },
               backgroundColor: appTheme.disabledColor,
@@ -556,7 +618,7 @@ class _SearchState extends State<Search> {
           labelStyle: appTheme.textTheme.titleSmall,
           selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) async {
-            await showProgress(context, true);
+            await showProgress(context, false);
             setState(() {
               if (selected) {
                 searchController.genreType = item.title;

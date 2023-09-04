@@ -53,11 +53,11 @@ class EpisodeController extends GetxController {
             EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
             epData = epDetailPodo.data!;
             dwldList = epDetailPodo.data!.downloadEpisodeLink;
-            log(epDetailPodo.data!.downloadEpisodeLink!.length.toString());
             vdUrl = epDetailPodo.data!.episodeLink!.file;
             betterPlayerController = BetterPlayerController(
               betterPlayerDataSource: BetterPlayerDataSource(
-                bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+                bufferingConfiguration:
+                    const BetterPlayerBufferingConfiguration(
                   minBufferMs: 60000,
                   maxBufferMs: 555000,
                 ),
@@ -72,14 +72,15 @@ class EpisodeController extends GetxController {
                 videoFormat: BetterPlayerVideoFormat.hls,
                 headers: {
                   'User-Agent':
-                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+                      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
                 },
                 resolutions: Map.fromEntries(
                   epDetailPodo.data!.downloadEpisodeLink!.map(
-                        (link) => MapEntry(link.quality!, link.link!),
+                    (link) => MapEntry(link.quality!, link.link!),
                   ),
                 ),
-                notificationConfiguration: BetterPlayerNotificationConfiguration(
+                notificationConfiguration:
+                    BetterPlayerNotificationConfiguration(
                   showNotification: true,
                   title: epDetailPodo.data!.episodeTitle.toString(),
                   author: "animerush.in",
@@ -95,7 +96,9 @@ class EpisodeController extends GetxController {
                 autoDispose: true,
                 fullScreenByDefault: false,
                 fullScreenAspectRatio: 16 / 9,
-                deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+                deviceOrientationsAfterFullScreen: [
+                  DeviceOrientation.portraitUp
+                ],
                 aspectRatio: 16 / 9,
                 fit: BoxFit.contain,
                 looping: false,
@@ -125,7 +128,7 @@ class EpisodeController extends GetxController {
                     BetterPlayerOverflowMenuItem(
                       Icons.picture_in_picture,
                       "Picture in Picture",
-                          () => betterPlayerController
+                      () => betterPlayerController
                           .enablePictureInPicture(betterPlayerKey),
                     ),
                   ],
@@ -160,5 +163,4 @@ class EpisodeController extends GetxController {
       }
     });
   }
-
 }

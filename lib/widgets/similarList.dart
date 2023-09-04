@@ -20,7 +20,8 @@ class SimilarList extends StatefulWidget {
   State<SimilarList> createState() => _SimilarListState();
 }
 
-class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin {
+class _SimilarListState extends State<SimilarList>
+    with TickerProviderStateMixin {
   late final AnimationController controller;
   WatchListController watchListController = Get.put(WatchListController());
 
@@ -55,7 +56,6 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
         final lang, type, status;
 
         if (widget.pg == 'continue') {
-
           if (similarList.anime.type == 'S') {
             lang = "SUB";
           } else if (similarList.anime.type == 'D') {
@@ -66,9 +66,7 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
 
           type = '';
           status = '';
-
         } else {
-
           if (similarList.type == 'S') {
             lang = "SUB";
           } else if (similarList.type == 'D') {
@@ -98,24 +96,23 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
           } else {
             status = "-";
           }
-
         }
 
         return AnimatedBuilder(
           animation: controller,
           child: GestureDetector(
             onTap: () {
-              Get.off(() => Details(id: similarList.id.toString()));
+              Get.offAll(() => Details(id: similarList.id.toString()));
             },
-            onHorizontalDragEnd: (DragEndDetails) {
-              setState(() {
-                if (widget.pg == 'detail') {
+            onHorizontalDragEnd: (DragEndDetails dragEndDetails) {
+              // setState(() {
+                if (widget.pg == 'detail' || widget.pg == 'watch') {
                   watchListController.addToListApi(
                     animeId: similarList.id.toString(),
                     type: 'False00',
                   );
                 }
-              });
+              // });
             },
             child: Hero(
               tag: similarList.id.toString(),
@@ -210,9 +207,13 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
           builder: (BuildContext context, Widget? child) {
             return Transform(
               transform: Matrix4.translationValues(
-                0, 10 * (1.0 - animeAnimation(controller, index, widget
-                  .similarData
-                  .length).value), 0,
+                0,
+                10 *
+                    (1.0 -
+                        animeAnimation(
+                                controller, index, widget.similarData.length)
+                            .value),
+                0,
               ),
               child: child,
             );
@@ -296,14 +297,15 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
                 },
                 child: Container(
                   height: 250,
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   child: Wrap(
                     children: [
                       FadeInImage.assetNetwork(
                         alignment: Alignment.center,
                         placeholder: "assets/img/blank.png",
-                        image:
-                            similarList.aniImage ?? similarList.imageHighQuality!,
+                        image: similarList.aniImage ??
+                            similarList.imageHighQuality!,
                         fit: BoxFit.fill,
                         height: 230,
                         imageErrorBuilder: (context, error, stackTrace) {
@@ -361,7 +363,8 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
                             style: appTheme.textTheme.titleSmall,
                           ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 5),
                       ),
                     ],
                   ),

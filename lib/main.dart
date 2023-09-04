@@ -1,6 +1,4 @@
-import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/splash.dart';
-import 'package:animerush/utils/appRoutes.dart';
 import 'package:animerush/utils/appTheme.dart';
 import 'package:animerush/widgets/customButtons.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-
 
 class DownloadClass {
   static void callback(String id, DownloadTaskStatus status, int progress) {
@@ -24,11 +21,11 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     // DeviceOrientation.portraitDown,
   ]);
-  await FlutterDownloader.initialize(
-    debug: true,
-    ignoreSsl: true,
-  );
-  runApp(MyApp());
+  // await FlutterDownloader.initialize(
+  //   debug: true,
+  //   ignoreSsl: true,
+  // );
+  runApp(const MyApp());
 }
 
 /*
@@ -63,8 +60,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    super.initState();
     initPlatformState();
+    super.initState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -81,7 +78,8 @@ class _MyAppState extends State<MyApp> {
       if (jailBroken) {
         Get.defaultDialog(
           title: "Device Security Warning",
-          middleText: "This app cannot be used on a jailbroken or rooted device.",
+          middleText:
+              "This app cannot be used on a jailbroken or rooted device.",
           titleStyle: appTheme.textTheme.bodyLarge,
           middleTextStyle: appTheme.textTheme.labelSmall,
           cancel: textButton(text: 'Ok', onPressed: () {}),
@@ -118,7 +116,6 @@ class _MyAppState extends State<MyApp> {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
       home: const Splash(),
-      // home: const BottomBar(currentIndex: 2, checkVersion: false),
       // getPages: AppRoutes.pages,
     );
   }

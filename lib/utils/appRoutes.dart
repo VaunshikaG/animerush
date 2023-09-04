@@ -53,7 +53,7 @@ class AppRoutes {
     ),
     GetPage(
       name: Routes.episodeScreen,
-      page: () => const Episode(epDetails: [],pg: '',epId: '',aId: ''),
+      page: () => const Episode(epDetails: [], pg: '', epId: '', aId: ''),
     ),
     GetPage(
       name: Routes.splashScreen,

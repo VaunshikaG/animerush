@@ -74,6 +74,7 @@ class ContinueAnime {
   int? id;
   String? name;
   String? japaneseName;
+  String? synonyms;
   String? englishName;
   String? thumbnail;
   String? image;
@@ -89,6 +90,7 @@ class ContinueAnime {
   String? ratingAge;
   String? duration;
   String? description;
+  String? descriptionClear;
   String? airedYear;
   String? premiered;
   int? views;
@@ -101,6 +103,7 @@ class ContinueAnime {
       {this.id,
       this.name,
       this.japaneseName,
+        this.synonyms,
       this.englishName,
       this.thumbnail,
       this.image,
@@ -115,6 +118,7 @@ class ContinueAnime {
       this.episodesTillNow,
       this.ratingAge,
       this.duration,
+        this.descriptionClear,
       this.description,
       this.airedYear,
       this.premiered,
@@ -128,6 +132,7 @@ class ContinueAnime {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
+    synonyms = json['synonyms'];
     englishName = json['english_name'];
     thumbnail = json['thumbnail'];
     image = json['image'];
@@ -143,6 +148,7 @@ class ContinueAnime {
     ratingAge = json['rating_age'];
     duration = json['duration'];
     description = json['description'];
+    descriptionClear = json['description_clear'];
     airedYear = json['aired_year'];
     premiered = json['premiered'];
     views = json['views'];

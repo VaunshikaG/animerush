@@ -37,13 +37,12 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   TabController? _controller;
   bool showPassword = true;
   PackageInfo packageInfo =
-  PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
+      PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
   @override
   void initState() {
     _controller = TabController(length: 2, vsync: this);
     log(runtimeType.toString());
-    log(versionController.packageInfo.version.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
@@ -52,7 +51,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();
@@ -63,8 +62,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     List<DownloadTask> allTasks = (await FlutterDownloader.loadTasks())!;
     setState(() {
       if (allTasks.isNotEmpty) {
-        downloadedTasks = allTasks.where((task) =>
-        task.status == DownloadTaskStatus.complete || task.status == DownloadTaskStatus.running).toList();
+        downloadedTasks = allTasks
+            .where((task) =>
+                task.status == DownloadTaskStatus.complete ||
+                task.status == DownloadTaskStatus.running)
+            .toList();
         // downloadedTasks = (await FlutterDownloader.loadTasks())!;
         log('dwldList : ${downloadedTasks.length.toString()}');
       }
@@ -85,105 +87,112 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
           child: Column(
             children: [
               Obx(() => Visibility(
-                visible: accountController.hasData.value,
-                child: DefaultTabController(
-                  length: 2,
-                  child: Wrap(
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5, left: 5),
-                        child: TabBar(
-                          controller: _controller,
-                          automaticIndicatorColorAdjustment: true,
-                          isScrollable: true,
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 5),
-                          onTap: (index) async {
-                            await showProgress(context, true);
+                    visible: accountController.hasData.value,
+                    child: DefaultTabController(
+                      length: 2,
+                      child: Wrap(
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 5, bottom: 5, right: 5, left: 5),
+                            child: TabBar(
+                              controller: _controller,
+                              automaticIndicatorColorAdjustment: true,
+                              isScrollable: true,
+                              labelPadding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              onTap: (index) async {
+                                await showProgress(context, false);
 
-                            if (index == 1) {
-                              accountController.continueApi();
-                            }
-                            // else if (index == 2) {
-                            //   loadDownloadedTasks();
-                            // }
-                          },
-                          tabs: [
-                            Tab(
-                              height: 35,
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: const Center(
-                                  child: Text("Profile"),
+                                if (index == 1) {
+                                  accountController.continueApi();
+                                }
+                                // else if (index == 2) {
+                                //   loadDownloadedTasks();
+                                // }
+                              },
+                              tabs: [
+                                Tab(
+                                  height: 35,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: const Center(
+                                      child: Text("Profile"),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Tab(
-                              height: 35,
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: const Center(
-                                  child: Text("Continue Watching"),
+                                Tab(
+                                  height: 35,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: const Center(
+                                      child: Text("Continue Watching"),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            // Tab(
-                            //   height: 35,
-                            //   child: Container(
-                            //     alignment: Alignment.center,
-                            //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                            //     child: const Center(
-                            //       child: Text("Downloads"),
-                            //     ),
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.82,
-                        child: TabBarView(
-                          controller: _controller,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: [
-                            profile(),
-                            ListView(
-                              shrinkWrap: true,
-                              children: [
-                                Obx(() => Visibility(
-                                  visible: accountController.hasData.value,
-                                  child: continueWatch(),
-                                )),
-                                Obx(() => Visibility(
-                                  visible: accountController.noData.value,
-                                  child: noData("Oops, failed to load data!"),
-                                )),
+                                // Tab(
+                                //   height: 35,
+                                //   child: Container(
+                                //     alignment: Alignment.center,
+                                //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                                //     child: const Center(
+                                //       child: Text("Downloads"),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
-                            // downloads(),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height * 0.82,
+                            child: TabBarView(
+                              controller: _controller,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: [
+                                profile(),
+                                ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    Obx(() => Visibility(
+                                          visible:
+                                              accountController.hasCData.value,
+                                          child: continueWatch(),
+                                        )),
+                                    Obx(() => Visibility(
+                                          visible:
+                                              accountController.noData.value,
+                                          child: noData(
+                                              "Oops, failed to load data!"),
+                                        )),
+                                  ],
+                                ),
+                                // downloads(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              )),
+                    ),
+                  )),
               Obx(() => Visibility(
-                visible: accountController.noData.value,
-                child: noData("Oops, failed to load data!"),
-              )),
+                    visible: accountController.noData.value,
+                    child: noData("Oops, failed to load data!"),
+                  )),
               Obx(() => Visibility(
-                visible: accountController.showLogin.value,
-                child: Center(
-                  heightFactor: 13,
-                  child: elevatedButton(
-                    text: "Login →",
-                    onPressed: () => Get.offAll(() => const Auth()),
-                  ),
-                ),
-              )),
+                    visible: accountController.showLogin.value,
+                    child: Center(
+                      heightFactor: 13,
+                      child: elevatedButton(
+                        text: "Login →",
+                        onPressed: () => Get.offAll(() => const Auth()),
+                      ),
+                    ),
+                  )),
             ],
           ),
         ),
@@ -214,9 +223,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               ),
             ),
             customTile(text1: 'EMAIL ADDRESS', text2: accountController.email),
-            customTile(text1: 'EMAIL USERNAME', text2: accountController.userName),
-            customTile(text1: 'DATE JOINED', text2: accountController
-                .dateJoined),
+            customTile(
+                text1: 'EMAIL USERNAME', text2: accountController.userName),
+            customTile(
+                text1: 'DATE JOINED', text2: accountController.dateJoined),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: ExpansionTile(
@@ -314,7 +324,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                                 FocusScope.of(context).unfocus();
                               }
                               _formKey6.currentState!.save();
-                              await showProgress(context, true);
+                              await showProgress(context, false);
                               accountController.profilePasswordApi();
                             }
                           },
@@ -332,12 +342,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
               constraints: const BoxConstraints(maxWidth: 120),
               child: ListTile(
                 onTap: () async {
-                  // loginController.isLoggedIn.value = true;
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear();
-                  prefs.setBool(AppConst.loginStatus, false);
                   Get.deleteAll();
                   Get.offAll(() => const Splash());
+                  prefs.setBool(AppConst.loginStatus, false);
                 },
                 leading: Icon(
                   Icons.logout,
@@ -417,11 +426,14 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                       maxLines: 2,
                     ),
                     subtitle: (task.status == DownloadTaskStatus.running)
-                        ? Obx(() => LinearProgressIndicator(value:
-                    downloadedTasks[index].progress / 100))
-                        : (task.status == DownloadTaskStatus.failed) ? Text('Failed',
-                      style: appTheme.textTheme.titleSmall,
-                    ) : const SizedBox(),
+                        ? Obx(() => LinearProgressIndicator(
+                            value: downloadedTasks[index].progress / 100))
+                        : (task.status == DownloadTaskStatus.failed)
+                            ? Text(
+                                'Failed',
+                                style: appTheme.textTheme.titleSmall,
+                              )
+                            : const SizedBox(),
                     onTap: () async {
                       await FlutterDownloader.open(taskId: task.taskId);
                     },
@@ -438,6 +450,3 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     );
   }
 }
-
-
-

@@ -56,20 +56,21 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
       startVal = 0,
       length = 0,
       startIdx = 0,
-      selectedIndex = 0, rangeIndex = 0;
-  String  start = '', end = '';
+      selectedIndex = 0,
+      rangeIndex = 0;
+  String start = '', end = '';
   final ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
     log(runtimeType.toString());
-    log(widget.epDetails[0].id.toString());
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
     dwldController.bindBackgroundIsolate();
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {});
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -78,12 +79,13 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
   @pragma('vm:entry-point')
   static void downloadCallback(String id, int status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
     send.send([id, status, progress]);
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     epController.hasData.value = false;
     epController.noData.value = false;
     Future.delayed(const Duration(seconds: 0), () {
@@ -105,23 +107,24 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   void chunks() {
     // checks if the remainder of the division of the length of the "anime" list by 50 is less than 50.
     if ((widget.epDetails.length % 50).floor() < 50) {
-      log('length : ${(widget.epDetails.length % 50).toString()}');
+      // log('length : ${(widget.epDetails.length % 50).toString()}');
       hasRemainingEp = true;
       remainingEp = (widget.epDetails.length % 50).floor();
-      log('remainingEp : ${remainingEp.toString()}');
+      // log('remainingEp : ${remainingEp.toString()}');
     }
-    totalChipCount =
-        (widget.epDetails.length / 50).floor();
-    log('chunks of 50 : $totalChipCount');
+    totalChipCount = (widget.epDetails.length / 50).floor();
+    // log('chunks of 50 : $totalChipCount');
 
     //  size of the remaining chunk; otherwise, it takes 50.
     chunkList = widget.epDetails.sublist(
-        0, (hasRemainingEp == true && widget.epDetails.length < 50)
-        ? remainingEp : 50);
+        0,
+        (hasRemainingEp == true && widget.epDetails.length < 50)
+            ? remainingEp
+            : 50);
 
     //  size of remaining chunk; otherwise, it takes 50.
     finalChipCount = totalChipCount + (hasRemainingEp ? 1 : 0);
-    log('final : $finalChipCount');
+    // log('final : $finalChipCount');
   }
 
   String getEpisodeRange(int index) {
@@ -184,8 +187,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                         },
                                       ),
                                       Obx(() => epController.loading.value
-                                          ? const CircularProgressIndicator()
-                                          : AspectRatio(
+                                              ? const CircularProgressIndicator()
+                                              : AspectRatio(
                                                   aspectRatio: 16 / 9,
                                                   child: BetterPlayer(
                                                     controller: epController
@@ -206,7 +209,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                             "https://animerush.in/media/image/no_poster.jpg",
                                         dwldList: epController.dwldList,
                                       )*/
-                                      ),
+                                          ),
                                       dwld(),
                                       details(),
                                       Padding(
@@ -246,7 +249,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                       heightFactor: 13,
                                       child: elevatedButton(
                                         text: "Login →",
-                                        onPressed: () => Get.offAll(() => const Auth()),
+                                        onPressed: () =>
+                                            Get.offAll(() => const Auth()),
                                       ),
                                     ),
                                   ],
@@ -468,9 +472,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
             itemBuilder: (context, index) {
               return ActionChip(
                 onPressed: () async {
-                  await showProgress(context, true);
+                  await showProgress(context, false);
                   selectedIndex = index;
-                  print(chunkList[index].id.toString());
                   epController.betterPlayerController.dispose();
                   epController.betterPlayerController.clearCache();
                   epController.episodeApiCall(
@@ -510,7 +513,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
       final task = await FlutterDownloader.enqueue(
         headers: {
           'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
         },
         url: url,
         // "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
@@ -561,5 +564,4 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
-
 }

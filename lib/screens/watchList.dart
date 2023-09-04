@@ -43,7 +43,7 @@ class _WatchListState extends State<WatchList> {
   }
 
   Future<void> loadData(String value) async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
     });
@@ -76,34 +76,31 @@ class _WatchListState extends State<WatchList> {
               overscroll.disallowIndicator();
               return false;
             },
-            child: SizedBox(
-              height: (watchListController.showLogin.value == true)
-                  ? double.infinity
-                  : MediaQuery.of(context).size.height,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Obx(() => Visibility(
-                          visible: watchListController.hasData.value,
-                          child: _tabSection(),
-                        )),
-                    Obx(() => Visibility(
-                          visible: watchListController.noData.value,
-                          child: noData("Oops, failed to load data!"),
-                        )),
-                    Obx(() => Visibility(
-                          visible: watchListController.showLogin.value,
-                          child: Center(
-                            heightFactor: 13,
-                            child: elevatedButton(
-                              text: "Login →",
-                              onPressed: () => Get.offAll(() => const Auth()),
-                            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  (widget.pg == 'detail')
+                      ? const SizedBox(height: 10) : const SizedBox.shrink(),
+                  Obx(() => Visibility(
+                        visible: watchListController.hasData.value,
+                        child: _tabSection(),
+                      )),
+                  Obx(() => Visibility(
+                        visible: watchListController.noData.value,
+                        child: noData("Oops, failed to load data!"),
+                      )),
+                  Obx(() => Visibility(
+                        visible: watchListController.showLogin.value,
+                        child: Center(
+                          heightFactor: 13,
+                          child: elevatedButton(
+                            text: "Login →",
+                            onPressed: () => Get.offAll(() => const Auth()),
                           ),
-                        )),
-                  ],
-                ),
+                        ),
+                      )),
+                ],
               ),
             ),
           ),
@@ -194,7 +191,8 @@ class _WatchListState extends State<WatchList> {
               ],
             ),
           ),
-          SizedBox(
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.82,
             child: TabBarView(
@@ -216,14 +214,22 @@ class _WatchListState extends State<WatchList> {
   }
 
   Widget wishList() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: (watchListController.dataLength == 0)
-          ? noData("Oops, no data found!")
-          : SimilarList(
-        pg: 'watch',
-        similarData: watchListController.animeList,
-      ),
-    );
+    return ListView(
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          (watchListController.dataLength == 0)
+              ? noData("Oops, no data found!")
+              : Padding(
+                padding:
+                EdgeInsets.only(bottom: (widget.pg == 'detail') ? 10 :
+                MediaQuery.of(context).size.height / 10),
+                child: SimilarList(
+              pg: 'watch',
+              similarData: watchListController.animeList,
+            ),
+          )
+        ],
+      );
   }
 }

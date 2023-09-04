@@ -26,9 +26,10 @@ class Search_Controller extends GetxController {
       noData = false.obs,
       hasData = false.obs,
       showChips = true.obs,
-      showLogin = false.obs, isListLoading = false.obs,
+      showLogin = false.obs,
+      isListLoading = false.obs,
       isPageLoading = true.obs,
-  isSelected = false.obs;
+      isSelected = false.obs;
   SearchModel? searchModel;
   List<String> searchHistory = [];
   List<AnimeList> animeList = [];
@@ -37,7 +38,10 @@ class Search_Controller extends GetxController {
       genreType = "",
       value1 = "",
       value2 = "",
-      displayName = "", currentPg = '1', nextPg = '1', previousPg = '1',
+      displayName = "",
+      currentPg = '1',
+      nextPg = '1',
+      previousPg = '1',
       maxPg = '';
   TextEditingController searchText = TextEditingController();
 
@@ -55,34 +59,34 @@ class Search_Controller extends GetxController {
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             animeList.clear();
-            if (pgName.contains("drawer")) {
+            if (pgName == "drawer") {
               // Get.back();
               // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
               searchText.text = '';
               showChips.value = false;
-              print('object');
-            } else if (pgName == "chips") {
-              print('chips');
-            } else if (pgName == "searchField") {
-              // showChips.value = false;
             }
             SearchPodo searchPodo = SearchPodo.fromJson(responseBody);
-            hasData.value = true;
-            isPageLoading.value = false;
-            hideProgress();
-            if (searchModel.pageId!.isNotEmpty) {
-              scrollController.jumpTo(0);
+            if (searchPodo.data!.animeList!.isNotEmpty) {
+              hasData.value = true;
+              isPageLoading.value = false;
+              hideProgress();
+              if (searchModel.pageId!.isNotEmpty) {
+                scrollController.jumpTo(0);
+              }
+              animeList = searchPodo.data!.animeList!;
+              displayName = searchPodo.data!.displayContentName!;
+              currentPg = searchPodo.data!.currentPage.toString();
+              nextPg = searchPodo.data!.nextPage.toString();
+              previousPg = searchPodo.data!.previousPage.toString();
+              maxPg = searchPodo.data!.maxPageCounter.toString();
+            } else {
+              animeList.length = 0;
+              hasData.value = true;
+              isPageLoading.value = false;
+              hideProgress();
             }
-            animeList = searchPodo.data!.animeList!;
-
-            displayName = searchPodo.data!.displayContentName!;
-            currentPg = searchPodo.data!.currentPage.toString();
-            nextPg = searchPodo.data!.nextPage.toString();
-            previousPg = searchPodo.data!.previousPage.toString();
-            maxPg = searchPodo.data!.maxPageCounter.toString();
-
           } else if (responseBody['st'] == 101) {
-            animeList = [];
+            animeList.length = 0;
             showLogin.value = false;
             noData.value = false;
             hasData.value = true;
@@ -99,7 +103,6 @@ class Search_Controller extends GetxController {
             Get.back();
             // scaffoldKey.currentState!.closeDrawer();
             // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
-            print('here');
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;
             noData.value = false;

@@ -1,6 +1,7 @@
 import 'package:animerush/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 //  details pg
 Widget CustomAppBar({
@@ -34,6 +35,7 @@ Widget CustomAppBar({
           ),
         ),
         onPressed: () {
+          // Get.back();
           backBtn();
         },
       ),

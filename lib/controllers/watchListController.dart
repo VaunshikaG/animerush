@@ -15,9 +15,7 @@ import '../widgets/customSnackbar.dart';
 
 class WatchListController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
-  RxBool noData = false.obs,
-      hasData = false.obs,
-      showLogin = false.obs;
+  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -88,12 +86,13 @@ class WatchListController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     try {
       // _apiProviders.addToListApi().then((value) {
-      _apiProviders.AddToListApi(animeId: animeId, type: type).then((value) {
+      _apiProviders.AddToListApi(animeId: animeId, type: type).then((value) async {
         if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 200) {
             if (type.contains('False00')) {
+              await watchApi('00');
               Get.to(() => const BottomBar(currentIndex: 2, checkVersion: false));
             }
             CommonResponse commonResponse =
@@ -114,5 +113,4 @@ class WatchListController extends GetxController {
       rethrow;
     }
   }
-
 }

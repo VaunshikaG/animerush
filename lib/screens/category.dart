@@ -23,7 +23,6 @@ class Category extends StatefulWidget {
   State<Category> createState() => _CategoryState();
 }
 
-
 class _CategoryState extends State<Category> {
   // ScrollController scrollController = ScrollController();
   Search_Controller searchController = Get.put(Search_Controller());
@@ -60,7 +59,8 @@ class _CategoryState extends State<Category> {
           preferredSize: Size(MediaQuery.of(context).size.width, 50),
           child: CustomAppBar4(
             title: widget.category.toUpperCase(),
-            backBtn: () => Get.off(() => const BottomBar(currentIndex: 0, checkVersion: false)),
+            backBtn: () => Get.off(
+                () => const BottomBar(currentIndex: 0, checkVersion: false)),
           ),
         ),
         body: NotificationListener<OverscrollIndicatorNotification>(
@@ -73,8 +73,8 @@ class _CategoryState extends State<Category> {
             child: Column(
               children: [
                 Obx(() => Visibility(
-                  visible: searchController.hasData.value,
-                  child: Container(
+                      visible: searchController.hasData.value,
+                      child: Container(
                         alignment: Alignment.topCenter,
                         margin: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
@@ -85,76 +85,85 @@ class _CategoryState extends State<Category> {
                               similarData: searchController.animeList,
                             ),
                             ListTile(
-                              leading: (searchController.previousPg =='1')
-                                  ? const SizedBox.shrink() : ElevatedButton.icon(
-                                onPressed: () {
-                                  searchController.searchApiCall(
-                                      pgName: "pagination",
-                                      searchModel: SearchModel(
-                                        val: searchController.value1,
-                                        genres: searchController.value2,
-                                        searchKeywords: searchController.searchText.text,
-                                        pageId: searchController.previousPg.toString(),
-                                        sort: '',
+                              leading: (searchController.previousPg == '1')
+                                  ? const SizedBox.shrink()
+                                  : ElevatedButton.icon(
+                                      onPressed: () {
+                                        searchController.searchApiCall(
+                                            pgName: "pagination",
+                                            searchModel: SearchModel(
+                                              val: searchController.value1,
+                                              genres: searchController.value2,
+                                              searchKeywords: searchController
+                                                  .searchText.text,
+                                              pageId: searchController
+                                                  .previousPg
+                                                  .toString(),
+                                              sort: '',
+                                            ),
+                                            ctx: context);
+                                      },
+                                      label: Text(
+                                        searchController.previousPg.toString(),
+                                        style: appTheme.textTheme.titleSmall,
                                       ),
-                                      ctx: context);
-                                },
-                                label: Text(
-                                  searchController.previousPg.toString(),
-                                  style: appTheme.textTheme.titleSmall,
-                                ),
-                                icon: Icon(
-                                  Icons.fast_rewind_outlined,
-                                  size: 18,
-                                  color: appTheme.iconTheme.color,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  side: BorderSide.none,
-                                  backgroundColor: appTheme.hintColor,
-                                ),
-                              ),
+                                      icon: Icon(
+                                        Icons.fast_rewind_outlined,
+                                        size: 18,
+                                        color: appTheme.iconTheme.color,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        side: BorderSide.none,
+                                        backgroundColor: appTheme.hintColor,
+                                      ),
+                                    ),
                               title: ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   side: BorderSide.none,
-                                  backgroundColor: appTheme.scaffoldBackgroundColor,
+                                  backgroundColor:
+                                      appTheme.scaffoldBackgroundColor,
                                 ),
                                 child: Text(
                                   searchController.currentPg.toString(),
                                   style: appTheme.textTheme.titleSmall,
                                 ),
                               ),
-                              trailing: (searchController.maxPg == searchController.currentPg)
-                                  ? const SizedBox.shrink() : ElevatedButton.icon(
-                                onPressed: () {
-                                  searchController.searchApiCall(
-                                      pgName: "pagination",
-                                      searchModel: SearchModel(
-                                        val: searchController.value1,
-                                        genres: searchController.value2,
-                                        searchKeywords: searchController.searchText.text,
-                                        pageId: searchController.nextPg.toString(),
-                                        sort: '',
+                              trailing: (searchController.maxPg ==
+                                      searchController.currentPg)
+                                  ? const SizedBox.shrink()
+                                  : ElevatedButton.icon(
+                                      onPressed: () {
+                                        searchController.searchApiCall(
+                                            pgName: "pagination",
+                                            searchModel: SearchModel(
+                                              val: searchController.value1,
+                                              genres: searchController.value2,
+                                              searchKeywords: searchController
+                                                  .searchText.text,
+                                              pageId: searchController.nextPg
+                                                  .toString(),
+                                              sort: '',
+                                            ),
+                                            ctx: context);
+                                      },
+                                      label: Text(
+                                        searchController.nextPg.toString(),
+                                        style: appTheme.textTheme.titleSmall,
                                       ),
-                                      ctx: context);
-                                },
-                                label: Text(
-                                  searchController.nextPg.toString(),
-                                  style: appTheme.textTheme.titleSmall,
-                                ),
-                                icon: Icon(
-                                  Icons.fast_forward_outlined,
-                                  size: 18,
-                                  color: appTheme.iconTheme.color,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  side: BorderSide.none,
-                                  backgroundColor: appTheme.hintColor,
-                                ),
-                              ),
+                                      icon: Icon(
+                                        Icons.fast_forward_outlined,
+                                        size: 18,
+                                        color: appTheme.iconTheme.color,
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        side: BorderSide.none,
+                                        backgroundColor: appTheme.hintColor,
+                                      ),
+                                    ),
                               dense: true,
                             ),
                           ],
@@ -162,19 +171,19 @@ class _CategoryState extends State<Category> {
                       ),
                     )),
                 Obx(() => Visibility(
-                  visible: searchController.noData.value,
-                  child: noData("Oops, failed to load data!"),
-                )),
+                      visible: searchController.noData.value,
+                      child: noData("Oops, failed to load data!"),
+                    )),
                 Obx(() => Visibility(
-                  visible: searchController.showLogin.value,
-                  child: Center(
-                    heightFactor: 13,
-                    child: elevatedButton(
-                      text: "Login →",
-                      onPressed: () => Get.offAll(() => const Auth()),
-                    ),
-                  ),
-                )),
+                      visible: searchController.showLogin.value,
+                      child: Center(
+                        heightFactor: 13,
+                        child: elevatedButton(
+                          text: "Login →",
+                          onPressed: () => Get.offAll(() => const Auth()),
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),

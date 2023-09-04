@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
   }
@@ -72,10 +72,8 @@ class _HomeState extends State<Home> {
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: CarouselSlider.builder(
-                                itemCount:
-                                    homeController.spotlightData.length,
-                                itemBuilder:
-                                    (BuildContext context, index, _) {
+                                itemCount: homeController.spotlightData.length,
+                                itemBuilder: (BuildContext context, index, _) {
                                   var img = homeController
                                           .spotlightData[index].banner ??
                                       homeController
@@ -85,9 +83,7 @@ class _HomeState extends State<Home> {
                                     onTap: () {
                                       Get.off(() => Details(
                                           id: homeController
-                                              .spotlightData[
-                                          index]
-                                              .id
+                                              .spotlightData[index].id
                                               .toString()));
                                     },
                                     child: Container(
@@ -213,7 +209,8 @@ class _HomeState extends State<Home> {
                               ),
                               trailing: TextButton(
                                 onPressed: () {
-                                  Get.off(() => const Category(category: 'specials'));
+                                  Get.off(() =>
+                                      const Category(category: 'specials'));
                                 },
                                 child: Text(
                                   "View all >",
@@ -236,7 +233,8 @@ class _HomeState extends State<Home> {
                               ),
                               trailing: TextButton(
                                 onPressed: () {
-                                  Get.off(() => const Category(category: 'movies'));
+                                  Get.off(
+                                      () => const Category(category: 'movies'));
                                 },
                                 child: Text(
                                   "View all >",
@@ -259,7 +257,8 @@ class _HomeState extends State<Home> {
                               ),
                               trailing: TextButton(
                                 onPressed: () {
-                                  Get.off(() => const Category(category: 'ona'));
+                                  Get.off(
+                                      () => const Category(category: 'ona'));
                                 },
                                 child: Text(
                                   "View all >",
@@ -282,7 +281,8 @@ class _HomeState extends State<Home> {
                               ),
                               trailing: TextButton(
                                 onPressed: () {
-                                  Get.off(() => const Category(category: 'ova'));
+                                  Get.off(
+                                      () => const Category(category: 'ova'));
                                 },
                                 child: Text(
                                   "View all >",

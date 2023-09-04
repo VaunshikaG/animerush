@@ -19,7 +19,8 @@ class BottomBar extends StatefulWidget {
   final int currentIndex;
   final bool checkVersion;
 
-  const BottomBar({Key? key, required this.currentIndex, required this.checkVersion})
+  const BottomBar(
+      {Key? key, required this.currentIndex, required this.checkVersion})
       : super(key: key);
 
   @override
@@ -27,7 +28,6 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-
   final _tabs = [
     const Home(),
     const Search(),
@@ -40,17 +40,14 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     log(runtimeType.toString());
-    log(widget.checkVersion.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _selectedTab = widget.currentIndex;
       if (widget.checkVersion == true) {
-        Future.delayed(const Duration(seconds: 1), () =>
-        versionController.appVersionApiCall(context));
+       versionController.appVersionApiCall(context);
       }
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +78,7 @@ class _BottomBarState extends State<BottomBar> {
           ),
         ),
         drawerEdgeDragWidth: 50,
-        endDrawer: const HomeDrawer(),
+        // endDrawer: const HomeDrawer(),
         body: SafeArea(child: _tabs[_selectedTab]),
         bottomNavigationBar: Container(
           color: appTheme.scaffoldBackgroundColor,

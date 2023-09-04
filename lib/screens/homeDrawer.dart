@@ -305,7 +305,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                 vertical: 10, horizontal: 17),
                             disabledColor: appTheme.disabledColor,
                             pressedOpacity: 0.6,
-                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5)),
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Column(
@@ -337,13 +338,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     searchKeywords: '',
                                   ),
                                   ctx: context);
-                              },
+                            },
                             color: appTheme.hintColor,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 17),
                             disabledColor: appTheme.disabledColor,
                             pressedOpacity: 0.6,
-                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5)),
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Column(
@@ -370,14 +372,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               int max = 13000;
                               int randomNumber = min + rng.nextInt(max - min);
                               Get.offAll(
-                                      () => Details(id: randomNumber.toString()));
-                              },
+                                  () => Details(id: randomNumber.toString()));
+                            },
                             color: appTheme.hintColor,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 17),
                             disabledColor: appTheme.disabledColor,
                             pressedOpacity: 0.6,
-                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5)),
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: Column(
@@ -482,7 +485,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ),
                       ctx: context);
                   searchController.isSelected.value = true;
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const BottomBar(currentIndex: 1, checkVersion: false)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const BottomBar(
+                              currentIndex: 1, checkVersion: false)));
                 });
               },
               backgroundColor: appTheme.colorScheme.surface,
@@ -563,7 +570,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   searchController.value2 = "";
                 }
                 // });
-
               },
               backgroundColor: appTheme.colorScheme.surface,
               disabledColor: appTheme.colorScheme.surface,

@@ -42,21 +42,21 @@ class Data {
 
   Data(
       {this.name,
-        this.domain,
-        this.apkUrl,
-        this.version,
-        this.showLogin,
-        this.webCode,
-        this.description,
-        this.mainColor,
-        this.subColor,
-        this.logo,
-        this.fevicon,
-        this.email,
-        this.discord,
-        this.donationLink,
-        this.twitterLink,
-        this.teleLink});
+      this.domain,
+      this.apkUrl,
+      this.version,
+      this.showLogin,
+      this.webCode,
+      this.description,
+      this.mainColor,
+      this.subColor,
+      this.logo,
+      this.fevicon,
+      this.email,
+      this.discord,
+      this.donationLink,
+      this.twitterLink,
+      this.teleLink});
 
   Data.fromJson(Map<String, dynamic> json) {
     name = json['name'];

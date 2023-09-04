@@ -16,11 +16,8 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  bool isLoggedIn = false;
-
   @override
   void initState() {
-    isLoggedIn = false;
     Timer(const Duration(seconds: 2), () {
       navigatePg();
     });

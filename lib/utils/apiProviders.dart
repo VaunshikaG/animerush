@@ -59,7 +59,6 @@ class ApiProviders {
       )
           .then((http.Response response) {
         final int statusCode = response.statusCode;
-        print(statusCode);
         statusExp(statusCode);
         return response.body;
       });
@@ -181,10 +180,12 @@ class ApiProviders {
     Map<String, String> jsonMap = {'key': AppConst.KEY};
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         body: jsonMap,
-      ).then((http.Response response) async {
+      )
+          .then((http.Response response) async {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         // Store JSON data
@@ -270,7 +271,8 @@ class ApiProviders {
           'Authorization': 'JWT $token',
         },
         body: model.toJson(),
-      ).then((http.Response response) {
+      )
+          .then((http.Response response) {
         final int statusCode = response.statusCode;
         statusExp(statusCode);
         return response.body;
@@ -381,15 +383,16 @@ class ApiProviders {
     };
 
     try {
-      return http.post(
+      return http
+          .post(
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
         },
         body: jsonMap,
-      ).then((http.Response response) async {
+      )
+          .then((http.Response response) async {
         final int statusCode = response.statusCode;
-        print(statusCode);
         statusExp(statusCode);
         // Store JSON data
         await ProfileStorage().storeProfile(response.body);

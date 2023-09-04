@@ -30,7 +30,6 @@ class _PlayerState extends State<Player> {
   @override
   void initState() {
     log(runtimeType.toString());
-    log(widget.url.toString());
 
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,

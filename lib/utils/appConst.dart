@@ -1,5 +1,4 @@
 class AppConst {
-
   static const APP_STORE_URL = '';
   static const PLAY_STORE_URL = '';
 
@@ -29,8 +28,8 @@ class AppConst {
   static const String otp = "otp";
   static const String apiStatus = "api_status";
   static const String dateJoined = "date_joined";
-  static const String homeApi = "home_api";
-  static const String profileApi = "profile_api";
+  static const String lastHomeApi = "last_home_api";
+  static const String lastProfileApi = "last_profile_api";
 
   static const int duration = 1800;
 

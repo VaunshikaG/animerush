@@ -74,6 +74,7 @@ class AnimeList {
   int? id;
   String? name;
   String? japaneseName;
+  String? synonyms;
   String? englishName;
   String? thumbnail;
   String? image;
@@ -89,6 +90,7 @@ class AnimeList {
   String? ratingAge;
   String? duration;
   String? description;
+  String? descriptionClear;
   String? airedYear;
   String? premiered;
   int? views;
@@ -101,6 +103,7 @@ class AnimeList {
       {this.id,
       this.name,
       this.japaneseName,
+        this.synonyms,
       this.englishName,
       this.thumbnail,
       this.image,
@@ -116,6 +119,7 @@ class AnimeList {
       this.ratingAge,
       this.duration,
       this.description,
+        this.descriptionClear,
       this.airedYear,
       this.premiered,
       this.views,
@@ -128,6 +132,7 @@ class AnimeList {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
+    synonyms = json['synonyms'];
     englishName = json['english_name'];
     thumbnail = json['thumbnail'];
     image = json['image'];
@@ -143,6 +148,7 @@ class AnimeList {
     ratingAge = json['rating_age'];
     duration = json['duration'];
     description = json['description'];
+    descriptionClear = json['description_clear'];
     airedYear = json['aired_year'];
     premiered = json['premiered'];
     views = json['views'];
