@@ -102,9 +102,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                               labelPadding:
                                   const EdgeInsets.symmetric(horizontal: 5),
                               onTap: (index) async {
-                                await showProgress(context, false);
-
                                 if (index == 1) {
+                                  await showProgress(context, false);
                                   accountController.continueApi();
                                 }
                                 // else if (index == 2) {

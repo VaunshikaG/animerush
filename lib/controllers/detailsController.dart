@@ -59,6 +59,7 @@ class DetailsController extends GetxController {
             desc = detailsPodo.data!.descriptionClear ?? "-";
             year = detailsPodo.data!.airedYear ?? "-";
             otherName = detailsPodo.data!.synonyms ?? "-";
+            print(otherName);
             ep = detailsPodo.data!.episodesTillNow ?? "-";
             duration = detailsPodo.data!.duration ?? "-";
             views = detailsPodo.data!.views.toString();

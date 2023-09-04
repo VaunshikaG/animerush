@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/watchListController.dart';
+import '../model/continueWatchPodo.dart';
 import '../screens/details.dart';
 import '../utils/appConst.dart';
 import 'animeAnimation.dart';
@@ -50,8 +51,9 @@ class _SimilarListState extends State<SimilarList>
       physics: const NeverScrollableScrollPhysics(),
       itemCount: widget.similarData.length,
       itemBuilder: (BuildContext context, int index) {
+        final similarList;
         controller.forward();
-        final similarList = widget.similarData[index];
+        similarList = widget.similarData[index];
 
         final lang, type, status;
 
@@ -102,7 +104,11 @@ class _SimilarListState extends State<SimilarList>
           animation: controller,
           child: GestureDetector(
             onTap: () {
-              Get.offAll(() => Details(id: similarList.id.toString()));
+              if (widget.pg == 'continue') {
+                Get.offAll(() => Details(id: similarList.anime.id.toString()));
+              } else {
+                Get.offAll(() => Details(id: similarList.id.toString()));
+              }
             },
             onHorizontalDragEnd: (DragEndDetails dragEndDetails) {
               // setState(() {

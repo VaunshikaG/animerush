@@ -379,6 +379,13 @@ class _DetailsState extends State<Details> {
                                       ),
 
                                       // info
+                                      // Padding(
+                                      //   padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
+                                      //   child: customText(
+                                      //     text1: "Other names",
+                                      //     text2: detailsController.otherName.toString(),
+                                      //   ),
+                                      // ),
                                       ListView.builder(
                                         itemCount: detailTitle.length,
                                         shrinkWrap: true,
