@@ -230,23 +230,15 @@ class _SearchState extends State<Search> {
                                   ? const SizedBox.shrink()
                                   : ElevatedButton.icon(
                                       onPressed: () {
-                                        if (searchController
-                                            .value2.isNotEmpty) {
-                                          if (searchController
-                                                  .isSelected.value ==
-                                              true) {
+                                        if (searchController.value2.isNotEmpty) {
+                                          if (searchController.isSelected.value == true) {
                                             searchController.searchApiCall(
                                                 pgName: "pagination",
                                                 searchModel: SearchModel(
                                                   val: searchController.value1,
-                                                  genres:
-                                                      searchController.value2,
-                                                  searchKeywords:
-                                                      searchController
-                                                          .searchText.text,
-                                                  pageId: searchController
-                                                      .previousPg
-                                                      .toString(),
+                                                  genres: searchController.value2,
+                                                  searchKeywords: searchController.searchText.text,
+                                                  pageId: searchController.previousPg.toString(),
                                                   sort: '',
                                                 ),
                                                 ctx: context);
@@ -255,14 +247,9 @@ class _SearchState extends State<Search> {
                                                 pgName: "pagination",
                                                 searchModel: SearchModel(
                                                   val: 'anime',
-                                                  genres:
-                                                      searchController.value2,
-                                                  searchKeywords:
-                                                      searchController
-                                                          .searchText.text,
-                                                  pageId: searchController
-                                                      .nextPg
-                                                      .toString(),
+                                                  genres: searchController.value2,
+                                                  searchKeywords: searchController.searchText.text,
+                                                  pageId: searchController.previousPg.toString(),
                                                   sort: '',
                                                 ),
                                                 ctx: context);

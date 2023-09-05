@@ -32,7 +32,7 @@ class _CategoryState extends State<Category> {
     log(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       searchController.searchApiCall(
-          pgName: "searchField",
+          pgName: "viewAll",
           searchModel: SearchModel(
             val: widget.category,
             genres: '',
@@ -85,20 +85,18 @@ class _CategoryState extends State<Category> {
                               similarData: searchController.animeList,
                             ),
                             ListTile(
-                              leading: (searchController.previousPg == '1')
+                              leading: (searchController.previousPg ==
+                                  searchController.currentPg)
                                   ? const SizedBox.shrink()
                                   : ElevatedButton.icon(
                                       onPressed: () {
                                         searchController.searchApiCall(
-                                            pgName: "pagination",
+                                            pgName: "viewAll",
                                             searchModel: SearchModel(
-                                              val: searchController.value1,
-                                              genres: searchController.value2,
-                                              searchKeywords: searchController
-                                                  .searchText.text,
-                                              pageId: searchController
-                                                  .previousPg
-                                                  .toString(),
+                                              val: widget.category,
+                                              genres: '',
+                                              searchKeywords: '',
+                                              pageId: searchController.previousPg.toString(),
                                               sort: '',
                                             ),
                                             ctx: context);
@@ -137,14 +135,12 @@ class _CategoryState extends State<Category> {
                                   : ElevatedButton.icon(
                                       onPressed: () {
                                         searchController.searchApiCall(
-                                            pgName: "pagination",
+                                            pgName: "viewAll",
                                             searchModel: SearchModel(
-                                              val: searchController.value1,
-                                              genres: searchController.value2,
-                                              searchKeywords: searchController
-                                                  .searchText.text,
-                                              pageId: searchController.nextPg
-                                                  .toString(),
+                                              val: widget.category,
+                                              genres: '',
+                                              searchKeywords: '',
+                                              pageId: searchController.nextPg.toString(),
                                               sort: '',
                                             ),
                                             ctx: context);

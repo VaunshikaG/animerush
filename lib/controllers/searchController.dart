@@ -57,6 +57,8 @@ class Search_Controller extends GetxController {
         if (value.isNotEmpty) {
           hasData.value = false;
           var responseBody = json.decode(value);
+          print(searchModel.toJson());
+          print(responseBody);
           if (responseBody["st"] == 200) {
             animeList.clear();
             if (pgName == "drawer") {

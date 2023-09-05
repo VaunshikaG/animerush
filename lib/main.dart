@@ -21,10 +21,10 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     // DeviceOrientation.portraitDown,
   ]);
-  // await FlutterDownloader.initialize(
-  //   debug: true,
-  //   ignoreSsl: true,
-  // );
+  await FlutterDownloader.initialize(
+    debug: true,
+    ignoreSsl: true,
+  );
   runApp(const MyApp());
 }
 
