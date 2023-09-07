@@ -143,7 +143,7 @@ class _SearchState extends State<Search> {
                                 pageId: '1',
                                 sort: '',
                               ),
-                              ctx: context);
+                              context: context);
                         }
                       });
 
@@ -241,7 +241,7 @@ class _SearchState extends State<Search> {
                                                   pageId: searchController.previousPg.toString(),
                                                   sort: '',
                                                 ),
-                                                ctx: context);
+                                                context: context);
                                           } else {
                                             searchController.searchApiCall(
                                                 pgName: "pagination",
@@ -252,7 +252,7 @@ class _SearchState extends State<Search> {
                                                   pageId: searchController.previousPg.toString(),
                                                   sort: '',
                                                 ),
-                                                ctx: context);
+                                                context: context);
                                           }
                                         }
                                       },
@@ -308,7 +308,7 @@ class _SearchState extends State<Search> {
                                                       .toString(),
                                                   sort: '',
                                                 ),
-                                                ctx: context);
+                                                context: context);
                                           } else {
                                             searchController.searchApiCall(
                                                 pgName: "pagination",
@@ -324,7 +324,7 @@ class _SearchState extends State<Search> {
                                                       .toString(),
                                                   sort: '',
                                                 ),
-                                                ctx: context);
+                                                context: context);
                                           }
                                         }
                                       },
@@ -407,7 +407,7 @@ class _SearchState extends State<Search> {
                           sort: '',
                           searchKeywords: searchController.searchText.text,
                         ),
-                        ctx: context);
+                        context: context);
                   }
                 });
               },
@@ -484,7 +484,7 @@ class _SearchState extends State<Search> {
                               sort: '',
                               searchKeywords: searchController.searchText.text,
                             ),
-                            ctx: context);
+                            context: context);
                       } else {
                         searchController.searchApiCall(
                             pgName: "chips",
@@ -495,7 +495,7 @@ class _SearchState extends State<Search> {
                               sort: '',
                               searchKeywords: searchController.searchText.text,
                             ),
-                            ctx: context);
+                            context: context);
                       }
                     }
                   } else {
@@ -553,7 +553,7 @@ class _SearchState extends State<Search> {
                     sort: '',
                     searchKeywords: '',
                   ),
-                  ctx: context);
+                  context: context);
             });
           },
           backgroundColor: appTheme.disabledColor,
@@ -625,7 +625,7 @@ class _SearchState extends State<Search> {
                     sort: '',
                     searchKeywords: '',
                   ),
-                  ctx: context);
+                  context: context);
             });
           },
           backgroundColor: appTheme.disabledColor,

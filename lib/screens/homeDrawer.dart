@@ -298,7 +298,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     sort: '',
                                     searchKeywords: '',
                                   ),
-                                  ctx: context);
+                                  context: context);
                             },
                             color: appTheme.hintColor,
                             padding: const EdgeInsets.symmetric(
@@ -337,7 +337,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                     sort: '',
                                     searchKeywords: '',
                                   ),
-                                  ctx: context);
+                                  context: context);
                             },
                             color: appTheme.hintColor,
                             padding: const EdgeInsets.symmetric(
@@ -483,7 +483,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         sort: '',
                         searchKeywords: '',
                       ),
-                      ctx: context);
+                      context: context);
                   searchController.isSelected.value = true;
                   Navigator.push(
                       context,
@@ -551,7 +551,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             sort: '',
                             searchKeywords: searchController.searchText.text,
                           ),
-                          ctx: context);
+                          context: context);
                     } else {
                       searchController.searchApiCall(
                           pgName: "chips",
@@ -562,7 +562,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             sort: '',
                             searchKeywords: searchController.searchText.text,
                           ),
-                          ctx: context);
+                          context: context);
                     }
                   }
                 } else {

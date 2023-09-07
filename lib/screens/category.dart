@@ -40,7 +40,7 @@ class _CategoryState extends State<Category> {
             sort: '',
             searchKeywords: '',
           ),
-          ctx: context);
+          context: context);
     });
     super.initState();
   }
@@ -99,7 +99,7 @@ class _CategoryState extends State<Category> {
                                               pageId: searchController.previousPg.toString(),
                                               sort: '',
                                             ),
-                                            ctx: context);
+                                            context: context);
                                       },
                                       label: Text(
                                         searchController.previousPg.toString(),
@@ -143,7 +143,7 @@ class _CategoryState extends State<Category> {
                                               pageId: searchController.nextPg.toString(),
                                               sort: '',
                                             ),
-                                            ctx: context);
+                                            context: context);
                                       },
                                       label: Text(
                                         searchController.nextPg.toString(),
