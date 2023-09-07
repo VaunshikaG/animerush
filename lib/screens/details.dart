@@ -59,7 +59,7 @@ class _DetailsState extends State<Details> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });

@@ -48,8 +48,8 @@ class Search_Controller extends GetxController {
   Future<void> searchApiCall(
       {required SearchModel searchModel,
       required String pgName,
-      required BuildContext ctx}) async {
-    await showProgress(ctx, true);
+      required BuildContext context}) async {
+    await showProgress(context, false);
     final prefs = await SharedPreferences.getInstance();
 
     _apiProviders.SearchApi(model: searchModel).then((value) {

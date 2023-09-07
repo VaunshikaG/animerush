@@ -69,7 +69,7 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     searchController.value1 = "";
     searchController.categoryType = "";
     searchController.value2 = "";

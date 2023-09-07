@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     homeController.hasData.value = false;
     homeController.noData.value = false;
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
                                           fit: BoxFit.cover,
                                           onError: (error, stackTrace) =>
                                               Image.asset(
-                                            "assets/img/icon1.png",
+                                            "assets/img/blank.png",
                                             fit: BoxFit.cover,
                                           ),
                                         ),

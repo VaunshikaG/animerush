@@ -35,7 +35,7 @@ class _WatchListState extends State<WatchList> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData('00');
     });

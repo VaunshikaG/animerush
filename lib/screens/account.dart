@@ -42,7 +42,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _controller = TabController(length: 2, vsync: this);
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });

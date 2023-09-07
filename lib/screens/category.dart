@@ -29,7 +29,7 @@ class _CategoryState extends State<Category> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       searchController.searchApiCall(
           pgName: "viewAll",

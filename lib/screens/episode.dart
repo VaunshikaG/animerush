@@ -63,7 +63,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
@@ -288,7 +288,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
           ),
           onError: (error, stackTrace) {
             Image.asset(
-              "assets/img/icon1.png",
+              "assets/img/blank.png",
               fit: BoxFit.contain,
             );
           },

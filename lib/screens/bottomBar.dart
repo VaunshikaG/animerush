@@ -39,7 +39,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   void initState() {
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _selectedTab = widget.currentIndex;
       if (widget.checkVersion == true) {

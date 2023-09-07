@@ -32,7 +32,7 @@ class _SimilarListState extends State<SimilarList>
       duration: const Duration(milliseconds: AppConst.duration),
       vsync: this,
     );
-    log(runtimeType.toString());
+    debugPrint(runtimeType.toString());
     super.initState();
   }
 
