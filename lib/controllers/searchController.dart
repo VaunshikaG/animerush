@@ -49,7 +49,7 @@ class Search_Controller extends GetxController {
       {required SearchModel searchModel,
       required String pgName,
       required BuildContext context}) async {
-    await showProgress(context, true);
+    await showProgress(context, false);
     final prefs = await SharedPreferences.getInstance();
 
     _apiProviders.SearchApi(model: searchModel).then((value) {
@@ -93,6 +93,7 @@ class Search_Controller extends GetxController {
             hideProgress();
             // CustomSnackBar(responseBody['msg']);
           } else if (responseBody['detail'] == "Signature has expired.") {
+            hideProgress();
             prefs.setBool(AppConst.loginStatus, false);
             hasData.value = false;
             noData.value = false;

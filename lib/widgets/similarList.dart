@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,7 @@ import '../model/continueWatchPodo.dart';
 import '../screens/details.dart';
 import '../utils/appConst.dart';
 import 'animeAnimation.dart';
+import 'loader.dart';
 import 'noData.dart';
 
 class SimilarList extends StatefulWidget {
@@ -110,16 +112,6 @@ class _SimilarListState extends State<SimilarList>
                 Get.offAll(() => Details(id: similarList.id.toString()));
               }
             },
-            onHorizontalDragEnd: (DragEndDetails dragEndDetails) {
-              // setState(() {
-                if (widget.pg == 'detail' || widget.pg == 'watch') {
-                  watchListController.addToListApi(
-                    animeId: similarList.id.toString(),
-                    type: 'False00',
-                  );
-                }
-              // });
-            },
             child: Hero(
               tag: similarList.id.toString(),
               child: Column(
@@ -145,6 +137,31 @@ class _SimilarListState extends State<SimilarList>
                               fit: BoxFit.contain,
                             );
                           },
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            height: 35,
+                            width: 30,
+                            color: appTheme.hintColor,
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              alignment: Alignment.topRight,
+                              icon: const Icon(
+                                CupertinoIcons.clear_fill,
+                                size: 20,
+                              ),
+                              onPressed: () async {
+                                if (widget.pg == 'detail' || widget.pg == 'watch') {
+                                  await showProgress(context, false);
+                                  watchListController.addToListApi(
+                                    animeId: similarList.id.toString(),
+                                    type: 'False00',
+                                  );
+                                }
+                              },
+                            ),
+                          ),
                         ),
                       ],
                     ),

@@ -45,9 +45,6 @@ class WatchListController extends GetxController {
             noData.value = false;
             showLogin.value = false;
             hideProgress();
-            if (type == '00') {
-              CustomSnackBar('Swipe left on anime to .');
-            }
           } else if (responseBody['st'] == 101) {
             dataLength = 0;
             animeList = [];

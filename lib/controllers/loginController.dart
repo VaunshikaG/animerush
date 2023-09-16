@@ -61,8 +61,10 @@ class LoginController extends GetxController {
             passwordController.clear();
             otpController.clear();
           } else if (responseBody['st'] == 101) {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           } else {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           }
         }
@@ -88,6 +90,7 @@ class LoginController extends GetxController {
                 CommonResponse.fromJson(responseBody);
             message = commonResponse.msg;
             CustomSnackBar(message);
+            hideProgress();
             isSignin.value = false;
             isLogin.value = true;
             userNameController.clear();
@@ -95,10 +98,12 @@ class LoginController extends GetxController {
             passwordController.clear();
             otpController.clear();
           } else if (responseBody['st'] == 101) {
+            hideProgress();
             isSignin.value = true;
             isLogin.value = false;
             message = responseBody['msg'];
           } else {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           }
         }
@@ -122,6 +127,7 @@ class LoginController extends GetxController {
           if (responseBody['st'] == 100) {
             CommonResponse commonResponse =
                 CommonResponse.fromJson(responseBody);
+            hideProgress();
             isOtp.value = false;
             isPassword.value = true;
             userNameController.clear();
@@ -130,8 +136,10 @@ class LoginController extends GetxController {
             otpController.clear();
             CustomSnackBar(responseBody['msg']);
           } else if (responseBody['st'] == 101) {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           } else {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           }
         }
@@ -153,6 +161,7 @@ class LoginController extends GetxController {
           if (responseBody['st'] == 100) {
             CommonResponse commonResponse =
                 CommonResponse.fromJson(responseBody);
+            hideProgress();
             isForgot.value = false;
             isOtp.value = true;
             userNameController.clear();
@@ -161,8 +170,10 @@ class LoginController extends GetxController {
             otpController.clear();
             CustomSnackBar(responseBody['msg']);
           } else if (responseBody['st'] == 101) {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           } else {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           }
         }
@@ -186,6 +197,7 @@ class LoginController extends GetxController {
           if (responseBody['st'] == 100) {
             CommonResponse commonResponse =
                 CommonResponse.fromJson(responseBody);
+            hideProgress();
             isLogin.value = true;
             isPassword.value = false;
             userNameController.clear();
@@ -194,8 +206,10 @@ class LoginController extends GetxController {
             otpController.clear();
             CustomSnackBar(responseBody['msg']);
           } else if (responseBody['st'] == 101) {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           } else {
+            hideProgress();
             CustomSnackBar(responseBody['msg']);
           }
         }

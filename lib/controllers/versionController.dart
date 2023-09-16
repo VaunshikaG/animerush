@@ -45,9 +45,10 @@ class VersionController extends GetxController {
                   child: elevatedButton(
                     text: 'Update Now',
                     onPressed: () {
-                      Platform.isIOS
-                          ? launchURL(AppConst.APP_STORE_URL)
-                          : launchURL(AppConst.PLAY_STORE_URL);
+                      // Platform.isIOS
+                      //     ? launchURL(AppConst.APP_STORE_URL)
+                      //     : launchURL(AppConst.PLAY_STORE_URL);
+                      launchURL(versionPodo.data!.apkUrl!);
                       Get.back();
                     },
                   ),
