@@ -43,7 +43,7 @@ class _BottomBarState extends State<BottomBar> {
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _selectedTab = widget.currentIndex;
       if (widget.checkVersion == true) {
-       versionController.appVersionApiCall(context);
+       versionController.appVersionApiCall(context, 'bottom');
       }
     });
     super.initState();

@@ -34,9 +34,9 @@ class EpisodeController extends GetxController {
       w_title = "",
       w_name = "",
       w_desc = "",
-      vdUrl;
+      vdUrl, dwldLink, epRank;
   Data epData = Data();
-  List<DownloadEpisodeLink>? dwldList;
+  // List<DownloadEpisodeLink>? dwldList;
   VdResolutionModel? vdResolutionModel;
   late BetterPlayerController betterPlayerController;
   final GlobalKey betterPlayerKey = GlobalKey();
@@ -52,8 +52,10 @@ class EpisodeController extends GetxController {
           if (responseBody["st"] == 200) {
             EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
             epData = epDetailPodo.data!;
-            dwldList = epDetailPodo.data!.downloadEpisodeLink;
+            // dwldList = epDetailPodo.data!.downloadEpisodeLink;
+            epRank = epDetailPodo.data!.epRank.toString();
             vdUrl = epDetailPodo.data!.episodeLink!.file;
+            dwldLink = epDetailPodo.data!.streamDetails!.download;
             betterPlayerController = BetterPlayerController(
               betterPlayerDataSource: BetterPlayerDataSource(
                 bufferingConfiguration:
@@ -74,11 +76,11 @@ class EpisodeController extends GetxController {
                   'User-Agent':
                       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
                 },
-                resolutions: Map.fromEntries(
-                  epDetailPodo.data!.downloadEpisodeLink!.map(
-                    (link) => MapEntry(link.quality!, link.link!),
-                  ),
-                ),
+                // resolutions: Map.fromEntries(
+                //   epDetailPodo.data!.downloadEpisodeLink!.map(
+                //     (link) => MapEntry(link.quality!, link.link!),
+                //   ),
+                // ),
                 notificationConfiguration:
                     BetterPlayerNotificationConfiguration(
                   showNotification: true,
@@ -159,6 +161,8 @@ class EpisodeController extends GetxController {
           }
         }
       } catch (e) {
+        hideProgress();
+        loading.value = false;
         rethrow;
       }
     });

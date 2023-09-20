@@ -159,6 +159,7 @@ class DetailsController extends GetxController {
           }
         }
       } catch (e) {
+        hideProgress();
         rethrow;
       }
     });

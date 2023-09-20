@@ -40,6 +40,7 @@ class HomeController extends GetxController {
       }
 
     } catch (e) {
+      hideProgress();
       noData.value = true;
       rethrow;
     }

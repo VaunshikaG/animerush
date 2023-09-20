@@ -138,31 +138,33 @@ class _SimilarListState extends State<SimilarList>
                             );
                           },
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            height: 35,
-                            width: 30,
-                            color: appTheme.hintColor,
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              alignment: Alignment.topRight,
-                              icon: const Icon(
-                                CupertinoIcons.clear_fill,
-                                size: 20,
-                              ),
-                              onPressed: () async {
-                                if (widget.pg == 'detail' || widget.pg == 'watch') {
-                                  await showProgress(context, false);
-                                  watchListController.addToListApi(
-                                    animeId: similarList.id.toString(),
-                                    type: 'False00',
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ),
+                        (widget.pg == 'watch')
+                            ? Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  height: 35,
+                                  width: 30,
+                                  color: appTheme.hintColor,
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    alignment: Alignment.topRight,
+                                    icon: const Icon(
+                                      CupertinoIcons.clear_fill,
+                                      size: 20,
+                                    ),
+                                    onPressed: () async {
+                                      if (widget.pg == 'watch') {
+                                        await showProgress(context, false);
+                                        watchListController.addToListApi(
+                                          animeId: similarList.id.toString(),
+                                          type: 'False00',
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(height: 0),
                       ],
                     ),
                   ),

@@ -25,6 +25,7 @@ class _SplashState extends State<Splash> {
   }
 
   Future<void> navigatePg() async {
+    versionController.appVersionApiCall(context, 'splash');
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(AppConst.loginStatus) == null) {
       prefs.setBool(AppConst.loginStatus, false);
@@ -52,6 +53,7 @@ class _SplashState extends State<Splash> {
             duration: const Duration(seconds: 2),
             delay: const Duration(seconds: 0),
             child: Image.asset('assets/img/white_logo.png'),
+            // child: Image.network(white_logo),
           ),
         ),
       ),

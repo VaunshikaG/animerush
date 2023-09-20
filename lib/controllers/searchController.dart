@@ -113,6 +113,7 @@ class Search_Controller extends GetxController {
           }
         }
       } catch (e) {
+        hideProgress();
         rethrow;
       }
     });

@@ -9,11 +9,11 @@ import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-class DownloadClass {
-  static void callback(String id, DownloadTaskStatus status, int progress) {
-    debugPrint("Download Status: $status,  Progress: $progress");
-  }
-}
+// class DownloadClass {
+//   static void callback(String id, DownloadTaskStatus status, int progress) {
+//     debugPrint("Download Status: $status,  Progress: $progress");
+//   }
+// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,10 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     // DeviceOrientation.portraitDown,
   ]);
-  await FlutterDownloader.initialize(
-    debug: true,
-    ignoreSsl: true,
-  );
+  // await FlutterDownloader.initialize(
+  //   debug: true,
+  //   ignoreSsl: true,
+  // );
   runApp(const MyApp());
 }
 

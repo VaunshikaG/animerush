@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/dwldController.dart';
 import '../controllers/episodeController.dart';
 import '../model/detailsPodo.dart';
@@ -64,16 +65,16 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   @override
   void initState() {
     debugPrint(runtimeType.toString());
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
     });
-    dwldController.bindBackgroundIsolate();
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {});
-
-    FlutterDownloader.registerCallback(downloadCallback);
+    // dwldController.bindBackgroundIsolate();
+    // IsolateNameServer.registerPortWithName(
+    //     _port.sendPort, 'downloader_send_port');
+    // _port.listen((dynamic data) {});
+    //
+    // FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
   }
 
@@ -210,8 +211,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                         dwldList: epController.dwldList,
                                       )*/
                                           ),
-                                      dwld(),
                                       details(),
+                                      dwld(),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 10),
@@ -345,8 +346,10 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: ListTile(
-        title: Row(
+      child: ActionChip(
+        elevation: 3,
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        label: Row(
           children: [
             Icon(
               Icons.file_download_outlined,
@@ -354,50 +357,33 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
               size: 20,
             ),
             Text(
-              ' Download   :',
+              ' Download Episode : ${epController.epRank.replaceAll('.0', '')
+                  .toString
+                ()}',
               style: appTheme.textTheme.bodySmall,
             ),
           ],
         ),
-        subtitle: SizedBox(
-          height: 35,
-          child: ListView.builder(
-            itemCount: epController.dwldList!.length,
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.only(top: 5),
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ActionChip(
-                  elevation: 3,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                  label: Text(epController.dwldList![index].quality!),
-                  labelStyle: appTheme.textTheme.labelSmall,
-                  onPressed: () {
-                    downloadEp(
-                      name: epController.epData.episodeTitle.toString(),
-                      url: epController.dwldList![index].link.toString(),
-                    );
-                  },
-                  backgroundColor: appTheme.primaryColor,
-                  side: BorderSide.none,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-              );
-            },
-          ),
-        ),
-        minVerticalPadding: 10,
-        tileColor: appTheme.disabledColor,
+        labelStyle: appTheme.textTheme.titleSmall,
+        onPressed: () {
+          launchURL(epController.dwldLink);
+        },
+        backgroundColor: appTheme.disabledColor,
+        disabledColor: appTheme.disabledColor,
+        side: BorderSide.none,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+          borderRadius: BorderRadius.circular(5)),
       ),
     );
+  }
+
+  launchURL(String strUrl) async {
+    final url = strUrl;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Widget episodes() {
@@ -561,7 +547,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   void dispose() {
     epController.betterPlayerController.clearCache();
     epController.betterPlayerController.dispose();
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
 }

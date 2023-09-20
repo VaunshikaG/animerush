@@ -1,3 +1,8 @@
+String white_logo = '';
+String fevicon = '';
+String web_code = '';
+String description = '';
+
 class AppConst {
   static const APP_STORE_URL = '';
   static const PLAY_STORE_URL = '';

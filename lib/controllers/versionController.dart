@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:animerush/widgets/customButtons.dart';
 import 'package:animerush/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/versionPodo.dart';
@@ -18,7 +18,8 @@ class VersionController extends GetxController {
   PackageInfo packageInfo =
       PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
-  Future<void> appVersionApiCall(BuildContext context) async {
+  Future<void> appVersionApiCall(BuildContext context, String pg) async {
+    final prefs = await SharedPreferences.getInstance();
     WidgetsFlutterBinding.ensureInitialized();
     final appTheme = Theme.of(context);
     final info = await PackageInfo.fromPlatform();
@@ -32,7 +33,8 @@ class VersionController extends GetxController {
             VersionPodo versionPodo = VersionPodo.fromJson(responseBody);
             hideProgress();
             if (versionPodo.data!.version!.isNotEmpty &&
-                versionPodo.data!.version != packageInfo.version) {
+                versionPodo.data!.version != packageInfo.version &&
+                pg == 'bottom') {
               Get.defaultDialog(
                 title: "New Update Available",
                 middleText:
@@ -59,11 +61,18 @@ class VersionController extends GetxController {
                 contentPadding: const EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: appTheme.colorScheme.background,
               );
+            } else {
+              white_logo = 'https://animerush.in${versionPodo.data!.logo!}';
+              fevicon = 'https://animerush.in${versionPodo.data!.fevicon!}';
+              fevicon = versionPodo.data!.fevicon!;
+              web_code = versionPodo.data!.webCode!;
+              description = versionPodo.data!.description!;
             }
           }
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }

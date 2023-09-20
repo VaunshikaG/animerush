@@ -32,7 +32,7 @@ class Data {
   String? webEpisodeUrl;
   StreamDetails? streamDetails;
   EpisodeLink? episodeLink;
-  List<DownloadEpisodeLink>? downloadEpisodeLink;
+  DownloadEpisodeLink? downloadEpisodeLink;
 
   Data(
       {this.epRank,
@@ -60,12 +60,9 @@ class Data {
     episodeLink = json['episode_link'] != null
         ? new EpisodeLink.fromJson(json['episode_link'])
         : null;
-    if (json['download_episode_link'] != null) {
-      downloadEpisodeLink = <DownloadEpisodeLink>[];
-      json['download_episode_link'].forEach((v) {
-        downloadEpisodeLink!.add(new DownloadEpisodeLink.fromJson(v));
-      });
-    }
+    downloadEpisodeLink = json['download_episode_link'] != null
+        ? new DownloadEpisodeLink.fromJson(json['download_episode_link'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -85,7 +82,7 @@ class Data {
     }
     if (this.downloadEpisodeLink != null) {
       data['download_episode_link'] =
-          this.downloadEpisodeLink!.map((v) => v.toJson()).toList();
+          this.downloadEpisodeLink!.toJson();
     }
     return data;
   }
@@ -132,6 +129,7 @@ class EpisodeLink {
   }
 }
 
+/*
 class DownloadEpisodeLink {
   String? quality;
   String? link;
@@ -147,6 +145,18 @@ class DownloadEpisodeLink {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['quality'] = this.quality;
     data['link'] = this.link;
+    return data;
+  }
+}
+*/
+
+class DownloadEpisodeLink {
+  DownloadEpisodeLink();
+
+  DownloadEpisodeLink.fromJson(Map<String, dynamic> json) {}
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     return data;
   }
 }

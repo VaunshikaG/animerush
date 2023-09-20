@@ -70,6 +70,7 @@ class LoginController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }
@@ -109,6 +110,7 @@ class LoginController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }
@@ -145,6 +147,7 @@ class LoginController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }
@@ -179,6 +182,7 @@ class LoginController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }
@@ -215,6 +219,7 @@ class LoginController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }

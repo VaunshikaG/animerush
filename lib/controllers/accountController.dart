@@ -47,6 +47,7 @@ class AccountController extends GetxController {
         }
       });
     } catch (e) {
+      hideProgress();
       rethrow;
     }
   }
