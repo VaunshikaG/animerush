@@ -211,7 +211,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                         dwldList: epController.dwldList,
                                       )*/
                                           ),
-                                      details(),
+                                      (epController.epData.videoDetails != null)
+                                          ? details() : const SizedBox(height: 0),
                                       dwld(),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -379,9 +380,13 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
   launchURL(String strUrl) async {
     final url = strUrl;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        await launch(url);
+      }
+    } catch (e) {
       throw 'Could not launch $url';
     }
   }
