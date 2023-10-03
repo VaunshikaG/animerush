@@ -230,7 +230,7 @@ class _SearchState extends State<Search> {
                                   ? const SizedBox.shrink()
                                   : ElevatedButton.icon(
                                       onPressed: () {
-                                        if (searchController.value2.isNotEmpty) {
+                                        if (searchController.value1.isNotEmpty) {
                                           if (searchController.isSelected.value == true) {
                                             searchController.searchApiCall(
                                                 pgName: "pagination",
@@ -289,11 +289,8 @@ class _SearchState extends State<Search> {
                                   ? const SizedBox.shrink()
                                   : ElevatedButton.icon(
                                       onPressed: () {
-                                        if (searchController
-                                            .value2.isNotEmpty) {
-                                          if (searchController
-                                                  .isSelected.value ==
-                                              true) {
+                                        if (searchController.value1.isNotEmpty) {
+                                          if (searchController.isSelected.value == true) {
                                             searchController.searchApiCall(
                                                 pgName: "pagination",
                                                 searchModel: SearchModel(

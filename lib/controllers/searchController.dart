@@ -59,17 +59,14 @@ class Search_Controller extends GetxController {
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             animeList.clear();
-            if (pgName == "drawer") {
+            // if (pgName == "drawer") {
               // Get.back();
               // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
-              searchText.text = '';
-              showChips.value = false;
-            }
+              // searchText.text = '';
+              // showChips.value = false;
+            // }
             SearchPodo searchPodo = SearchPodo.fromJson(responseBody);
             if (searchPodo.data!.animeList!.isNotEmpty) {
-              hasData.value = true;
-              isPageLoading.value = false;
-              hideProgress();
               if (searchModel.pageId!.isNotEmpty) {
                 scrollController.jumpTo(0);
               }
@@ -79,6 +76,9 @@ class Search_Controller extends GetxController {
               nextPg = searchPodo.data!.nextPage.toString();
               previousPg = searchPodo.data!.previousPage.toString();
               maxPg = searchPodo.data!.maxPageCounter.toString();
+              hasData.value = true;
+              isPageLoading.value = false;
+              hideProgress();
             } else {
               animeList.length = 0;
               hasData.value = true;
