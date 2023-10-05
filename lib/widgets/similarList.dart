@@ -196,7 +196,7 @@ class _SimilarListState extends State<SimilarList>
                                 color: appTheme.colorScheme.background,
                               ),
                               child: Text(
-                                "EP ${similarList.episodes}",
+                                "EP ${similarList.episodesTillNow}",
                                 style: appTheme.textTheme.labelSmall,
                               ),
                             ),

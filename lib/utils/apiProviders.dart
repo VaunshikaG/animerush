@@ -28,6 +28,8 @@ class ApiProviders {
 
   void statusExp(int statusCode) {
     if (statusCode < 200 || statusCode > 401) {
+      hideProgress();
+      CustomSnackBar("Error $statusCode while fetching the data.");
       throw Exception("Error while fetching the data");
     }
   }
