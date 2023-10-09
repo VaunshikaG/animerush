@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 // class DownloadClass {
@@ -28,24 +27,6 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-/*
-
-var flavorConfigProvider;
-Future<void> mainCommon(FlavorConfig config) async {
-  flavorConfigProvider = StateProvider((ref) => config);
-
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    // DeviceOrientation.portraitDown,
-  ]);
-  await FlutterDownloader.initialize(
-    debug: true,
-    ignoreSsl: true,
-  );
-  runApp(ProviderScope(child: MyApp()));
-}
-*/
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
