@@ -4,8 +4,8 @@ String web_code = '';
 String description = '';
 
 class AppConst {
-  static const APP_STORE_URL = '';
-  static const PLAY_STORE_URL = '';
+  static const APP_KEY_IRON_SOURCE = "1c00f6115";
+  static const APP_USER_ID = "app_user_id_animerush_00";
 
   static const String KEY = "lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc";
   static const String app_url = "https://animerush.in/api";

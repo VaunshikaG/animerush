@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,7 @@ class Account extends StatefulWidget {
   _AccountState createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
+class _AccountState extends State<Account> with SingleTickerProviderStateMixin, IronSourceBannerListener {
   AccountController accountController = Get.put(AccountController());
   List<DownloadTask> downloadedTasks = [];
 
@@ -39,8 +40,13 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   PackageInfo packageInfo =
       PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
+  bool isBannerLoaded = false;
+  bool bannerCapped = false;
+  final size = IronSourceBannerSize.BANNER;
+
   @override
   void initState() {
+    initAds();
     _controller = TabController(length: 2, vsync: this);
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
@@ -74,6 +80,63 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     });
   }
 
+  Future<void> initAds() async {
+    IronSource.setBannerListener(this);
+    if (!bannerCapped) {
+      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
+      print('Banner DefaultBanner capped: $bannerCapped');
+      // size.isAdaptive = true; // Adaptive Banner
+      IronSource.loadBanner(
+          size: size,
+          position: IronSourceBannerPosition.Bottom,
+          // verticalOffset: 40,
+          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
+          placementName: 'DefaultBanner');
+      log('banner displayed');
+      IronSource.displayBanner();
+    }
+  }
+
+  /// Banner listener ==================================================================================
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLoadFailed(IronSourceError error) {
+    print("onBannerAdLoadFailed Error:$error");
+    setState(() => isBannerLoaded = false);
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    log("onBannerAdLoaded");
+    setState(() => isBannerLoaded = true);
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismissed");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void dispose() {
+    IronSource.destroyBanner();
+    log('destroyBanner');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,117 +146,133 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
           overscroll.disallowIndicator();
           return false;
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Obx(() => Visibility(
-                    visible: accountController.hasData.value,
-                    child: DefaultTabController(
-                      length: 2,
-                      child: Wrap(
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(
-                                top: 5, bottom: 5, right: 5, left: 5),
-                            child: TabBar(
-                              controller: _controller,
-                              automaticIndicatorColorAdjustment: true,
-                              isScrollable: true,
-                              labelPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              onTap: (index) async {
-                                if (index == 1) {
-                                  await showProgress(context, false);
-                                  accountController.continueApi();
-                                }
-                                // else if (index == 2) {
-                                //   loadDownloadedTasks();
-                                // }
-                              },
-                              tabs: [
-                                Tab(
-                                  height: 35,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: const Center(
-                                      child: Text("Profile"),
-                                    ),
+        child: Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Obx(() => Visibility(
+                          visible: accountController.hasData.value,
+                          child: DefaultTabController(
+                            length: 2,
+                            child: Wrap(
+                              children: <Widget>[
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 5, bottom: 5, right: 5, left: 5),
+                                  child: TabBar(
+                                    controller: _controller,
+                                    automaticIndicatorColorAdjustment: true,
+                                    isScrollable: true,
+                                    labelPadding:
+                                        const EdgeInsets.symmetric(horizontal: 5),
+                                    onTap: (index) async {
+                                      if (index == 1) {
+                                        await showProgress(context, false);
+                                        accountController.continueApi();
+                                      }
+                                      // else if (index == 2) {
+                                      //   loadDownloadedTasks();
+                                      // }
+                                    },
+                                    tabs: [
+                                      Tab(
+                                        height: 35,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: const Center(
+                                            child: Text("Profile"),
+                                          ),
+                                        ),
+                                      ),
+                                      Tab(
+                                        height: 35,
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: const Center(
+                                            child: Text("Continue Watching"),
+                                          ),
+                                        ),
+                                      ),
+                                      // Tab(
+                                      //   height: 35,
+                                      //   child: Container(
+                                      //     alignment: Alignment.center,
+                                      //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      //     child: const Center(
+                                      //       child: Text("Downloads"),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
                                   ),
                                 ),
-                                Tab(
-                                  height: 35,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: const Center(
-                                      child: Text("Continue Watching"),
-                                    ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: MediaQuery.of(context).size.height * 0.82,
+                                  child: TabBarView(
+                                    controller: _controller,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    children: [
+                                      profile(),
+                                      ListView(
+                                        shrinkWrap: true,
+                                        children: [
+                                          Obx(() => Visibility(
+                                                visible:
+                                                    accountController.hasCData.value,
+                                                child: continueWatch(),
+                                              )),
+                                          Obx(() => Visibility(
+                                                visible:
+                                                    accountController.noData.value,
+                                                child: noData(
+                                                    "Oops, failed to load data!"),
+                                              )),
+                                        ],
+                                      ),
+                                      // downloads(),
+                                    ],
                                   ),
                                 ),
-                                // Tab(
-                                //   height: 35,
-                                //   child: Container(
-                                //     alignment: Alignment.center,
-                                //     padding: const EdgeInsets.symmetric(horizontal: 20),
-                                //     child: const Center(
-                                //       child: Text("Downloads"),
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.82,
-                            child: TabBarView(
-                              controller: _controller,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                profile(),
-                                ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    Obx(() => Visibility(
-                                          visible:
-                                              accountController.hasCData.value,
-                                          child: continueWatch(),
-                                        )),
-                                    Obx(() => Visibility(
-                                          visible:
-                                              accountController.noData.value,
-                                          child: noData(
-                                              "Oops, failed to load data!"),
-                                        )),
-                                  ],
-                                ),
-                                // downloads(),
-                              ],
+                        )),
+                    Obx(() => Visibility(
+                          visible: accountController.noData.value,
+                          child: noData("Oops, failed to load data!"),
+                        )),
+                    Obx(() => Visibility(
+                          visible: accountController.showLogin.value,
+                          child: Center(
+                            heightFactor: 13,
+                            child: elevatedButton(
+                              text: "Login →",
+                              onPressed: () => Get.offAll(() => const Auth()),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  )),
-              Obx(() => Visibility(
-                    visible: accountController.noData.value,
-                    child: noData("Oops, failed to load data!"),
-                  )),
-              Obx(() => Visibility(
-                    visible: accountController.showLogin.value,
-                    child: Center(
-                      heightFactor: 13,
-                      child: elevatedButton(
-                        text: "Login →",
-                        onPressed: () => Get.offAll(() => const Auth()),
-                      ),
-                    ),
-                  )),
-            ],
-          ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.07,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
       ),
     );

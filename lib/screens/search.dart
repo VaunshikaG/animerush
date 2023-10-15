@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
 import '../utils/appConst.dart';
@@ -26,7 +27,7 @@ class Search extends StatefulWidget {
 Search_Controller searchController = Get.put(Search_Controller());
 ScrollController scrollController = ScrollController();
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search> with IronSourceBannerListener {
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
     {'title': 'TV Series', 'value': 'tv'},
@@ -67,8 +68,13 @@ class _SearchState extends State<Search> {
   List<CategoryTitle> categoryNames = [];
   List<GenreTitle> genreNames = [];
 
+  bool isBannerLoaded = false;
+  bool bannerCapped = false;
+  final size = IronSourceBannerSize.BANNER;
+
   @override
   void initState() {
+    initAds();
     debugPrint(runtimeType.toString());
     searchController.value1 = "";
     searchController.categoryType = "";
@@ -104,6 +110,63 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
+  Future<void> initAds() async {
+    IronSource.setBannerListener(this);
+    if (!bannerCapped) {
+      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
+      print('Banner DefaultBanner capped: $bannerCapped');
+      // size.isAdaptive = true; // Adaptive Banner
+      IronSource.loadBanner(
+          size: size,
+          position: IronSourceBannerPosition.Bottom,
+          // verticalOffset: 40,
+          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
+          placementName: 'DefaultBanner');
+      log('banner displayed');
+      IronSource.displayBanner();
+    }
+  }
+
+  /// Banner listener ==================================================================================
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLoadFailed(IronSourceError error) {
+    print("onBannerAdLoadFailed Error:$error");
+    setState(() => isBannerLoaded = false);
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    log("onBannerAdLoaded");
+    setState(() => isBannerLoaded = true);
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismissed");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void dispose() {
+    IronSource.destroyBanner();
+    log('destroyBanner');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
@@ -115,272 +178,288 @@ class _SearchState extends State<Search> {
           overscroll.disallowIndicator();
           return false;
         },
-        child: ListView(
-          controller: scrollController,
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom),
+        child: Stack(
           children: [
-            (searchController.showLogin.value == true)
-                ? const SizedBox()
-                : CupertinoSearchTextField(
-                    controller: searchController.searchText,
-                    placeholder: 'Search',
-                    placeholderStyle: appTheme.textTheme.titleMedium,
-                    keyboardType: TextInputType.text,
-                    onSubmitted: (value) {
-                      searchController.animeList.clear();
+            Container(
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+              child: ListView(
+                controller: scrollController,
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewPadding.bottom),
+                children: [
+                  (searchController.showLogin.value == true)
+                      ? const SizedBox()
+                      : CupertinoSearchTextField(
+                          controller: searchController.searchText,
+                          placeholder: 'Search',
+                          placeholderStyle: appTheme.textTheme.titleMedium,
+                          keyboardType: TextInputType.text,
+                          onSubmitted: (value) {
+                            searchController.animeList.clear();
 
-                      setState(() {
-                        if (value.isNotEmpty) {
-                          searchController.searchApiCall(
-                              pgName: "searchField",
-                              searchModel: SearchModel(
-                                val: 'anime',
-                                searchKeywords: value,
-                                genres: '',
-                                pageId: '1',
-                                sort: '',
-                              ),
-                              context: context);
-                        }
-                      });
+                            setState(() {
+                              if (value.isNotEmpty) {
+                                searchController.searchApiCall(
+                                    pgName: "searchField",
+                                    searchModel: SearchModel(
+                                      val: 'anime',
+                                      searchKeywords: value,
+                                      genres: '',
+                                      pageId: '1',
+                                      sort: '',
+                                    ),
+                                    context: context);
+                              }
+                            });
 
-                      searchController.value1 = "";
-                      searchController.categoryType = "";
-                      searchController.value2 = "";
-                      searchController.genreType = "";
-                    },
-                    style: appTheme.textTheme.titleMedium,
-                    prefixIcon: Icon(
-                      CupertinoIcons.search,
-                      size: 23,
-                      color: appTheme.primaryColor,
-                    ),
-                    suffixIcon: Icon(
-                      CupertinoIcons.clear_circled_solid,
-                      size: 20,
-                      color: appTheme.iconTheme.color,
-                    ),
-                    onTap: () => searchController.isTyping.value = true,
-                    backgroundColor: appTheme.splashColor.withOpacity(0.25),
-                    suffixInsets: const EdgeInsets.only(right: 15),
-                  ),
-            Obx(() => Visibility(
-                  visible: searchController.showChips.value,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 20, 0, 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Anime Type",
-                          style: appTheme.textTheme.labelMedium,
+                            searchController.value1 = "";
+                            searchController.categoryType = "";
+                            searchController.value2 = "";
+                            searchController.genreType = "";
+                          },
+                          style: appTheme.textTheme.titleMedium,
+                          prefixIcon: Icon(
+                            CupertinoIcons.search,
+                            size: 23,
+                            color: appTheme.primaryColor,
+                          ),
+                          suffixIcon: Icon(
+                            CupertinoIcons.clear_circled_solid,
+                            size: 20,
+                            color: appTheme.iconTheme.color,
+                          ),
+                          onTap: () => searchController.isTyping.value = true,
+                          backgroundColor: appTheme.splashColor.withOpacity(0.25),
+                          suffixInsets: const EdgeInsets.only(right: 15),
                         ),
-                      ),
-                      categoryChips(),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
+                  Obx(() => Visibility(
+                        visible: searchController.showChips.value,
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(10, 20, 0, 5),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Anime Type",
+                                style: appTheme.textTheme.labelMedium,
+                              ),
+                            ),
+                            categoryChips(),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(10, 15, 0, 10),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Genre",
+                                style: appTheme.textTheme.labelMedium,
+                              ),
+                            ),
+                            genreChips(),
+
+                            /*ExpansionTile(
+                        title: Text(
                           "Genre",
                           style: appTheme.textTheme.labelMedium,
                         ),
-                      ),
-                      genreChips(),
-
-                      /*ExpansionTile(
-                  title: Text(
-                    "Genre",
-                    style: appTheme.textTheme.labelMedium,
-                  ),
-                  children: [
-                    Wrap(
-                      spacing: -5,
-                      runSpacing: -15,
-                      children: genreChips.toList(),
-                    )
-                  ],
-                ),*/
-                    ],
-                  ),
-                )),
-            Obx(() => Visibility(
-                  visible: searchController.hasData.value,
-                  child: searchController.animeList.isNotEmpty
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                searchController.displayName,
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                            ),
-                            SimilarList(
-                              pg: 'search',
-                              similarData: searchController.animeList,
-                            ),
-                            ListTile(
-                              leading: (searchController.previousPg ==
-                                      searchController.currentPg)
-                                  ? const SizedBox.shrink()
-                                  : ElevatedButton.icon(
-                                      onPressed: () {
-                                        if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
-                                          if (searchController.isSelected.value == true) {
-                                            searchController.searchApiCall(
-                                                pgName: "pagination",
-                                                searchModel: SearchModel(
-                                                  val: searchController.value1,
-                                                  genres: searchController.value2,
-                                                  searchKeywords: searchController.searchText.text,
-                                                  pageId: searchController.previousPg.toString(),
-                                                  sort: '',
-                                                ),
-                                                context: context);
-                                          } else {
-                                            searchController.searchApiCall(
-                                                pgName: "pagination",
-                                                searchModel: SearchModel(
-                                                  val: 'anime',
-                                                  genres: searchController.value2,
-                                                  searchKeywords: searchController.searchText.text,
-                                                  pageId: searchController.previousPg.toString(),
-                                                  sort: '',
-                                                ),
-                                                context: context);
-                                          }
-                                        } else if (searchController.searchText.text.isNotEmpty) {
-                                          searchController.searchApiCall(
-                                              pgName: "searchField",
-                                              searchModel: SearchModel(
-                                                val: 'anime',
-                                                searchKeywords: searchController.searchText.text,
-                                                genres: '',
-                                                pageId: searchController.previousPg.toString(),
-                                                sort: '',
-                                              ),
-                                              context: context);
-                                        }
-                                      },
-                                      label: Text(
-                                        searchController.previousPg.toString(),
-                                        style: appTheme.textTheme.titleSmall,
-                                      ),
-                                      icon: Icon(
-                                        Icons.fast_rewind_outlined,
-                                        size: 18,
-                                        color: appTheme.iconTheme.color,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        side: BorderSide.none,
-                                        backgroundColor: appTheme.hintColor,
-                                      ),
-                                    ),
-                              title: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  side: BorderSide.none,
-                                  backgroundColor:
-                                      appTheme.scaffoldBackgroundColor,
-                                ),
-                                child: Text(
-                                  searchController.currentPg.toString(),
-                                  style: appTheme.textTheme.titleSmall,
-                                ),
-                              ),
-                              trailing: (searchController.maxPg ==
-                                      searchController.currentPg)
-                                  ? const SizedBox.shrink()
-                                  : ElevatedButton.icon(
-                                      onPressed: () {
-                                        if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
-                                            if (searchController.isSelected.value == true) {
-                                              searchController.searchApiCall(
-                                                  pgName: "pagination",
-                                                  searchModel: SearchModel(
-                                                    val: searchController.value1,
-                                                    genres:
-                                                    searchController.value2,
-                                                    searchKeywords:
-                                                    searchController
-                                                        .searchText.text,
-                                                    pageId: searchController
-                                                        .nextPg
-                                                        .toString(),
-                                                    sort: '',
-                                                  ),
-                                                  context: context);
-                                            } else {
-                                              searchController.searchApiCall(
-                                                  pgName: "pagination",
-                                                  searchModel: SearchModel(
-                                                    val: 'anime',
-                                                    genres: searchController.value2,
-                                                    searchKeywords:
-                                                    searchController
-                                                        .searchText.text,
-                                                    pageId: searchController
-                                                        .nextPg
-                                                        .toString(),
-                                                    sort: '',
-                                                  ),
-                                                  context: context);
-                                            }
-                                          } else if (searchController.searchText.text.isNotEmpty) {
-                                          searchController.searchApiCall(
-                                              pgName: "searchField",
-                                              searchModel: SearchModel(
-                                                val: 'anime',
-                                                searchKeywords: searchController.searchText.text,
-                                                genres: '',
-                                                pageId: searchController.nextPg.toString(),
-                                                sort: '',
-                                              ),
-                                              context: context);
-                                        }
-                                      },
-                                      label: Text(
-                                        searchController.nextPg.toString(),
-                                        style: appTheme.textTheme.titleSmall,
-                                      ),
-                                      icon: Icon(
-                                        Icons.fast_forward_outlined,
-                                        size: 18,
-                                        color: appTheme.iconTheme.color,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        side: BorderSide.none,
-                                        backgroundColor: appTheme.hintColor,
-                                      ),
-                                    ),
-                              dense: true,
-                            ),
+                        children: [
+                          Wrap(
+                            spacing: -5,
+                            runSpacing: -15,
+                            children: genreChips.toList(),
+                          )
+                        ],
+                      ),*/
                           ],
-                        )
-                      : noData("Oops, no data found!"),
-                )),
-            Obx(() => Visibility(
-                  visible: searchController.noData.value,
-                  child: noData("Oops, failed to load data!"),
-                )),
-            Obx(() => Visibility(
-                  visible: searchController.showLogin.value,
-                  child: Center(
-                    heightFactor: 13,
-                    child: elevatedButton(
-                      text: "Login →",
-                      onPressed: () => Get.offAll(() => const Auth()),
-                    ),
-                  ),
-                )),
+                        ),
+                      )),
+                  Obx(() => Visibility(
+                        visible: searchController.hasData.value,
+                        child: searchController.animeList.isNotEmpty
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      searchController.displayName,
+                                      style: appTheme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  SimilarList(
+                                    pg: 'search',
+                                    similarData: searchController.animeList,
+                                  ),
+                                  ListTile(
+                                    leading: (searchController.previousPg ==
+                                            searchController.currentPg)
+                                        ? const SizedBox.shrink()
+                                        : ElevatedButton.icon(
+                                            onPressed: () {
+                                              if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
+                                                if (searchController.isSelected.value == true) {
+                                                  searchController.searchApiCall(
+                                                      pgName: "pagination",
+                                                      searchModel: SearchModel(
+                                                        val: searchController.value1,
+                                                        genres: searchController.value2,
+                                                        searchKeywords: searchController.searchText.text,
+                                                        pageId: searchController.previousPg.toString(),
+                                                        sort: '',
+                                                      ),
+                                                      context: context);
+                                                } else {
+                                                  searchController.searchApiCall(
+                                                      pgName: "pagination",
+                                                      searchModel: SearchModel(
+                                                        val: 'anime',
+                                                        genres: searchController.value2,
+                                                        searchKeywords: searchController.searchText.text,
+                                                        pageId: searchController.previousPg.toString(),
+                                                        sort: '',
+                                                      ),
+                                                      context: context);
+                                                }
+                                              } else if (searchController.searchText.text.isNotEmpty) {
+                                                searchController.searchApiCall(
+                                                    pgName: "searchField",
+                                                    searchModel: SearchModel(
+                                                      val: 'anime',
+                                                      searchKeywords: searchController.searchText.text,
+                                                      genres: '',
+                                                      pageId: searchController.previousPg.toString(),
+                                                      sort: '',
+                                                    ),
+                                                    context: context);
+                                              }
+                                            },
+                                            label: Text(
+                                              searchController.previousPg.toString(),
+                                              style: appTheme.textTheme.titleSmall,
+                                            ),
+                                            icon: Icon(
+                                              Icons.fast_rewind_outlined,
+                                              size: 18,
+                                              color: appTheme.iconTheme.color,
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.zero,
+                                              side: BorderSide.none,
+                                              backgroundColor: appTheme.hintColor,
+                                            ),
+                                          ),
+                                    title: ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.zero,
+                                        side: BorderSide.none,
+                                        backgroundColor:
+                                            appTheme.scaffoldBackgroundColor,
+                                      ),
+                                      child: Text(
+                                        searchController.currentPg.toString(),
+                                        style: appTheme.textTheme.titleSmall,
+                                      ),
+                                    ),
+                                    trailing: (searchController.maxPg ==
+                                            searchController.currentPg)
+                                        ? const SizedBox.shrink()
+                                        : ElevatedButton.icon(
+                                            onPressed: () {
+                                              if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
+                                                  if (searchController.isSelected.value == true) {
+                                                    searchController.searchApiCall(
+                                                        pgName: "pagination",
+                                                        searchModel: SearchModel(
+                                                          val: searchController.value1,
+                                                          genres:
+                                                          searchController.value2,
+                                                          searchKeywords:
+                                                          searchController
+                                                              .searchText.text,
+                                                          pageId: searchController
+                                                              .nextPg
+                                                              .toString(),
+                                                          sort: '',
+                                                        ),
+                                                        context: context);
+                                                  } else {
+                                                    searchController.searchApiCall(
+                                                        pgName: "pagination",
+                                                        searchModel: SearchModel(
+                                                          val: 'anime',
+                                                          genres: searchController.value2,
+                                                          searchKeywords:
+                                                          searchController
+                                                              .searchText.text,
+                                                          pageId: searchController
+                                                              .nextPg
+                                                              .toString(),
+                                                          sort: '',
+                                                        ),
+                                                        context: context);
+                                                  }
+                                                } else if (searchController.searchText.text.isNotEmpty) {
+                                                searchController.searchApiCall(
+                                                    pgName: "searchField",
+                                                    searchModel: SearchModel(
+                                                      val: 'anime',
+                                                      searchKeywords: searchController.searchText.text,
+                                                      genres: '',
+                                                      pageId: searchController.nextPg.toString(),
+                                                      sort: '',
+                                                    ),
+                                                    context: context);
+                                              }
+                                            },
+                                            label: Text(
+                                              searchController.nextPg.toString(),
+                                              style: appTheme.textTheme.titleSmall,
+                                            ),
+                                            icon: Icon(
+                                              Icons.fast_forward_outlined,
+                                              size: 18,
+                                              color: appTheme.iconTheme.color,
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              padding: EdgeInsets.zero,
+                                              side: BorderSide.none,
+                                              backgroundColor: appTheme.hintColor,
+                                            ),
+                                          ),
+                                    dense: true,
+                                  ),
+                                ],
+                              )
+                            : noData("Oops, no data found!"),
+                      )),
+                  Obx(() => Visibility(
+                        visible: searchController.noData.value,
+                        child: noData("Oops, failed to load data!"),
+                      )),
+                  Obx(() => Visibility(
+                        visible: searchController.showLogin.value,
+                        child: Center(
+                          heightFactor: 13,
+                          child: elevatedButton(
+                            text: "Login →",
+                            onPressed: () => Get.offAll(() => const Auth()),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.07,
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
       ),

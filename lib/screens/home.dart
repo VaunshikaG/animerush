@@ -1,20 +1,16 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:animerush/screens/category.dart';
-import 'package:animerush/utils/appConst.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../controllers/homeController.dart';
 import '../widgets/loader.dart';
 import '../utils/theme.dart';
 import '../widgets/noData.dart';
-import 'bottomBar.dart';
 import 'details.dart';
 
 class Home extends StatefulWidget {
@@ -24,13 +20,17 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with IronSourceBannerListener {
   HomeController homeController = Get.put(HomeController());
-
   int activeindex = 0;
+
+  bool isBannerLoaded = false;
+  bool bannerCapped = false;
+  final size = IronSourceBannerSize.BANNER;
 
   @override
   void initState() {
+    initAds();
     debugPrint(runtimeType.toString());
     homeController.hasData.value = false;
     homeController.noData.value = false;
@@ -46,6 +46,63 @@ class _HomeState extends State<Home> {
     homeController.homeApiCall();
   }
 
+  Future<void> initAds() async {
+    IronSource.setBannerListener(this);
+    if (!bannerCapped) {
+        bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
+        print('Banner DefaultBanner capped: $bannerCapped');
+        // size.isAdaptive = true; // Adaptive Banner
+        IronSource.loadBanner(
+            size: size,
+            position: IronSourceBannerPosition.Bottom,
+            // verticalOffset: 40,
+            verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
+            placementName: 'DefaultBanner');
+        log('banner displayed');
+        IronSource.displayBanner();
+      }
+  }
+
+  /// Banner listener ==================================================================================
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLoadFailed(IronSourceError error) {
+    print("onBannerAdLoadFailed Error:$error");
+    setState(() => isBannerLoaded = false);
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    log("onBannerAdLoaded");
+    setState(() => isBannerLoaded = true);
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismissed");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void dispose() {
+    IronSource.destroyBanner();
+    log('destroyBanner');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
@@ -58,251 +115,265 @@ class _HomeState extends State<Home> {
             overscroll.disallowIndicator();
             return false;
           },
-          child: SizedBox(
-            height: double.infinity,
-            child: ListView(
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              children: [
-                Obx(() => Visibility(
-                      visible: homeController.hasData.value,
-                      child: Column(
-                        children: [
-                          FittedBox(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: CarouselSlider.builder(
-                                itemCount: homeController.spotlightData.length,
-                                itemBuilder: (BuildContext context, index, _) {
-                                  var img = homeController
-                                          .spotlightData[index].banner ??
-                                      homeController
-                                          .spotlightData[index].aniImage
-                                          .toString();
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Get.off(() => Details(
-                                          id: homeController
-                                              .spotlightData[index].id
-                                              .toString()));
+          child: Stack(
+            children: [
+              Container(
+                // height: double.infinity,
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  children: [
+                    Obx(() => Visibility(
+                          visible: homeController.hasData.value,
+                          child: Column(
+                            children: [
+                              FittedBox(
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CarouselSlider.builder(
+                                    itemCount: homeController.spotlightData.length,
+                                    itemBuilder: (BuildContext context, index, _) {
+                                      var img = homeController
+                                              .spotlightData[index].banner ??
+                                          homeController
+                                              .spotlightData[index].aniImage
+                                              .toString();
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Get.off(() => Details(
+                                              id: homeController
+                                                  .spotlightData[index].id
+                                                  .toString()));
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          padding: EdgeInsets.zero,
+                                          decoration: BoxDecoration(
+                                            color: appTheme.splashColor,
+                                            image: DecorationImage(
+                                              image: NetworkImage(img),
+                                              fit: BoxFit.cover,
+                                              onError: (error, stackTrace) =>
+                                                  Image.asset(
+                                                "assets/img/blank.png",
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 15, horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              color: appTheme.splashColor
+                                                  .withOpacity(0.5),
+                                              gradient: RadialGradient(
+                                                radius: 0.8,
+                                                center: const Alignment(0.7, 0),
+                                                colors: [
+                                                  CustomTheme.transparent,
+                                                  CustomTheme.transparent,
+                                                  CustomTheme.transparent,
+                                                  CustomTheme.black12,
+                                                  // CustomTheme.black38,
+                                                  CustomTheme.black54,
+                                                  CustomTheme.black87,
+                                                ],
+                                              ),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 10),
+                                                  child: Text(
+                                                    "#${index + 1} Spotlight",
+                                                    style: appTheme
+                                                        .textTheme.titleSmall,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 20),
+                                                  child: Text(
+                                                    homeController
+                                                        .spotlightData[index].name!,
+                                                    style: appTheme
+                                                        .textTheme.titleMedium,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                     },
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        color: appTheme.splashColor,
-                                        image: DecorationImage(
-                                          image: NetworkImage(img),
-                                          fit: BoxFit.cover,
-                                          onError: (error, stackTrace) =>
-                                              Image.asset(
-                                            "assets/img/blank.png",
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: appTheme.splashColor
-                                              .withOpacity(0.5),
-                                          gradient: RadialGradient(
-                                            radius: 0.8,
-                                            center: const Alignment(0.7, 0),
-                                            colors: [
-                                              CustomTheme.transparent,
-                                              CustomTheme.transparent,
-                                              CustomTheme.transparent,
-                                              CustomTheme.black12,
-                                              // CustomTheme.black38,
-                                              CustomTheme.black54,
-                                              CustomTheme.black87,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 10),
-                                              child: Text(
-                                                "#${index + 1} Spotlight",
-                                                style: appTheme
-                                                    .textTheme.titleSmall,
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 20),
-                                              child: Text(
-                                                homeController
-                                                    .spotlightData[index].name!,
-                                                style: appTheme
-                                                    .textTheme.titleMedium,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                    options: CarouselOptions(
+                                      onPageChanged: (index, _) {
+                                        setState(() => activeindex = index);
+                                      },
+                                      height: 200,
+                                      autoPlay: true,
+                                      pageSnapping: true,
+                                      enlargeCenterPage: true,
+                                      enableInfiniteScroll: true,
+                                      aspectRatio: 16 / 9,
+                                      autoPlayCurve: Curves.fastOutSlowIn,
+                                      autoPlayAnimationDuration:
+                                          const Duration(milliseconds: 800),
+                                      viewportFraction: 1.0,
                                     ),
-                                  );
-                                },
-                                options: CarouselOptions(
-                                  onPageChanged: (index, _) {
-                                    setState(() => activeindex = index);
-                                  },
-                                  height: 200,
-                                  autoPlay: true,
-                                  pageSnapping: true,
-                                  enlargeCenterPage: true,
-                                  enableInfiniteScroll: true,
-                                  aspectRatio: 16 / 9,
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  autoPlayAnimationDuration:
-                                      const Duration(milliseconds: 800),
-                                  viewportFraction: 1.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            alignment: Alignment.center,
-                            child: AnimatedSmoothIndicator(
-                              curve: Curves.easeInCirc,
-                              activeIndex: activeindex,
-                              axisDirection: Axis.horizontal,
-                              count: homeController.spotlightData.length,
-                              effect: ExpandingDotsEffect(
-                                dotHeight: 3,
-                                dotWidth: 18,
-                                activeDotColor: appTheme.primaryColor,
-                                dotColor: appTheme.colorScheme.secondary,
+                              Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                child: AnimatedSmoothIndicator(
+                                  curve: Curves.easeInCirc,
+                                  activeIndex: activeindex,
+                                  axisDirection: Axis.horizontal,
+                                  count: homeController.spotlightData.length,
+                                  effect: ExpandingDotsEffect(
+                                    dotHeight: 3,
+                                    dotWidth: 18,
+                                    activeDotColor: appTheme.primaryColor,
+                                    dotColor: appTheme.colorScheme.secondary,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
 
-                          //  trending
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Trending",
-                              style: appTheme.textTheme.bodyLarge,
-                            ),
-                          ),
-                          trending(),
-
-                          //  types
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                            alignment: Alignment.centerLeft,
-                            child: ListTile(
-                              leading: Text(
-                                "Special",
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                              trailing: TextButton(
-                                onPressed: () {
-                                  Get.off(() =>
-                                      const Category(category: 'specials'));
-                                },
+                              //  trending
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+                                alignment: Alignment.centerLeft,
                                 child: Text(
-                                  "View all >",
+                                  "Trending",
                                   style: appTheme.textTheme.bodyLarge,
                                 ),
                               ),
-                              tileColor: appTheme.hintColor,
-                              visualDensity: VisualDensity.compact,
-                            ),
-                          ),
-                          specials(),
+                              trending(),
 
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                            alignment: Alignment.centerLeft,
-                            child: ListTile(
-                              leading: Text(
-                                "Movies",
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                              trailing: TextButton(
-                                onPressed: () {
-                                  Get.off(
-                                      () => const Category(category: 'movies'));
-                                },
-                                child: Text(
-                                  "View all >",
-                                  style: appTheme.textTheme.bodyLarge,
+                              //  types
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                alignment: Alignment.centerLeft,
+                                child: ListTile(
+                                  leading: Text(
+                                    "Special",
+                                    style: appTheme.textTheme.bodyLarge,
+                                  ),
+                                  trailing: TextButton(
+                                    onPressed: () {
+                                      Get.off(() =>
+                                          const Category(category: 'specials'));
+                                    },
+                                    child: Text(
+                                      "View all >",
+                                      style: appTheme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  tileColor: appTheme.hintColor,
+                                  visualDensity: VisualDensity.compact,
                                 ),
                               ),
-                              tileColor: appTheme.hintColor,
-                              visualDensity: VisualDensity.compact,
-                            ),
-                          ),
-                          movies(),
+                              specials(),
 
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                            alignment: Alignment.centerLeft,
-                            child: ListTile(
-                              leading: Text(
-                                "ONA",
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                              trailing: TextButton(
-                                onPressed: () {
-                                  Get.off(
-                                      () => const Category(category: 'ona'));
-                                },
-                                child: Text(
-                                  "View all >",
-                                  style: appTheme.textTheme.bodyLarge,
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                alignment: Alignment.centerLeft,
+                                child: ListTile(
+                                  leading: Text(
+                                    "Movies",
+                                    style: appTheme.textTheme.bodyLarge,
+                                  ),
+                                  trailing: TextButton(
+                                    onPressed: () {
+                                      Get.off(
+                                          () => const Category(category: 'movies'));
+                                    },
+                                    child: Text(
+                                      "View all >",
+                                      style: appTheme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  tileColor: appTheme.hintColor,
+                                  visualDensity: VisualDensity.compact,
                                 ),
                               ),
-                              tileColor: appTheme.hintColor,
-                              visualDensity: VisualDensity.compact,
-                            ),
-                          ),
-                          ona(),
+                              movies(),
 
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                            alignment: Alignment.centerLeft,
-                            child: ListTile(
-                              leading: Text(
-                                "OVA",
-                                style: appTheme.textTheme.bodyLarge,
-                              ),
-                              trailing: TextButton(
-                                onPressed: () {
-                                  Get.off(
-                                      () => const Category(category: 'ova'));
-                                },
-                                child: Text(
-                                  "View all >",
-                                  style: appTheme.textTheme.bodyLarge,
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                alignment: Alignment.centerLeft,
+                                child: ListTile(
+                                  leading: Text(
+                                    "ONA",
+                                    style: appTheme.textTheme.bodyLarge,
+                                  ),
+                                  trailing: TextButton(
+                                    onPressed: () {
+                                      Get.off(
+                                          () => const Category(category: 'ona'));
+                                    },
+                                    child: Text(
+                                      "View all >",
+                                      style: appTheme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  tileColor: appTheme.hintColor,
+                                  visualDensity: VisualDensity.compact,
                                 ),
                               ),
-                              tileColor: appTheme.hintColor,
-                              visualDensity: VisualDensity.compact,
-                            ),
+                              ona(),
+
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                alignment: Alignment.centerLeft,
+                                child: ListTile(
+                                  leading: Text(
+                                    "OVA",
+                                    style: appTheme.textTheme.bodyLarge,
+                                  ),
+                                  trailing: TextButton(
+                                    onPressed: () {
+                                      Get.off(
+                                          () => const Category(category: 'ova'));
+                                    },
+                                    child: Text(
+                                      "View all >",
+                                      style: appTheme.textTheme.bodyLarge,
+                                    ),
+                                  ),
+                                  tileColor: appTheme.hintColor,
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                              ),
+                              ova(),
+                            ],
                           ),
-                          ova(),
-                        ],
-                      ),
-                    )),
-                Obx(() => Visibility(
-                      visible: homeController.noData.value,
-                      child: noData("Oops, failed to load data!"),
-                    )),
-              ],
-            ),
+                        )),
+                    Obx(() => Visibility(
+                          visible: homeController.noData.value,
+                          child: noData("Oops, failed to load data!"),
+                        )),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -312,94 +383,104 @@ class _HomeState extends State<Home> {
   Widget trending() {
     final appTheme = Theme.of(context);
 
-    return Container(
-      height: 200,
-      margin: const EdgeInsets.only(bottom: 20),
-      child: ListView.builder(
-        itemCount: homeController.topData.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        physics: const ClampingScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              Get.off(() =>
-                  Details(id: homeController.topData[index].id.toString()));
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              height: 150,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 180,
-                    width: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    margin: EdgeInsets.zero,
-                    color: appTheme.colorScheme.surface,
-                    child: Column(
+    return Stack(
+      children: [
+        Positioned(
+          child: Container(
+            height: 200,
+            margin: const EdgeInsets.only(bottom: 20),
+            child: ListView.builder(
+              itemCount: homeController.topData.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              physics: const ClampingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    Get.off(() =>
+                        Details(id: homeController.topData[index].id.toString()));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    height: 150,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        RichText(
-                          text: TextSpan(
+                        Container(
+                          height: 180,
+                          width: 40,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          margin: EdgeInsets.zero,
+                          color: appTheme.colorScheme.surface,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              WidgetSpan(
-                                child: RotatedBox(
-                                  quarterTurns: -1,
-                                  child: SizedBox(
-                                    width: 120,
-                                    child: Text(
-                                      homeController.topData[index].name!,
-                                      softWrap: true,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: appTheme.textTheme.titleSmall,
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    WidgetSpan(
+                                      child: RotatedBox(
+                                        quarterTurns: -1,
+                                        child: SizedBox(
+                                          width: 120,
+                                          child: Text(
+                                            homeController.topData[index].name!,
+                                            softWrap: true,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: appTheme.textTheme.titleSmall,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                (index + 1).toString(),
+                                style: appTheme.textTheme.bodyLarge,
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          (index + 1).toString(),
-                          style: appTheme.textTheme.bodyLarge,
+                        SizedBox(
+                          height: 180,
+                          width: 130,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: FadeInImage.assetNetwork(
+                              placeholder: "assets/img/blank.png",
+                              image:
+                                  homeController.topData[index].aniImage.toString(),
+                              imageErrorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  "assets/img/blank.png",
+                                  fit: BoxFit.contain,
+                                );
+                              },
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 180,
-                    width: 130,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: FadeInImage.assetNetwork(
-                        placeholder: "assets/img/blank.png",
-                        image:
-                            homeController.topData[index].aniImage.toString(),
-                        imageErrorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            "assets/img/blank.png",
-                            fit: BoxFit.contain,
-                          );
-                        },
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
+          ),
+        ),
+        Positioned(
+          bottom: 50,
+          child: SizedBox(height: 30),
+        )
+      ],
     );
   }
 
@@ -689,4 +770,5 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
 }

@@ -1,19 +1,17 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import '../controllers/versionController.dart';
-import '../widgets/customButtons.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
+import '../main.dart';
+import '../utils/appConst.dart';
 import 'home.dart';
-import 'homeDrawer.dart';
 import 'search.dart';
 import 'watchList.dart';
 import 'account.dart';
-
-VersionController versionController = Get.put(VersionController());
 
 class BottomBar extends StatefulWidget {
   final int currentIndex;
@@ -52,7 +50,6 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
-
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -79,7 +76,8 @@ class _BottomBarState extends State<BottomBar> {
         ),
         drawerEdgeDragWidth: 50,
         // endDrawer: const HomeDrawer(),
-        body: SafeArea(child: _tabs[_selectedTab]),
+        body: SafeArea(child:  _tabs[_selectedTab]),
+        // extendBody: true,
         bottomNavigationBar: Container(
           color: appTheme.scaffoldBackgroundColor,
           padding: const EdgeInsets.all(8),
@@ -123,4 +121,5 @@ class _BottomBarState extends State<BottomBar> {
       ),
     );
   }
+
 }

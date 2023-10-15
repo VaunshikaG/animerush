@@ -32,13 +32,16 @@ class VersionController extends GetxController {
           if (responseBody['st'] == 100) {
             VersionPodo versionPodo = VersionPodo.fromJson(responseBody);
             hideProgress();
+            print(versionPodo.data!.version);
+            print(packageInfo.version);
             if (versionPodo.data!.version!.isNotEmpty &&
                 versionPodo.data!.version != packageInfo.version &&
                 pg == 'bottom') {
               Get.defaultDialog(
                 title: "New Update Available",
                 middleText:
-                    "A newer version of app available please update it now.",
+                    // "A newer version of app available please update it now.",
+                "Please uninstall current app and download and install the latest app for better experience.",
                 titleStyle: appTheme.textTheme.bodyLarge,
                 middleTextStyle: appTheme.textTheme.labelSmall,
                 confirm: ConstrainedBox(
@@ -76,11 +79,16 @@ class VersionController extends GetxController {
       rethrow;
     }
   }
-
   launchURL(String strUrl) async {
-    final Uri _url = Uri.parse(strUrl);
-    if (!await launchUrl(_url)) {
-      throw 'Could not launch $strUrl';
+    final url = strUrl;
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        await launch(url);
+      }
+    } catch (e) {
+      throw 'Could not launch $url';
     }
   }
 }

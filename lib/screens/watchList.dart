@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
@@ -25,7 +26,7 @@ class WatchList extends StatefulWidget {
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList> {
+class _WatchListState extends State<WatchList> with IronSourceBannerListener {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -33,8 +34,13 @@ class _WatchListState extends State<WatchList> {
   ScrollController scrollController = ScrollController();
   TabController? _controller;
 
+  bool isBannerLoaded = false;
+  bool bannerCapped = false;
+  final size = IronSourceBannerSize.BANNER;
+
   @override
   void initState() {
+    initAds();
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData('00');
@@ -47,6 +53,63 @@ class _WatchListState extends State<WatchList> {
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
     });
+  }
+
+  Future<void> initAds() async {
+    IronSource.setBannerListener(this);
+    if (!bannerCapped) {
+      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
+      print('Banner DefaultBanner capped: $bannerCapped');
+      // size.isAdaptive = true; // Adaptive Banner
+      IronSource.loadBanner(
+          size: size,
+          position: IronSourceBannerPosition.Bottom,
+          // verticalOffset: 40,
+          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
+          placementName: 'DefaultBanner');
+      log('banner displayed');
+      IronSource.displayBanner();
+    }
+  }
+
+  /// Banner listener ==================================================================================
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLoadFailed(IronSourceError error) {
+    print("onBannerAdLoadFailed Error:$error");
+    setState(() => isBannerLoaded = false);
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    log("onBannerAdLoaded");
+    setState(() => isBannerLoaded = true);
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismissed");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void dispose() {
+    IronSource.destroyBanner();
+    log('destroyBanner');
+    super.dispose();
   }
 
   @override
@@ -76,32 +139,49 @@ class _WatchListState extends State<WatchList> {
               overscroll.disallowIndicator();
               return false;
             },
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  (widget.pg == 'detail')
-                      ? const SizedBox(height: 10) : const SizedBox.shrink(),
-                  Obx(() => Visibility(
-                        visible: watchListController.hasData.value,
-                        child: _tabSection(),
-                      )),
-                  Obx(() => Visibility(
-                        visible: watchListController.noData.value,
-                        child: noData("Oops, failed to load data!"),
-                      )),
-                  Obx(() => Visibility(
-                        visible: watchListController.showLogin.value,
-                        child: Center(
-                          heightFactor: 13,
-                          child: elevatedButton(
-                            text: "Login →",
-                            onPressed: () => Get.offAll(() => const Auth()),
-                          ),
-                        ),
-                      )),
-                ],
-              ),
+            child: Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size
+                      .height * 0.06),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (widget.pg == 'detail')
+                            ? const SizedBox(height: 10) : const SizedBox.shrink(),
+                        Obx(() => Visibility(
+                              visible: watchListController.hasData.value,
+                              child: _tabSection(),
+                            )),
+                        Obx(() => Visibility(
+                              visible: watchListController.noData.value,
+                              child: noData("Oops, failed to load data!"),
+                            )),
+                        Obx(() => Visibility(
+                              visible: watchListController.showLogin.value,
+                              child: Center(
+                                heightFactor: 13,
+                                child: elevatedButton(
+                                  text: "Login →",
+                                  onPressed: () => Get.offAll(() => const Auth()),
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
