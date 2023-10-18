@@ -113,6 +113,8 @@ class _BottomBarState extends State<BottomBar> {
             selectedIndex: _selectedTab,
             onTabChange: (index) {
               setState(() {
+                IronSource.destroyBanner();
+                log('destroyBanner');
                 _selectedTab = index;
               });
             },

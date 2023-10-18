@@ -106,16 +106,11 @@ class _WatchListState extends State<WatchList> with IronSourceBannerListener {
   }
 
   @override
-  void dispose() {
-    IronSource.destroyBanner();
-    log('destroyBanner');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        IronSource.destroyBanner();
+        log('destroyBanner');
         Get.off(() => Details(id: widget.aId, epId: ''));
         return true;
       },

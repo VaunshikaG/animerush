@@ -131,13 +131,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin, 
   }
 
   @override
-  void dispose() {
-    IronSource.destroyBanner();
-    log('destroyBanner');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -127,7 +127,8 @@ class _MyAppState extends State<MyApp> with IronSourceImpressionDataListener, Ir
       'do_not_sell': ['false'],
       // COPPA
       'is_child_directed': ['false'],
-      'is_test_suite': ['enable']
+      // 'is_test_suite': ['enable']
+      // 'is_test_suite': ['disable']
     });
 
     return;

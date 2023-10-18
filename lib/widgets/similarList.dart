@@ -1,18 +1,15 @@
-// ignore_for_file: unused_import
-
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 
 import '../controllers/watchListController.dart';
-import '../model/continueWatchPodo.dart';
 import '../screens/details.dart';
 import '../utils/appConst.dart';
 import 'animeAnimation.dart';
 import 'loader.dart';
-import 'noData.dart';
 
 class SimilarList extends StatefulWidget {
   final similarData;
@@ -23,8 +20,7 @@ class SimilarList extends StatefulWidget {
   State<SimilarList> createState() => _SimilarListState();
 }
 
-class _SimilarListState extends State<SimilarList>
-    with TickerProviderStateMixin {
+class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin {
   late final AnimationController controller;
   WatchListController watchListController = Get.put(WatchListController());
 
@@ -106,6 +102,8 @@ class _SimilarListState extends State<SimilarList>
           animation: controller,
           child: GestureDetector(
             onTap: () {
+              IronSource.destroyBanner();
+              log('destroyBanner');
               if (widget.pg == 'continue') {
                 Get.offAll(() => Details(id: similarList.anime.id.toString()));
               } else {

@@ -48,14 +48,14 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
 
   Future<void> initAds() async {
     IronSource.setBannerListener(this);
-    if (!bannerCapped) {
+
+    if (!isBannerLoaded) {
         bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
         print('Banner DefaultBanner capped: $bannerCapped');
         // size.isAdaptive = true; // Adaptive Banner
         IronSource.loadBanner(
             size: size,
             position: IronSourceBannerPosition.Bottom,
-            // verticalOffset: 40,
             verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
             placementName: 'DefaultBanner');
         log('banner displayed');
@@ -97,13 +97,6 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
   }
 
   @override
-  void dispose() {
-    IronSource.destroyBanner();
-    log('destroyBanner');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
 
@@ -141,6 +134,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                               .toString();
                                       return GestureDetector(
                                         onTap: () {
+                                          IronSource.destroyBanner();
+                                          log('destroyBanner');
                                           Get.off(() => Details(
                                               id: homeController
                                                   .spotlightData[index].id
@@ -154,11 +149,22 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                             image: DecorationImage(
                                               image: NetworkImage(img),
                                               fit: BoxFit.cover,
-                                              onError: (error, stackTrace) =>
-                                                  Image.asset(
-                                                "assets/img/blank.png",
-                                                fit: BoxFit.cover,
-                                              ),
+                                              onError: (error, stackTrace) => Image.network(
+                                                  homeController.spotlightData[index]
+                                                      .imageHighQuality.toString(),
+                                                  fit: BoxFit.contain,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return Image.asset(
+                                                      "assets/img/blank.png",
+                                                      fit: BoxFit.contain,
+                                                    );
+                                                  },
+                                                ),
+                                              // onError: (error, stackTrace) =>
+                                              //     Image.asset(
+                                              //   "assets/img/blank.png",
+                                              //   fit: BoxFit.cover,
+                                              // ),
                                             ),
                                           ),
                                           child: Container(
@@ -269,6 +275,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
+                                      IronSource.destroyBanner();
+                                      log('destroyBanner');
                                       Get.off(() =>
                                           const Category(category: 'specials'));
                                     },
@@ -293,6 +301,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
+                                      IronSource.destroyBanner();
+                                      log('destroyBanner');
                                       Get.off(
                                           () => const Category(category: 'movies'));
                                     },
@@ -317,6 +327,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
+                                      IronSource.destroyBanner();
+                                      log('destroyBanner');
                                       Get.off(
                                           () => const Category(category: 'ona'));
                                     },
@@ -341,6 +353,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
+                                      IronSource.destroyBanner();
+                                      log('destroyBanner');
                                       Get.off(
                                           () => const Category(category: 'ova'));
                                     },
@@ -397,6 +411,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    IronSource.destroyBanner();
+                    log('destroyBanner');
                     Get.off(() =>
                         Details(id: homeController.topData[index].id.toString()));
                   },
@@ -459,10 +475,17 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                               image:
                                   homeController.topData[index].aniImage.toString(),
                               imageErrorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  "assets/img/blank.png",
-                                  fit: BoxFit.contain,
-                                );
+                                try {
+                                  return Image.network(
+                                    homeController.topData[index].imageHighQuality.toString(),
+                                    fit: BoxFit.contain,
+                                  );
+                                } catch (e) {
+                                  return Image.asset(
+                                    "assets/img/blank.png",
+                                    fit: BoxFit.contain,
+                                  );
+                                }
                               },
                               fit: BoxFit.contain,
                             ),
@@ -510,6 +533,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
           }
           return ListTile(
             onTap: () {
+              IronSource.destroyBanner();
+              log('destroyBanner');
               Get.off(() =>
                   Details(id: homeController.specialData[index].id.toString()));
             },
@@ -518,14 +543,21 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??=
-                    homeController.moviesData[index].imageHighQuality
+                image: homeController.specialData[index].aniImage ??=
+                    homeController.specialData[index].imageHighQuality
                         .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    "assets/img/blank.png",
-                    fit: BoxFit.contain,
-                  );
+                  try {
+                    return Image.network(
+                      homeController.moviesData[index].imageHighQuality.toString(),
+                      fit: BoxFit.contain,
+                    );
+                  } catch (e) {
+                    return Image.asset(
+                      "assets/img/blank.png",
+                      fit: BoxFit.contain,
+                    );
+                  }
                 },
                 fit: BoxFit.contain,
               ),
@@ -584,6 +616,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
           }
           return ListTile(
             onTap: () {
+              IronSource.destroyBanner();
+              log('destroyBanner');
               Get.off(() =>
                   Details(id: homeController.moviesData[index].id.toString()));
             },
@@ -596,10 +630,17 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
                     homeController.moviesData[index].imageHighQuality
                         .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    "assets/img/blank.png",
-                    fit: BoxFit.contain,
-                  );
+                  try {
+                    return Image.network(
+                      homeController.moviesData[index].imageHighQuality.toString(),
+                      fit: BoxFit.contain,
+                    );
+                  } catch (e) {
+                    return Image.asset(
+                      "assets/img/blank.png",
+                      fit: BoxFit.contain,
+                    );
+                  }
                 },
                 fit: BoxFit.contain,
               ),
@@ -655,6 +696,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
           }
           return ListTile(
             onTap: () {
+              IronSource.destroyBanner();
+              log('destroyBanner');
               Get.off(() =>
                   Details(id: homeController.onasData[index].id.toString()));
             },
@@ -663,14 +706,21 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??=
-                    homeController.moviesData[index].imageHighQuality
+                image: homeController.onasData[index].aniImage ??=
+                    homeController.onasData[index].imageHighQuality
                         .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    "assets/img/blank.png",
-                    fit: BoxFit.contain,
-                  );
+                  try {
+                    return Image.network(
+                      homeController.onasData[index].imageHighQuality.toString(),
+                      fit: BoxFit.contain,
+                    );
+                  } catch (e) {
+                    return Image.asset(
+                      "assets/img/blank.png",
+                      fit: BoxFit.contain,
+                    );
+                  }
                 },
                 fit: BoxFit.contain,
               ),
@@ -726,6 +776,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
           }
           return ListTile(
             onTap: () {
+              IronSource.destroyBanner();
+              log('destroyBanner');
               Get.off(() =>
                   Details(id: homeController.ovasData[index].id.toString()));
             },
@@ -734,14 +786,21 @@ class _HomeState extends State<Home> with IronSourceBannerListener {
               width: 50,
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
-                image: homeController.moviesData[index].aniImage ??=
-                    homeController.moviesData[index].imageHighQuality
+                image: homeController.ovasData[index].aniImage ??=
+                    homeController.ovasData[index].imageHighQuality
                         .toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    "assets/img/blank.png",
-                    fit: BoxFit.contain,
-                  );
+                  try {
+                    return Image.network(
+                      homeController.ovasData[index].imageHighQuality.toString(),
+                      fit: BoxFit.contain,
+                    );
+                  } catch (e) {
+                    return Image.asset(
+                      "assets/img/blank.png",
+                      fit: BoxFit.contain,
+                    );
+                  }
                 },
                 fit: BoxFit.contain,
               ),

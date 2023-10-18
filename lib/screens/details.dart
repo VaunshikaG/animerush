@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:animerush/screens/episode.dart';
 import 'package:animerush/utils/appConst.dart';
@@ -5,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:rich_text_view/rich_text_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/detailsController.dart';
 import '../controllers/watchListController.dart';
 import '../utils/commonStyle.dart';
@@ -30,8 +33,7 @@ class Details extends StatefulWidget {
   State<Details> createState() => _DetailsState();
 }
 
-class _DetailsState extends State<Details> {
-    // with IronSourceBannerListener {
+class _DetailsState extends State<Details> with IronSourceInterstitialListener, IronSourceBannerListener {
   DetailsController detailsController = Get.put(DetailsController());
   WatchListController watchListController = Get.put(WatchListController());
   ScrollController scrollController = ScrollController();
@@ -59,16 +61,20 @@ class _DetailsState extends State<Details> {
 
   bool isInterstitialAvailable = false;
   bool interstitialCapped = false;
+  bool interstitialClosed = false;
 
   bool isBannerLoaded = false;
   bool bannerCapped = false;
   final size = IronSourceBannerSize.BANNER;
 
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
-    // initAds();
-    // IronSource.setInterstitialListener(this);
-    // IronSource.loadInterstitial();
+    IronSource.setBannerListener(this);
+    initAds();
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
@@ -78,9 +84,7 @@ class _DetailsState extends State<Details> {
 
   Future<void> loadData() async {
     await showProgress(context, false);
-    // Future.delayed(const Duration(seconds: 1), () {
     detailsController.detailsApiCall(animeId: widget.id);
-    // });
   }
 
   var top = 0.0;
@@ -91,7 +95,8 @@ class _DetailsState extends State<Details> {
 
     return WillPopScope(
       onWillPop: () async {
-        // Get.back();
+        IronSource.destroyBanner();
+        log('destroyBanner');
         Get.offAll(() => const BottomBar(currentIndex: 0, checkVersion: false));
         return true;
       },
@@ -143,7 +148,8 @@ class _DetailsState extends State<Details> {
                       child: Stack(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+                            margin: EdgeInsets.only(bottom: MediaQuery.of
+                              (context).size.height * 0.04),
                             child: Column(
                               children: [
                                 Obx(() => Visibility(
@@ -271,28 +277,10 @@ class _DetailsState extends State<Details> {
                                                       style: appTheme
                                                           .textTheme.labelSmall,
                                                     ),
-                                                    onPressed: () {
-                                                      // setState(() {
-                                                      if (widget.epId != "") {
-                                                        Get.off(() => Episode(
-                                                              pg: 'details',
-                                                              epDetails:
-                                                                  detailsController
-                                                                      .epDetails,
-                                                              aId: widget.id,
-                                                              epId: widget.epId,
-                                                            ));
-                                                      } else {
-                                                        Get.off(() => Episode(
-                                                              pg: 'details',
-                                                              epDetails:
-                                                                  detailsController
-                                                                      .epDetails,
-                                                              aId: widget.id,
-                                                              epId: '',
-                                                            ));
-                                                      }
-                                                      // });
+                                                    onPressed: () async {
+                                                      IronSource.destroyBanner();
+                                                      log('destroyBanner');
+                                                      _handleButtonClick();
                                                     },
                                                     backgroundColor:
                                                         appTheme.primaryColor,
@@ -429,8 +417,7 @@ class _DetailsState extends State<Details> {
                                             ),
                                             SimilarList(
                                               pg: 'detail',
-                                              similarData:
-                                                  detailsController.similarData,
+                                              similarData: detailsController.similarData,
                                             ),
                                           ],
                                         ),
@@ -459,8 +446,8 @@ class _DetailsState extends State<Details> {
                             left: 0,
                             right: 0,
                             child: Container(
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              // color: Colors.black,
+                              height: MediaQuery.of(context).size.height * 0.077,
+                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -475,33 +462,114 @@ class _DetailsState extends State<Details> {
       ),
     );
   }
-/*
+  Future<void> _handleButtonClick() async {
+    final prefs = await SharedPreferences.getInstance();
+    String formatted = DateFormat('HH:mm').format(DateTime.now());
+    DateTime now = DateTime.now();
+    DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp)
+        ? DateTime.parse(prefs.getString(AppConst.adTimeStamp)!)
+        : null;
 
+    if (lastClicked == null || now.difference(lastClicked).inMinutes >= 10) {
+      log('Executing code...');
+      if (isInterstitialAvailable == true) {
+        final isCapped = await IronSource
+            .isInterstitialPlacementCapped(placementName: "Default");
+        print('Interstitial Default placement capped: $isCapped');
+        if (!isCapped && await IronSource.isInterstitialReady()) {
+          prefs.setString(AppConst.adTimeStamp, now.toIso8601String());
+          IronSource.showInterstitial();
+        }
+      }
+
+    } else {
+      log('Button clicked within the last 10 minute. Not executing code.');
+    }
+
+    if (interstitialClosed == true) {
+      if (widget.epId != "") {
+        Get.off(() => Episode(
+          pg: 'details',
+          epDetails: detailsController.epDetails,
+          aId: widget.id,
+          epId: widget.epId,
+        ));
+      } else {
+        Get.off(() => Episode(
+          pg: 'details',
+          epDetails: detailsController.epDetails,
+          aId: widget.id,
+          epId: '',
+        ));
+      }
+    }
+  }
   Future<void> initAds() async {
-    // if (isInterstitialAvailable == true) {
-    //   interstitialCapped =
-    // await IronSource.isInterstitialPlacementCapped(placementName: "Default");
-    // await IronSource.isInterstitialPlacementCapped(placementName: "DefaultInterstitial");
-    // log('Interstitial Default placement capped: $interstitialCapped');
-    // if (!interstitialCapped && await IronSource.isInterstitialReady()) {
-    //   IronSource.showInterstitial();
-    // }
-    // }
-
-    IronSource.setBannerListener(this);
-    if (!bannerCapped) {
+    if (!isBannerLoaded) {
       bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
       print('Banner DefaultBanner capped: $bannerCapped');
-      // size.isAdaptive = true; // Adaptive Banner
-      IronSource.loadBanner(
-          size: size,
-          position: IronSourceBannerPosition.Bottom,
-          // verticalOffset: 40,
-          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
-          placementName: 'DefaultBanner');
-      log('banner displayed');
-      IronSource.displayBanner();
+      if (!bannerCapped) {
+        IronSource.loadBanner(
+            size: size,
+            position: IronSourceBannerPosition.Bottom,
+            // verticalOffset: 40,
+            verticalOffset: -(MediaQuery.of(context).size.height * 0.022)
+                .toInt(),
+            placementName: 'DefaultBanner');
+        log('banner displayed');
+        IronSource.displayBanner();
+        interstitialClosed = true;
+        IronSource.setInterstitialListener(this);
+        IronSource.loadInterstitial();
+      }
+    } else {
+      interstitialClosed = true;
     }
+  }
+
+  /// Interstitial listener ==================================================================================
+  @override
+  void onInterstitialAdClicked() {
+    log("onInterstitialAdClicked");
+  }
+
+  @override
+  void onInterstitialAdClosed() {
+    log("onInterstitialAdClosed");
+    setState(() => isInterstitialAvailable = false);
+    setState(() => interstitialClosed = true);
+    print(interstitialClosed);
+  }
+
+  @override
+  void onInterstitialAdLoadFailed(IronSourceError error) {
+    log("onInterstitialAdLoadFailed Error:$error");
+    setState(() => isInterstitialAvailable = false);
+    setState(() => interstitialClosed = true);
+  }
+
+  @override
+  void onInterstitialAdOpened() {
+    log("onInterstitialAdOpened");
+  }
+
+  @override
+  void onInterstitialAdReady() {
+    log("onInterstitialAdReady");
+    setState(() => isInterstitialAvailable = true);
+    print(isInterstitialAvailable);
+  }
+
+  @override
+  void onInterstitialAdShowFailed(IronSourceError error) {
+    log("onInterstitialAdShowFailed Error:$error");
+    setState(() => isInterstitialAvailable = false);
+    setState(() => interstitialClosed = true);
+  }
+
+  @override
+  void onInterstitialAdShowSucceeded() {
+    log("onInterstitialAdShowSucceeded");
   }
 
   /// Banner listener ==================================================================================
@@ -536,56 +604,5 @@ class _DetailsState extends State<Details> {
   void onBannerAdLeftApplication() {
     print("onBannerAdLeftApplication");
   }
-
-  @override
-  void dispose() {
-    IronSource.destroyBanner();
-    log('destroyBanner');
-    super.dispose();
-  }
-*/
-
-  /// Interstitial listener ==================================================================================
-/*
-  @override
-  void onInterstitialAdClicked() {
-    log("onInterstitialAdClicked");
-  }
-
-  @override
-  void onInterstitialAdClosed() {
-    log("onInterstitialAdClosed");
-    setState(() => isInterstitialAvailable = false);
-  }
-
-  @override
-  void onInterstitialAdLoadFailed(IronSourceError error) {
-    log("onInterstitialAdLoadFailed Error:$error");
-    setState(() => isInterstitialAvailable = false);
-  }
-
-  @override
-  void onInterstitialAdOpened() {
-    log("onInterstitialAdOpened");
-  }
-
-  @override
-  void onInterstitialAdReady() {
-    log("hereeeeeeeee onInterstitialAdReady");
-    setState(() => isInterstitialAvailable = true);
-    print(isInterstitialAvailable);
-  }
-
-  @override
-  void onInterstitialAdShowFailed(IronSourceError error) {
-    log("onInterstitialAdShowFailed Error:$error");
-    setState(() => isInterstitialAvailable = false);
-  }
-
-  @override
-  void onInterstitialAdShowSucceeded() {
-    log("onInterstitialAdShowSucceeded");
-  }
-*/
 
 }

@@ -37,6 +37,7 @@ class AppConst {
   static const String lastProfileApi = "last_profile_api";
 
   static const int duration = 1800;
+  static const String adTimeStamp = 'ad_TimeStamp';
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex =

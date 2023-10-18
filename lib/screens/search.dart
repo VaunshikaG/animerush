@@ -161,13 +161,6 @@ class _SearchState extends State<Search> with IronSourceBannerListener {
   }
 
   @override
-  void dispose() {
-    IronSource.destroyBanner();
-    log('destroyBanner');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
 
