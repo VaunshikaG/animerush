@@ -59,7 +59,7 @@ class _WatchListState extends State<WatchList> with IronSourceBannerListener {
     IronSource.setBannerListener(this);
     if (!bannerCapped) {
       bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      print('Banner DefaultBanner capped: $bannerCapped');
+      log('Banner DefaultBanner capped: $bannerCapped');
       // size.isAdaptive = true; // Adaptive Banner
       IronSource.loadBanner(
           size: size,
@@ -75,34 +75,42 @@ class _WatchListState extends State<WatchList> with IronSourceBannerListener {
   /// Banner listener ==================================================================================
   @override
   void onBannerAdClicked() {
-    print("onBannerAdClicked");
+    log("onBannerAdClicked");
   }
 
   @override
   void onBannerAdLoadFailed(IronSourceError error) {
-    print("onBannerAdLoadFailed Error:$error");
-    setState(() => isBannerLoaded = false);
+    log("onBannerAdLoadFailed Error:$error");
+    if (mounted) {
+      setState(() {
+        isBannerLoaded = false;
+      });
+    }
   }
 
   @override
   void onBannerAdLoaded() {
     log("onBannerAdLoaded");
-    setState(() => isBannerLoaded = true);
+    if (mounted) {
+      setState(() {
+        isBannerLoaded = true;
+      });
+    }
   }
-
+  
   @override
   void onBannerAdScreenDismissed() {
-    print("onBannerAdScreenDismissed");
+    log("onBannerAdScreenDismissed");
   }
 
   @override
   void onBannerAdScreenPresented() {
-    print("onBannerAdScreenPresented");
+    log("onBannerAdScreenPresented");
   }
 
   @override
   void onBannerAdLeftApplication() {
-    print("onBannerAdLeftApplication");
+    log("onBannerAdLeftApplication");
   }
 
   @override

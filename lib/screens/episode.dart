@@ -8,6 +8,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,7 @@ class Episode extends StatefulWidget {
   State<Episode> createState() => _EpisodeState();
 }
 
-class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
+class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSourceBannerListener {
   DwldController dwldController = DwldController();
   EpisodeController epController = Get.put(EpisodeController());
 
@@ -62,12 +63,22 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   String start = '', end = '';
   final ReceivePort _port = ReceivePort();
 
+  bool isBannerLoaded = false;
+  bool bannerCapped = false;
+  final size = IronSourceBannerSize.BANNER;
+
+  bool isRewardedVideoAvailable = false;
+  bool isVideoAdVisible = false;
+  IronSourceRewardedVideoPlacement? _placement;
+
   @override
   void initState() {
+    IronSource.setBannerListener(this);
     debugPrint(runtimeType.toString());
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
+      // initAds();
     });
     // dwldController.bindBackgroundIsolate();
     // IsolateNameServer.registerPortWithName(
@@ -76,6 +87,24 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     //
     // FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
+  }
+
+  Future<void> initAds() async {
+    if (!isBannerLoaded) {
+      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
+      log('Banner DefaultBanner capped: $bannerCapped');
+      if (!bannerCapped) {
+        IronSource.loadBanner(
+            size: size,
+            position: IronSourceBannerPosition.Bottom,
+            // verticalOffset: 40,
+            verticalOffset: -(MediaQuery.of(context).size.height * 0.022)
+                .toInt(),
+            placementName: 'DefaultBanner');
+        log('banner displayed');
+        IronSource.displayBanner();
+      }
+    }
   }
 
   @pragma('vm:entry-point')
@@ -144,6 +173,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
     return WillPopScope(
       onWillPop: () async {
+        IronSource.destroyBanner();
+        log('destroyBanner');
         Get.offAll(() => Details(id: widget.aId, epId: ''));
         return true;
       },
@@ -162,102 +193,118 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: Column(
+                      child: Stack(
                         children: [
-                          Obx(() => (epController.showPg.value == true)
-                              ? Visibility(
-                                  visible: epController.hasData.value,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CustomAppBar3(
-                                        title:
-                                            epController.epData.episodeTitle ??
-                                                epController.w_title,
-                                        backBtn: () {
-                                          Get.offAll(() => Details(
-                                              id: widget.aId, epId: ''));
-                                        },
-                                        wishlist: () {
-                                          Get.off(() => WatchList(
-                                                pg: ''
-                                                    'detail',
-                                                aId: widget.aId,
-                                              ));
-                                        },
-                                      ),
-                                      Obx(() => epController.loading.value
-                                              ? const CircularProgressIndicator()
-                                              : AspectRatio(
-                                                  aspectRatio: 16 / 9,
-                                                  child: BetterPlayer(
-                                                    controller: epController
-                                                        .betterPlayerController,
-                                                    key: epController
-                                                        .betterPlayerKey,
-                                                  ),
-                                                )
-                                          /*Player(
-                                        url: epController.vdUrl ??
-                                            epController
-                                                .epData.episodeLink!.file,
-                                        title:
-                                        epController.epData.episodeTitle ??
-                                            epController.w_title,
-                                        placeHolder: epController
-                                            .epData.image ??
-                                            "https://animerush.in/media/image/no_poster.jpg",
-                                        dwldList: epController.dwldList,
-                                      )*/
-                                          ),
-                                      (epController.epData.videoDetails != null)
-                                          ? details() : const SizedBox(height: 0),
-                                      dwld(),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 10),
-                                        child: Text(
-                                          "List of Episodes   :",
-                                          softWrap: true,
-                                          textAlign: TextAlign.left,
-                                          style: appTheme.textTheme.titleMedium,
+                          Container(
+                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.04),
+                            child: Column(
+                              children: [
+                                Obx(() => (epController.showPg.value == true)
+                                    ? Visibility(
+                                        visible: epController.hasData.value,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CustomAppBar3(
+                                              title:
+                                                  epController.epData.episodeTitle ??
+                                                      epController.w_title,
+                                              backBtn: () {
+                                                Get.offAll(() => Details(
+                                                    id: widget.aId, epId: ''));
+                                              },
+                                              wishlist: () {
+                                                Get.off(() => WatchList(
+                                                      pg: ''
+                                                          'detail',
+                                                      aId: widget.aId,
+                                                    ));
+                                              },
+                                            ),
+                                            Obx(() => epController.loading.value
+                                                    ? const CircularProgressIndicator()
+                                                    : AspectRatio(
+                                                        aspectRatio: 16 / 9,
+                                                        child: BetterPlayer(
+                                                          controller: epController
+                                                              .betterPlayerController,
+                                                          key: epController
+                                                              .betterPlayerKey,
+                                                        ),
+                                                      )
+                                                /*Player(
+                                              url: epController.vdUrl ??
+                                                  epController
+                                                      .epData.episodeLink!.file,
+                                              title:
+                                              epController.epData.episodeTitle ??
+                                                  epController.w_title,
+                                              placeHolder: epController
+                                                  .epData.image ??
+                                                  "https://animerush.in/media/image/no_poster.jpg",
+                                              dwldList: epController.dwldList,
+                                            )*/
+                                                ),
+                                            (epController.epData.videoDetails != null)
+                                                ? details() : const SizedBox(height: 0),
+                                            dwld(),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 15, vertical: 10),
+                                              child: Text(
+                                                "List of Episodes   :",
+                                                softWrap: true,
+                                                textAlign: TextAlign.left,
+                                                style: appTheme.textTheme.titleMedium,
+                                              ),
+                                            ),
+                                            (finalChipCount > 0)
+                                                ? episodes()
+                                                : const Placeholder(),
+                                            const SizedBox(height: 20),
+                                          ],
                                         ),
+                                      )
+                                    : Container()),
+                                Obx(() => Visibility(
+                                      visible: epController.noData.value,
+                                      child: noData("Oops, failed to load data!"),
+                                    )),
+                                Obx(() => Visibility(
+                                      visible: epController.showLogin.value,
+                                      child: Column(
+                                        children: [
+                                          CustomAppBar4(
+                                            title: '',
+                                            backBtn: () {
+                                              Get.off(() =>
+                                                  Details(id: widget.aId, epId: ''));
+                                            },
+                                          ),
+                                          Center(
+                                            heightFactor: 13,
+                                            child: elevatedButton(
+                                              text: "Login →",
+                                              onPressed: () =>
+                                                  Get.offAll(() => const Auth()),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      (finalChipCount > 0)
-                                          ? episodes()
-                                          : const Placeholder(),
-                                      const SizedBox(height: 20),
-                                    ],
-                                  ),
-                                )
-                              : Container()),
-                          Obx(() => Visibility(
-                                visible: epController.noData.value,
-                                child: noData("Oops, failed to load data!"),
-                              )),
-                          Obx(() => Visibility(
-                                visible: epController.showLogin.value,
-                                child: Column(
-                                  children: [
-                                    CustomAppBar4(
-                                      title: '',
-                                      backBtn: () {
-                                        Get.off(() =>
-                                            Details(id: widget.aId, epId: ''));
-                                      },
-                                    ),
-                                    Center(
-                                      heightFactor: 13,
-                                      child: elevatedButton(
-                                        text: "Login →",
-                                        onPressed: () =>
-                                            Get.offAll(() => const Auth()),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
+                                    )),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.077,
+                              color: Colors.black,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -464,6 +511,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
               return ActionChip(
                 onPressed: () async {
                   await showProgress(context, false);
+                  IronSource.destroyBanner();
+                  log('destroyBanner');
                   selectedIndex = index;
                   epController.betterPlayerController.dispose();
                   epController.betterPlayerController.clearCache();
@@ -555,4 +604,46 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
+
+  /// Banner listener ==================================================================================
+  @override
+  void onBannerAdClicked() {
+    log("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLoadFailed(IronSourceError error) {
+    log("onBannerAdLoadFailed Error:$error");
+    if (mounted) {
+      setState(() {
+        isBannerLoaded = false;
+      });
+    }
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    log("onBannerAdLoaded");
+    if (mounted) {
+      setState(() {
+        isBannerLoaded = true;
+      });
+    }
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    log("onBannerAdScreenDismissed");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    log("onBannerAdScreenPresented");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    log("onBannerAdLeftApplication");
+  }
+  
 }
