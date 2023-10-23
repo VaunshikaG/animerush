@@ -73,12 +73,11 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
 
   @override
   void initState() {
-    IronSource.setBannerListener(this);
+    initAds();
     debugPrint(runtimeType.toString());
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData();
-      // initAds();
     });
     // dwldController.bindBackgroundIsolate();
     // IsolateNameServer.registerPortWithName(
@@ -90,6 +89,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
   }
 
   Future<void> initAds() async {
+    IronSource.setBannerListener(this);
     if (!isBannerLoaded) {
       bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
       log('Banner DefaultBanner capped: $bannerCapped');
@@ -518,6 +518,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
                   epController.betterPlayerController.clearCache();
                   epController.episodeApiCall(
                       epId: chunkList[index].id.toString());
+                  initAds();
                 },
                 side: BorderSide.none,
                 disabledColor: appTheme.colorScheme.secondary,

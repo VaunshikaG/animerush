@@ -13,6 +13,7 @@ import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:get/get.dart';
 // import 'package:flutter_ironsource_x/flutter_ironsource_x.dart';
 import 'package:ironsource_mediation/ironsource_mediation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/versionController.dart';
 
@@ -56,6 +57,9 @@ class _MyAppState extends State<MyApp> with IronSourceImpressionDataListener, Ir
   }
 
   Future<void> initIronSource() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(AppConst.adTimeStamp1);
+    prefs.remove(AppConst.adTimeStamp2);
     final appKey = Platform.isAndroid
     // ? "85460dcd"
         ? AppConst.APP_KEY_IRON_SOURCE

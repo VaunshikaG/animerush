@@ -274,23 +274,42 @@ class _DetailsState extends State<Details> with IronSourceInterstitialListener, 
                                                           .textTheme.labelSmall,
                                                     ),
                                                     onPressed: () async {
-                                                      _handleButtonClick(() {
-                                                        if (widget.epId != "") {
-                                                          Get.off(() => Episode(
-                                                            pg: 'details',
-                                                            epDetails: detailsController.epDetails,
-                                                            aId: widget.id,
-                                                            epId: widget.epId,
-                                                          ));
-                                                        } else {
-                                                          Get.off(() => Episode(
-                                                            pg: 'details',
-                                                            epDetails: detailsController.epDetails,
-                                                            aId: widget.id,
-                                                            epId: '',
-                                                          ));
-                                                        }
-                                                      });
+                                                      print(isInterstitialAvailable);
+                                                      _handleButtonClick(()
+                                                      => (widget.epId != "")
+                                                              ? Get.off(
+                                                                  () => Episode(
+                                                                        pg: 'details',
+                                                                        epDetails:
+                                                                            detailsController.epDetails,
+                                                                        aId: widget
+                                                                            .id,
+                                                                        epId: widget
+                                                                            .epId,
+                                                                      ))
+                                                              : Get.off(
+                                                                  () => Episode(
+                                                      pg: 'details',
+                                                      epDetails: detailsController.epDetails,
+                                                      aId: widget.id,
+                                                      epId: '',
+                                                      ))
+                                                      );
+                                                      // if (widget.epId != "") {
+                                                      //   Get.off(() => Episode(
+                                                      //     pg: 'details',
+                                                      //     epDetails: detailsController.epDetails,
+                                                      //     aId: widget.id,
+                                                      //     epId: widget.epId,
+                                                      //   ));
+                                                      // } else {
+                                                      //   Get.off(() => Episode(
+                                                      //     pg: 'details',
+                                                      //     epDetails: detailsController.epDetails,
+                                                      //     aId: widget.id,
+                                                      //     epId: '',
+                                                      //   ));
+                                                      // }
                                                     },
                                                     backgroundColor:
                                                         appTheme.primaryColor,
@@ -497,8 +516,9 @@ class _DetailsState extends State<Details> with IronSourceInterstitialListener, 
             onPressed();
           }
         }
+      } else {
+        onPressed();
       }
-
     } else {
       log('Button clicked within the last 10 minute. Not executing code2.');
       onPressed();
