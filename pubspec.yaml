@@ -38,7 +38,6 @@ dependencies:
   package_info_plus: any
   flutter_jailbreak_detection: ^1.10.0
   flutter_secure_storage: ^8.1.0
-  ironsource_mediation: ^1.2.0
 
 
 dev_dependencies:
