@@ -111,7 +111,7 @@ class _SearchState extends State<Search> {
         child: Stack(
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+              // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
               child: ListView(
                 controller: scrollController,
                 shrinkWrap: true,
@@ -381,15 +381,15 @@ class _SearchState extends State<Search> {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.07,
-                color: Colors.black,
-              ),
-            ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 0,
+            //   right: 0,
+            //   child: Container(
+            //     height: MediaQuery.of(context).size.height * 0.07,
+            //     color: Colors.black,
+            //   ),
+            // ),
           ],
         ),
       ),

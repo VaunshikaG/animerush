@@ -1,13 +1,9 @@
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 import '../main.dart';
-import '../utils/appConst.dart';
 import 'home.dart';
 import 'search.dart';
 import 'watchList.dart';

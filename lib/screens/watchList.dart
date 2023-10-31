@@ -74,8 +74,7 @@ class _WatchListState extends State<WatchList>  {
             child: Stack(
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: MediaQuery.of(context).size
-                      .height * 0.06),
+                  // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -104,15 +103,15 @@ class _WatchListState extends State<WatchList>  {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    color: Colors.black,
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   right: 0,
+                //   child: Container(
+                //     height: MediaQuery.of(context).size.height * 0.06,
+                //     color: Colors.black,
+                //   ),
+                // ),
               ],
             ),
           ),

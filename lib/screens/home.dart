@@ -62,9 +62,8 @@ class _HomeState extends State<Home> {
           child: Stack(
             children: [
               Container(
-                // height: double.infinity,
-                margin: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.071),
+                height: double.infinity,
+                // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
                 child: ListView(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -333,15 +332,15 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  color: Colors.black,
-                ),
-              ),
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: Container(
+              //     height: MediaQuery.of(context).size.height * 0.07,
+              //     color: Colors.black,
+              //   ),
+              // ),
             ],
           ),
         ),

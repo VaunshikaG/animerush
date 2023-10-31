@@ -129,8 +129,7 @@ class _DetailsState extends State<Details> {
                       child: Stack(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: MediaQuery.of
-                              (context).size.height * 0.04),
+                            // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.04),
                             child: Column(
                               children: [
                                 Obx(() => Visibility(
@@ -434,15 +433,15 @@ class _DetailsState extends State<Details> {
                               ],
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.077,
-                              color: Colors.black,
-                            ),
-                          ),
+                          // Positioned(
+                          //   bottom: 0,
+                          //   left: 0,
+                          //   right: 0,
+                          //   child: Container(
+                          //     height: MediaQuery.of(context).size.height * 0.077,
+                          //     color: Colors.black,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

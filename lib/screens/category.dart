@@ -3,7 +3,6 @@ import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
@@ -24,10 +23,6 @@ class Category extends StatefulWidget {
 class _CategoryState extends State<Category>  {
   // ScrollController scrollController = ScrollController();
   Search_Controller searchController = Get.put(Search_Controller());
-
-  bool isBannerLoaded = false;
-  bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
 
   @override
   void initState() {
@@ -73,7 +68,7 @@ class _CategoryState extends State<Category>  {
           child: Stack(
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
+                // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Column(
@@ -190,15 +185,15 @@ class _CategoryState extends State<Category>  {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.077,
-                  color: Colors.black,
-                ),
-              ),
+              // Positioned(
+              //   bottom: 0,
+              //   left: 0,
+              //   right: 0,
+              //   child: Container(
+              //     height: MediaQuery.of(context).size.height * 0.077,
+              //     color: Colors.black,
+              //   ),
+              // ),
             ],
           ),
         ),
