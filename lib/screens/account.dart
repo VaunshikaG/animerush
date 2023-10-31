@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,13 +12,10 @@ import '../controllers/accountController.dart';
 import '../utils/appConst.dart';
 import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
-import '../widgets/animeAnimation.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
 import '../widgets/similarList.dart';
-import 'bottomBar.dart';
-import 'details.dart';
 import 'splash.dart';
 import 'auth.dart';
 
@@ -30,8 +26,7 @@ class Account extends StatefulWidget {
   _AccountState createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> with
-    SingleTickerProviderStateMixin, IronSourceBannerListener, IronSourceRewardedVideoManualListener {
+class _AccountState extends State<Account> with SingleTickerProviderStateMixin{
   AccountController accountController = Get.put(AccountController());
   List<DownloadTask> downloadedTasks = [];
 
@@ -41,21 +36,8 @@ class _AccountState extends State<Account> with
   PackageInfo packageInfo =
       PackageInfo(appName: '', packageName: '', version: '', buildNumber: '');
 
-  bool isBannerLoaded = false;
-  bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
-
-  bool isRewardedVideoAvailable = false;
-  bool isVideoAdVisible = false;
-  IronSourceRewardedVideoPlacement? _placement;
-
   @override
   void initState() {
-    // IronSource.setRVListener(this);
-    // IronSource.setManualLoadRewardedVideo(this);
-    // IronSource.setRewardedVideoListener(this);
-    // initAdVideo();
-    initAds();
     _controller = TabController(length: 2, vsync: this);
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
@@ -87,64 +69,6 @@ class _AccountState extends State<Account> with
       }
       hideProgress();
     });
-  }
-
-  Future<void> initAds() async {
-    IronSource.setBannerListener(this);
-    if (!bannerCapped) {
-      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      log('Banner DefaultBanner capped: $bannerCapped');
-      // size.isAdaptive = true; // Adaptive Banner
-      IronSource.loadBanner(
-          size: size,
-          position: IronSourceBannerPosition.Bottom,
-          // verticalOffset: 40,
-          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
-          placementName: 'DefaultBanner');
-      log('banner displayed');
-      IronSource.displayBanner();
-    }
-  }
-
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
   }
 
   @override
@@ -536,133 +460,6 @@ class _AccountState extends State<Account> with
             )
           : const Center(child: Text('No downloads yet')),
     );
-  }
-
-  Future<void> initAdVideo() async {
-    // checkRewardedVideoPlacement();
-    if (isRewardedVideoAvailable == true) {
-      if (await IronSource.isRewardedVideoAvailable()) {
-        // for the RV server-to-server callback param
-        // await IronSource.setDynamicUserId('some-dynamic-user-id');
-
-        // for placement capping test
-        IronSource.showRewardedVideo(placementName: 'DefaultRewardedVideo');
-        // IronSource.showRewardedVideo();
-
-        // onRewardedVideoAvailabilityChanged(false) won't be called on show
-        // So, the state must be changed manually.
-        setState(() => isRewardedVideoAvailable = false);
-
-        IronSource.loadRewardedVideo();
-        checkRewardedVideoPlacement();
-      }
-    }
-  }
-
-  // Solely for debug/testing purpose
-  Future<void> checkRewardedVideoPlacement() async {
-    final placement = await IronSource.getRewardedVideoPlacementInfo(
-        placementName: 'DefaultRewardedVideo');
-    log('DefaultRewardedVideo info $placement');
-
-    // this falls back to the default placement, not null
-    final noSuchPlacement =
-    await IronSource.getRewardedVideoPlacementInfo(placementName: 'NoSuch');
-    log('NoSuchPlacement info $noSuchPlacement');
-
-    final isPlacementCapped = await IronSource.isRewardedVideoPlacementCapped(
-        placementName: 'CAPPED_PLACEMENT');
-    log('CAPPED_PLACEMENT isPlacementCapped: $isPlacementCapped');
-  }
-
-  // RewardedVideo Manual Load listener =================================================================
-  @override
-  void onRewardedVideoAdClicked(IronSourceRewardedVideoPlacement placement) {
-    log('onRewardedVideoAdClicked Placement:$placement');
-  }
-
-  @override
-  void onRewardedVideoAdClosed() {
-    log("onRewardedVideoAdClosed");
-    setState(() {
-      isVideoAdVisible = false;
-    });
-    // if (mounted && _placement != null && !isVideoAdVisible) {
-    if (_placement != null && !isVideoAdVisible) {
-      setState(() {
-        _placement = null;
-      });
-    }
-  }
-
-  @override
-  void onRewardedVideoAdEnded() {
-    log("onRewardedVideoAdClosed");
-  }
-
-  @override
-  void onRewardedVideoAdOpened() {
-    log("onRewardedVideoAdOpened");
-    // if (mounted) {
-    setState(() {
-      isVideoAdVisible = true;
-    });
-    // }
-  }
-
-  @override
-  void onRewardedVideoAdRewarded(IronSourceRewardedVideoPlacement placement) {
-    log("onRewardedVideoAdRewarded Placement: $placement");
-    setState(() => _placement = placement);
-    // if (mounted && _placement != null && !isVideoAdVisible) {
-    if (_placement != null && !isVideoAdVisible) {
-      setState(() => _placement = null);
-    }
-  }
-
-  @override
-  void onRewardedVideoAdShowFailed(IronSourceError error) {
-    log("onRewardedVideoAdShowFailed Error:$error");
-    // if (mounted) {
-    setState(() {
-      isVideoAdVisible = true;
-    });
-    // }
-  }
-
-  @override
-  void onRewardedVideoAdStarted() {
-    log("onRewardedVideoAdStarted");
-  }
-
-  @override
-  void onRewardedVideoAvailabilityChanged(bool isAvailable) {
-    log('onRewardedVideoAvailabilityChanged: $isAvailable');
-    // if (mounted) {
-    setState(() {
-      isRewardedVideoAvailable = isAvailable;
-    });
-    // }
-  }
-
-  @override
-  void onRewardedVideoAdReady() {
-    log('onRewardedVideoAdReady');
-    // if (mounted) {
-    setState(() {
-      isRewardedVideoAvailable = true;
-    });
-    // }
-  }
-
-  @override
-  void onRewardedVideoAdLoadFailed(IronSourceError error) {
-    log("onRewardedVideoAdShowFailed Error:$error");
-    // if (mounted) {
-    setState(() {
-      isRewardedVideoAvailable = false;
-    });
-    // }
   }
 
 }

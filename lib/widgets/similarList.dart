@@ -102,8 +102,6 @@ class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin
           animation: controller,
           child: GestureDetector(
             onTap: () {
-              IronSource.destroyBanner();
-              log('destroyBanner');
               if (widget.pg == 'continue') {
                 Get.offAll(() => Details(id: similarList.anime.id.toString()));
               } else {

@@ -1,20 +1,12 @@
-import 'dart:developer';
-
-import 'package:animerush/widgets/animeAnimation.dart';
-import 'package:animerush/widgets/customSnackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
-import '../utils/appConst.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
 import '../widgets/similarList.dart';
-import 'bottomBar.dart';
 import 'auth.dart';
 
 class Search extends StatefulWidget {
@@ -27,7 +19,7 @@ class Search extends StatefulWidget {
 Search_Controller searchController = Get.put(Search_Controller());
 ScrollController scrollController = ScrollController();
 
-class _SearchState extends State<Search> with IronSourceBannerListener {
+class _SearchState extends State<Search> {
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
     {'title': 'TV Series', 'value': 'tv'},
@@ -68,13 +60,8 @@ class _SearchState extends State<Search> with IronSourceBannerListener {
   List<CategoryTitle> categoryNames = [];
   List<GenreTitle> genreNames = [];
 
-  bool isBannerLoaded = false;
-  bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
-
   @override
   void initState() {
-    initAds();
     debugPrint(runtimeType.toString());
     searchController.value1 = "";
     searchController.categoryType = "";
@@ -108,64 +95,6 @@ class _SearchState extends State<Search> with IronSourceBannerListener {
     //         ctx: context);
     // });
     super.initState();
-  }
-
-  Future<void> initAds() async {
-    IronSource.setBannerListener(this);
-    if (!bannerCapped) {
-      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      log('Banner DefaultBanner capped: $bannerCapped');
-      // size.isAdaptive = true; // Adaptive Banner
-      IronSource.loadBanner(
-          size: size,
-          position: IronSourceBannerPosition.Bottom,
-          // verticalOffset: 40,
-          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
-          placementName: 'DefaultBanner');
-      log('banner displayed');
-      IronSource.displayBanner();
-    }
-  }
-
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
   }
 
   @override

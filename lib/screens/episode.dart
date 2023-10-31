@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
@@ -8,10 +7,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/dwldController.dart';
 import '../controllers/episodeController.dart';
@@ -22,10 +19,7 @@ import '../widgets/loader.dart';
 import '../utils/theme.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/noData.dart';
-import 'account.dart';
-import 'bottomBar.dart';
 import 'details.dart';
-import 'player.dart';
 import 'watchList.dart';
 import 'auth.dart';
 
@@ -46,7 +40,7 @@ class Episode extends StatefulWidget {
   State<Episode> createState() => _EpisodeState();
 }
 
-class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSourceBannerListener {
+class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   DwldController dwldController = DwldController();
   EpisodeController epController = Get.put(EpisodeController());
 
@@ -63,17 +57,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
   String start = '', end = '';
   final ReceivePort _port = ReceivePort();
 
-  bool isBannerLoaded = false;
-  bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
-
-  bool isRewardedVideoAvailable = false;
-  bool isVideoAdVisible = false;
-  IronSourceRewardedVideoPlacement? _placement;
-
   @override
   void initState() {
-    initAds();
     debugPrint(runtimeType.toString());
     // WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
@@ -86,25 +71,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
     //
     // FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
-  }
-
-  Future<void> initAds() async {
-    IronSource.setBannerListener(this);
-    if (!isBannerLoaded) {
-      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      log('Banner DefaultBanner capped: $bannerCapped');
-      if (!bannerCapped) {
-        IronSource.loadBanner(
-            size: size,
-            position: IronSourceBannerPosition.Bottom,
-            // verticalOffset: 40,
-            verticalOffset: -(MediaQuery.of(context).size.height * 0.022)
-                .toInt(),
-            placementName: 'DefaultBanner');
-        log('banner displayed');
-        IronSource.displayBanner();
-      }
-    }
   }
 
   @pragma('vm:entry-point')
@@ -173,8 +139,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
 
     return WillPopScope(
       onWillPop: () async {
-        IronSource.destroyBanner();
-        log('destroyBanner');
         Get.offAll(() => Details(id: widget.aId, epId: ''));
         return true;
       },
@@ -511,14 +475,11 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
               return ActionChip(
                 onPressed: () async {
                   await showProgress(context, false);
-                  IronSource.destroyBanner();
-                  log('destroyBanner');
                   selectedIndex = index;
                   epController.betterPlayerController.dispose();
                   epController.betterPlayerController.clearCache();
                   epController.episodeApiCall(
                       epId: chunkList[index].id.toString());
-                  initAds();
                 },
                 side: BorderSide.none,
                 disabledColor: appTheme.colorScheme.secondary,
@@ -606,45 +567,4 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver, IronSour
     super.dispose();
   }
 
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
-  }
-  
 }

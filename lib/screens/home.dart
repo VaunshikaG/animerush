@@ -5,12 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../controllers/homeController.dart';
-import '../utils/appConst.dart';
 import '../widgets/loader.dart';
 import '../utils/theme.dart';
 import '../widgets/noData.dart';
@@ -23,7 +19,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceInterstitialListener {
+class _HomeState extends State<Home> {
   HomeController homeController = Get.put(HomeController());
   int activeindex = 0;
 
@@ -33,11 +29,9 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
 
   bool isBannerLoaded = false;
   bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
 
   @override
   void initState() {
-    initAds();
     debugPrint(runtimeType.toString());
     homeController.hasData.value = false;
     homeController.noData.value = false;
@@ -51,162 +45,6 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
     await showProgress(context, false);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
-  }
-
-  Future<void> initAds() async {
-    IronSource.setBannerListener(this);
-
-    if (!isBannerLoaded) {
-        bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-        log('Banner DefaultBanner capped: $bannerCapped');
-        // size.isAdaptive = true; // Adaptive Banner
-        IronSource.loadBanner(
-            size: size,
-            position: IronSourceBannerPosition.Bottom,
-            verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
-            placementName: 'DefaultBanner');
-        log('banner displayed');
-        IronSource.displayBanner();
-        interstitialClosed = true;
-        IronSource.setInterstitialListener(this);
-        IronSource.loadInterstitial();
-      } else {
-      interstitialClosed = true;
-    }
-  }
-
-  Future<void> _handleButtonClick(void Function() onPressed) async {
-    final prefs = await SharedPreferences.getInstance();
-    print(prefs.getString(AppConst.adTimeStamp1));
-    String formatted = DateFormat('HH:mm').format(DateTime.now());
-    DateTime now = DateTime.now();
-    DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
-        ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
-        : null;
-
-    IronSource.destroyBanner();
-    log('destroyBanner');
-
-    if (lastClicked == null || now.difference(lastClicked).inMinutes >= 15) {
-      if (isInterstitialAvailable == true) {
-        final isCapped = await IronSource
-            .isInterstitialPlacementCapped(placementName: "Default");
-        log('Interstitial Default placement capped: $isCapped');
-        if (!isCapped && await IronSource.isInterstitialReady()) {
-          log('Executing code...');
-          prefs.remove(AppConst.adTimeStamp1);
-          prefs.setString(AppConst.adTimeStamp1, now.toIso8601String());
-          IronSource.showInterstitial();
-          if (interstitialClosed == true) {
-            onPressed();
-          }
-        }
-      }
-    } else {
-      log('Button clicked within the last 10 minute. Not executing code1.');
-      onPressed();
-    }
-  }
-
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
-  }
-
-  /// Interstitial listener ==================================================================================
-  @override
-  void onInterstitialAdClicked() {
-    log("onInterstitialAdClicked");
-  }
-
-  @override
-  void onInterstitialAdClosed() {
-    log("onInterstitialAdClosed");
-    if (mounted) {
-      setState(() {
-        isInterstitialAvailable = false;
-        interstitialClosed = true;
-      });
-    }
-    log(interstitialClosed.toString());
-  }
-
-  @override
-  void onInterstitialAdLoadFailed(IronSourceError error) {
-    log("onInterstitialAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isInterstitialAvailable = false;
-        interstitialClosed = true;
-      });
-    }
-  }
-
-  @override
-  void onInterstitialAdOpened() {
-    log("onInterstitialAdOpened");
-  }
-
-  @override
-  void onInterstitialAdReady() {
-    log("onInterstitialAdReady");
-    if (mounted) {
-      setState(() {
-        isInterstitialAvailable = true;
-      });
-    }
-  }
-
-  @override
-  void onInterstitialAdShowFailed(IronSourceError error) {
-    log("onInterstitialAdShowFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isInterstitialAvailable = false;
-        interstitialClosed = true;
-      });
-    }
-  }
-
-  @override
-  void onInterstitialAdShowSucceeded() {
-    log("onInterstitialAdShowSucceeded");
   }
 
   @override
@@ -225,7 +63,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
             children: [
               Container(
                 // height: double.infinity,
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.071),
                 child: ListView(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -238,8 +77,10 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   child: CarouselSlider.builder(
-                                    itemCount: homeController.spotlightData.length,
-                                    itemBuilder: (BuildContext context, index, _) {
+                                    itemCount:
+                                        homeController.spotlightData.length,
+                                    itemBuilder:
+                                        (BuildContext context, index, _) {
                                       var img = homeController
                                               .spotlightData[index].banner ??
                                           homeController
@@ -247,32 +88,35 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                               .toString();
                                       return GestureDetector(
                                         onTap: () {
-                                          _handleButtonClick(() => Get.off(() =>
-                                              Details(
-                                                  id: homeController
-                                                      .spotlightData[index].id
-                                                      .toString())));
-
+                                          Get.off(() => Details(
+                                              id: homeController
+                                                  .spotlightData[index].id
+                                                  .toString()));
                                         },
                                         child: Container(
-                                          width: MediaQuery.of(context).size.width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           padding: EdgeInsets.zero,
                                           decoration: BoxDecoration(
                                             color: appTheme.splashColor,
                                             image: DecorationImage(
                                               image: NetworkImage(img),
                                               fit: BoxFit.cover,
-                                              onError: (error, stackTrace) => Image.network(
-                                                  homeController.spotlightData[index]
-                                                      .imageHighQuality.toString(),
-                                                  fit: BoxFit.contain,
-                                                  errorBuilder: (context, error, stackTrace) {
-                                                    return Image.asset(
-                                                      "assets/img/blank.png",
-                                                      fit: BoxFit.contain,
-                                                    );
-                                                  },
-                                                ),
+                                              onError: (error, stackTrace) =>
+                                                  Image.network(
+                                                homeController
+                                                    .spotlightData[index]
+                                                    .imageHighQuality
+                                                    .toString(),
+                                                fit: BoxFit.contain,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Image.asset(
+                                                    "assets/img/blank.png",
+                                                    fit: BoxFit.contain,
+                                                  );
+                                                },
+                                              ),
                                               // onError: (error, stackTrace) =>
                                               //     Image.asset(
                                               //   "assets/img/blank.png",
@@ -320,7 +164,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                                       bottom: 20),
                                                   child: Text(
                                                     homeController
-                                                        .spotlightData[index].name!,
+                                                        .spotlightData[index]
+                                                        .name!,
                                                     style: appTheme
                                                         .textTheme.titleMedium,
                                                   ),
@@ -368,7 +213,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
 
                               //  trending
                               Container(
-                                margin: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+                                margin:
+                                    const EdgeInsets.fromLTRB(10, 20, 0, 20),
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   "Trending",
@@ -379,7 +225,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
 
                               //  types
                               Container(
-                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                margin:
+                                    const EdgeInsets.fromLTRB(15, 20, 15, 0),
                                 alignment: Alignment.centerLeft,
                                 child: ListTile(
                                   leading: Text(
@@ -388,8 +235,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
-                                      _handleButtonClick(() => Get.off(() => const Category(
-                                          category: 'specials')));
+                                      Get.off(() =>
+                                          const Category(category: 'specials'));
                                     },
                                     child: Text(
                                       "View all >",
@@ -403,7 +250,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                               specials(),
 
                               Container(
-                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                margin:
+                                    const EdgeInsets.fromLTRB(15, 20, 15, 0),
                                 alignment: Alignment.centerLeft,
                                 child: ListTile(
                                   leading: Text(
@@ -412,8 +260,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
-                                      _handleButtonClick(() => Get.off(() =>
-                                      const Category(category: 'movies')));
+                                      Get.off(() =>
+                                          const Category(category: 'movies'));
                                     },
                                     child: Text(
                                       "View all >",
@@ -427,7 +275,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                               movies(),
 
                               Container(
-                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                margin:
+                                    const EdgeInsets.fromLTRB(15, 20, 15, 0),
                                 alignment: Alignment.centerLeft,
                                 child: ListTile(
                                   leading: Text(
@@ -436,8 +285,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
-                                      _handleButtonClick(() => Get.off(() =>
-                                      const Category(category: 'ona')));
+                                      Get.off(() =>
+                                          const Category(category: 'ona'));
                                     },
                                     child: Text(
                                       "View all >",
@@ -451,7 +300,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                               ona(),
 
                               Container(
-                                margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+                                margin:
+                                    const EdgeInsets.fromLTRB(15, 20, 15, 0),
                                 alignment: Alignment.centerLeft,
                                 child: ListTile(
                                   leading: Text(
@@ -460,8 +310,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                   ),
                                   trailing: TextButton(
                                     onPressed: () {
-                                      _handleButtonClick(() => Get.off(() =>
-                                      const Category(category: 'ova')));
+                                      Get.off(() =>
+                                          const Category(category: 'ova'));
                                     },
                                     child: Text(
                                       "View all >",
@@ -516,9 +366,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    _handleButtonClick(() => Get.off(() =>
-                        Details(id: homeController.topData[index].id
-                            .toString())));
+                    Get.off(() => Details(
+                        id: homeController.topData[index].id.toString()));
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -553,7 +402,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                                             homeController.topData[index].name!,
                                             softWrap: true,
                                             overflow: TextOverflow.ellipsis,
-                                            style: appTheme.textTheme.titleSmall,
+                                            style:
+                                                appTheme.textTheme.titleSmall,
                                           ),
                                         ),
                                       ),
@@ -576,12 +426,14 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                             fit: BoxFit.fill,
                             child: FadeInImage.assetNetwork(
                               placeholder: "assets/img/blank.png",
-                              image:
-                                  homeController.topData[index].aniImage.toString(),
+                              image: homeController.topData[index].aniImage
+                                  .toString(),
                               imageErrorBuilder: (context, error, stackTrace) {
                                 try {
                                   return Image.network(
-                                    homeController.topData[index].imageHighQuality.toString(),
+                                    homeController
+                                        .topData[index].imageHighQuality
+                                        .toString(),
                                     fit: BoxFit.contain,
                                   );
                                 } catch (e) {
@@ -637,9 +489,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
           }
           return ListTile(
             onTap: () {
-              _handleButtonClick(() => Get.off(() =>
-                  Details(
-                      id: homeController.specialData[index].id.toString())));
+              Get.off(() =>
+                  Details(id: homeController.specialData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
@@ -652,7 +503,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                 imageErrorBuilder: (context, error, stackTrace) {
                   try {
                     return Image.network(
-                      homeController.moviesData[index].imageHighQuality.toString(),
+                      homeController.moviesData[index].imageHighQuality
+                          .toString(),
                       fit: BoxFit.contain,
                     );
                   } catch (e) {
@@ -719,9 +571,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
           }
           return ListTile(
             onTap: () {
-              _handleButtonClick(() => Get.off(() =>
-                  Details(
-                      id: homeController.moviesData[index].id.toString())));
+              Get.off(() =>
+                  Details(id: homeController.moviesData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
@@ -734,7 +585,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
                 imageErrorBuilder: (context, error, stackTrace) {
                   try {
                     return Image.network(
-                      homeController.moviesData[index].imageHighQuality.toString(),
+                      homeController.moviesData[index].imageHighQuality
+                          .toString(),
                       fit: BoxFit.contain,
                     );
                   } catch (e) {
@@ -798,8 +650,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
           }
           return ListTile(
             onTap: () {
-              _handleButtonClick(() => Get.off(() =>
-                  Details(id: homeController.onasData[index].id.toString())));
+              Get.off(() =>
+                  Details(id: homeController.onasData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
@@ -807,12 +659,12 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
                 image: homeController.onasData[index].aniImage ??=
-                    homeController.onasData[index].imageHighQuality
-                        .toString(),
+                    homeController.onasData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   try {
                     return Image.network(
-                      homeController.onasData[index].imageHighQuality.toString(),
+                      homeController.onasData[index].imageHighQuality
+                          .toString(),
                       fit: BoxFit.contain,
                     );
                   } catch (e) {
@@ -876,10 +728,8 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
           }
           return ListTile(
             onTap: () {
-              IronSource.destroyBanner();
-              log('destroyBanner');
-              _handleButtonClick(() => Get.off(() =>
-                  Details(id: homeController.ovasData[index].id.toString())));
+              Get.off(() =>
+                  Details(id: homeController.ovasData[index].id.toString()));
             },
             leading: SizedBox(
               height: 100,
@@ -887,12 +737,12 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
               child: FadeInImage.assetNetwork(
                 placeholder: "assets/img/blank.png",
                 image: homeController.ovasData[index].aniImage ??=
-                    homeController.ovasData[index].imageHighQuality
-                        .toString(),
+                    homeController.ovasData[index].imageHighQuality.toString(),
                 imageErrorBuilder: (context, error, stackTrace) {
                   try {
                     return Image.network(
-                      homeController.ovasData[index].imageHighQuality.toString(),
+                      homeController.ovasData[index].imageHighQuality
+                          .toString(),
                       fit: BoxFit.contain,
                     );
                   } catch (e) {
@@ -929,5 +779,4 @@ class _HomeState extends State<Home> with IronSourceBannerListener, IronSourceIn
       ),
     );
   }
-
 }

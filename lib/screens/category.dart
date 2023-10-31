@@ -1,15 +1,12 @@
-import 'dart:developer';
 
 import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:ironsource_mediation/ironsource_mediation.dart';
 
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
-import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/noData.dart';
@@ -24,7 +21,7 @@ class Category extends StatefulWidget {
   State<Category> createState() => _CategoryState();
 }
 
-class _CategoryState extends State<Category> with IronSourceBannerListener {
+class _CategoryState extends State<Category>  {
   // ScrollController scrollController = ScrollController();
   Search_Controller searchController = Get.put(Search_Controller());
 
@@ -34,7 +31,6 @@ class _CategoryState extends State<Category> with IronSourceBannerListener {
 
   @override
   void initState() {
-    initAds();
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       searchController.searchApiCall(
@@ -49,24 +45,6 @@ class _CategoryState extends State<Category> with IronSourceBannerListener {
           context: context);
     });
     super.initState();
-  }
-
-  Future<void> initAds() async {
-    if (!isBannerLoaded) {
-      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      log('Banner DefaultBanner capped: $bannerCapped');
-      if (!bannerCapped) {
-        IronSource.loadBanner(
-            size: size,
-            position: IronSourceBannerPosition.Bottom,
-            // verticalOffset: 40,
-            verticalOffset: -(MediaQuery.of(context).size.height * 0.022)
-                .toInt(),
-            placementName: 'DefaultBanner');
-        log('banner displayed');
-        IronSource.displayBanner();
-      }
-    }
   }
 
   @override
@@ -226,47 +204,6 @@ class _CategoryState extends State<Category> with IronSourceBannerListener {
         ),
       ),
     );
-  }
-
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
   }
 
 }

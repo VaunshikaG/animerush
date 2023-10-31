@@ -1,19 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ironsource_mediation/ironsource_mediation.dart';
 
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
-import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
-import '../widgets/customSnackbar.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
 import '../widgets/similarList.dart';
-import 'bottomBar.dart';
 import 'details.dart';
 import 'auth.dart';
 
@@ -26,7 +20,7 @@ class WatchList extends StatefulWidget {
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList> with IronSourceBannerListener {
+class _WatchListState extends State<WatchList>  {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -34,13 +28,8 @@ class _WatchListState extends State<WatchList> with IronSourceBannerListener {
   ScrollController scrollController = ScrollController();
   TabController? _controller;
 
-  bool isBannerLoaded = false;
-  bool bannerCapped = false;
-  final size = IronSourceBannerSize.BANNER;
-
   @override
   void initState() {
-    initAds();
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       loadData('00');
@@ -55,70 +44,10 @@ class _WatchListState extends State<WatchList> with IronSourceBannerListener {
     });
   }
 
-  Future<void> initAds() async {
-    IronSource.setBannerListener(this);
-    if (!bannerCapped) {
-      bannerCapped = await IronSource.isBannerPlacementCapped('DefaultBanner');
-      log('Banner DefaultBanner capped: $bannerCapped');
-      // size.isAdaptive = true; // Adaptive Banner
-      IronSource.loadBanner(
-          size: size,
-          position: IronSourceBannerPosition.Bottom,
-          // verticalOffset: 40,
-          verticalOffset: -(MediaQuery.of(context).size.height * 0.242).toInt(),
-          placementName: 'DefaultBanner');
-      log('banner displayed');
-      IronSource.displayBanner();
-    }
-  }
-
-  /// Banner listener ==================================================================================
-  @override
-  void onBannerAdClicked() {
-    log("onBannerAdClicked");
-  }
-
-  @override
-  void onBannerAdLoadFailed(IronSourceError error) {
-    log("onBannerAdLoadFailed Error:$error");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = false;
-      });
-    }
-  }
-
-  @override
-  void onBannerAdLoaded() {
-    log("onBannerAdLoaded");
-    if (mounted) {
-      setState(() {
-        isBannerLoaded = true;
-      });
-    }
-  }
-  
-  @override
-  void onBannerAdScreenDismissed() {
-    log("onBannerAdScreenDismissed");
-  }
-
-  @override
-  void onBannerAdScreenPresented() {
-    log("onBannerAdScreenPresented");
-  }
-
-  @override
-  void onBannerAdLeftApplication() {
-    log("onBannerAdLeftApplication");
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        IronSource.destroyBanner();
-        log('destroyBanner');
         Get.off(() => Details(id: widget.aId, epId: ''));
         return true;
       },
