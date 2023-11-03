@@ -135,11 +135,12 @@ class _DetailsState extends State<Details> {
                                 Obx(() => Visibility(
                                       visible: detailsController.hasData.value,
                                       child: Container(
-                                        padding:
-                                            const EdgeInsets.symmetric(vertical: 15),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
                                         // margin: const EdgeInsets.only(bottom: 150),
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
@@ -148,20 +149,22 @@ class _DetailsState extends State<Details> {
                                               title: Text(
                                                 detailsController.name ?? '-',
                                                 softWrap: true,
-                                                style:
-                                                    appTheme.textTheme.displayMedium,
+                                                style: appTheme
+                                                    .textTheme.displayMedium,
                                               ),
                                               subtitle: Padding(
-                                                padding:
-                                                    const EdgeInsets.only(top: 10),
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
                                                 child: Text(
                                                   "HD   •   ${detailsController.status}   •   ${detailsController.animeType}",
-                                                  style: appTheme.textTheme.bodySmall,
+                                                  style: appTheme
+                                                      .textTheme.bodySmall,
                                                 ),
                                               ),
                                               // dense: true,
                                               contentPadding:
-                                                  const EdgeInsets.only(left: 5),
+                                                  const EdgeInsets.only(
+                                                      left: 5),
                                             ),
 
                                             /*Obx(() => Visibility(
@@ -210,14 +213,17 @@ class _DetailsState extends State<Details> {
 
                                             //  desc
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: RichTextView(
-                                                text: detailsController.desc ?? '-',
+                                                text: detailsController.desc ??
+                                                    '-',
                                                 maxLines: 4,
                                                 softWrap: true,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: appTheme.textTheme.titleSmall,
+                                                style: appTheme
+                                                    .textTheme.titleSmall,
                                                 truncate: true,
                                                 viewLessText: 'less',
                                                 linkStyle: TextStyle(
@@ -231,8 +237,9 @@ class _DetailsState extends State<Details> {
 
                                             //  btns
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  15, 5, 0, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      15, 5, 0, 0),
                                               child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -241,12 +248,14 @@ class _DetailsState extends State<Details> {
                                                 children: [
                                                   ActionChip(
                                                     elevation: 3,
-                                                    padding: const EdgeInsets.all(2),
+                                                    padding:
+                                                        const EdgeInsets.all(2),
                                                     avatar: CircleAvatar(
                                                       backgroundColor:
                                                           appTheme.primaryColor,
                                                       child: Icon(
-                                                        CupertinoIcons.play_circle,
+                                                        CupertinoIcons
+                                                            .play_circle,
                                                         color: appTheme
                                                             .scaffoldBackgroundColor,
                                                         size: 20,
@@ -260,23 +269,28 @@ class _DetailsState extends State<Details> {
                                                     onPressed: () async {
                                                       if (widget.epId != "") {
                                                         Get.off(() => Episode(
-                                                          pg: 'details',
-                                                          epDetails: detailsController.epDetails,
-                                                          aId: widget.id,
-                                                          epId: widget.epId,
-                                                        ));
+                                                              pg: 'details',
+                                                              epDetails:
+                                                                  detailsController
+                                                                      .epDetails,
+                                                              aId: widget.id,
+                                                              epId: widget.epId,
+                                                            ));
                                                       } else {
                                                         Get.off(() => Episode(
-                                                          pg: 'details',
-                                                          epDetails: detailsController.epDetails,
-                                                          aId: widget.id,
-                                                          epId: '',
-                                                        ));
+                                                              pg: 'details',
+                                                              epDetails:
+                                                                  detailsController
+                                                                      .epDetails,
+                                                              aId: widget.id,
+                                                              epId: '',
+                                                            ));
                                                       }
                                                     },
                                                     backgroundColor:
                                                         appTheme.primaryColor,
-                                                    shape: const StadiumBorder(),
+                                                    shape:
+                                                        const StadiumBorder(),
                                                     side: BorderSide.none,
                                                     labelPadding:
                                                         const EdgeInsets.only(
@@ -293,14 +307,15 @@ class _DetailsState extends State<Details> {
                                                         );
                                                       });
                                                     },
-                                                    itemBuilder: (BuildContext ctx) =>
-                                                        [
+                                                    itemBuilder:
+                                                        (BuildContext ctx) => [
                                                       PopupMenuItem(
                                                         value: '01',
                                                         child: Text(
                                                           'Watching',
                                                           style: appTheme
-                                                              .textTheme.titleSmall,
+                                                              .textTheme
+                                                              .titleSmall,
                                                         ),
                                                       ),
                                                       PopupMenuItem(
@@ -308,7 +323,8 @@ class _DetailsState extends State<Details> {
                                                         child: Text(
                                                           'On Hold',
                                                           style: appTheme
-                                                              .textTheme.titleSmall,
+                                                              .textTheme
+                                                              .titleSmall,
                                                         ),
                                                       ),
                                                       PopupMenuItem(
@@ -316,7 +332,8 @@ class _DetailsState extends State<Details> {
                                                         child: Text(
                                                           'Plan To Watch',
                                                           style: appTheme
-                                                              .textTheme.titleSmall,
+                                                              .textTheme
+                                                              .titleSmall,
                                                         ),
                                                       ),
                                                       PopupMenuItem(
@@ -324,7 +341,8 @@ class _DetailsState extends State<Details> {
                                                         child: Text(
                                                           'Dropped',
                                                           style: appTheme
-                                                              .textTheme.titleSmall,
+                                                              .textTheme
+                                                              .titleSmall,
                                                         ),
                                                       ),
                                                       PopupMenuItem(
@@ -332,7 +350,8 @@ class _DetailsState extends State<Details> {
                                                         child: Text(
                                                           'Completed',
                                                           style: appTheme
-                                                              .textTheme.titleSmall,
+                                                              .textTheme
+                                                              .titleSmall,
                                                         ),
                                                       ),
                                                     ],
@@ -343,12 +362,15 @@ class _DetailsState extends State<Details> {
                                                     child: Chip(
                                                       elevation: 3,
                                                       padding:
-                                                          const EdgeInsets.all(2),
+                                                          const EdgeInsets.all(
+                                                              2),
                                                       avatar: CircleAvatar(
                                                         backgroundColor:
-                                                            appTheme.primaryColor,
+                                                            appTheme
+                                                                .primaryColor,
                                                         child: Icon(
-                                                          Icons.bookmark_add_outlined,
+                                                          Icons
+                                                              .bookmark_add_outlined,
                                                           color: appTheme
                                                               .scaffoldBackgroundColor,
                                                           size: 20,
@@ -357,11 +379,13 @@ class _DetailsState extends State<Details> {
                                                       label: Text(
                                                         'Add To WatchList',
                                                         style: appTheme
-                                                            .textTheme.labelSmall,
+                                                            .textTheme
+                                                            .labelSmall,
                                                       ),
                                                       backgroundColor:
                                                           appTheme.primaryColor,
-                                                      shape: const StadiumBorder(),
+                                                      shape:
+                                                          const StadiumBorder(),
                                                       side: BorderSide.none,
                                                       labelPadding:
                                                           const EdgeInsets.only(
@@ -384,11 +408,14 @@ class _DetailsState extends State<Details> {
                                               itemCount: detailTitle.length,
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
-                                              physics: const ClampingScrollPhysics(),
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  15, 6, 15, 6),
+                                              physics:
+                                                  const ClampingScrollPhysics(),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      15, 6, 15, 6),
                                               itemBuilder:
-                                                  (BuildContext context, int index) {
+                                                  (BuildContext context,
+                                                      int index) {
                                                 return customText(
                                                   text1: detailTitle[index],
                                                   text2: detailsController
@@ -404,12 +431,14 @@ class _DetailsState extends State<Details> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(
                                                 "Similar Anime",
-                                                style: appTheme.textTheme.labelLarge,
+                                                style: appTheme
+                                                    .textTheme.labelLarge,
                                               ),
                                             ),
                                             SimilarList(
                                               pg: 'detail',
-                                              similarData: detailsController.similarData,
+                                              similarData:
+                                                  detailsController.similarData,
                                             ),
                                           ],
                                         ),
@@ -417,10 +446,12 @@ class _DetailsState extends State<Details> {
                                     )),
                                 Obx(() => Visibility(
                                       visible: detailsController.noData.value,
-                                      child: noData("Oops, failed to load data!"),
+                                      child:
+                                          noData("Oops, failed to load data!"),
                                     )),
                                 Obx(() => Visibility(
-                                      visible: detailsController.showLogin.value,
+                                      visible:
+                                          detailsController.showLogin.value,
                                       child: Center(
                                         heightFactor: 13,
                                         child: elevatedButton(
@@ -454,5 +485,4 @@ class _DetailsState extends State<Details> {
       ),
     );
   }
-
 }

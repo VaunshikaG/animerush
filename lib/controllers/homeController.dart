@@ -38,7 +38,6 @@ class HomeController extends GetxController {
       } else {
         getHomeData();
       }
-
     } catch (e) {
       hideProgress();
       noData.value = true;

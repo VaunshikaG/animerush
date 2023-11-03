@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,7 @@ class Account extends StatefulWidget {
   _AccountState createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> with SingleTickerProviderStateMixin{
+class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   AccountController accountController = Get.put(AccountController());
   List<DownloadTask> downloadedTasks = [];
 
@@ -100,8 +101,8 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin{
                                     controller: _controller,
                                     automaticIndicatorColorAdjustment: true,
                                     isScrollable: true,
-                                    labelPadding:
-                                        const EdgeInsets.symmetric(horizontal: 5),
+                                    labelPadding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
                                     onTap: (index) async {
                                       if (index == 1) {
                                         await showProgress(context, false);
@@ -149,23 +150,25 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin{
                                 ),
                                 SizedBox(
                                   width: double.infinity,
-                                  height: MediaQuery.of(context).size.height * 0.82,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.82,
                                   child: TabBarView(
                                     controller: _controller,
-                                    physics: const NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     children: [
                                       profile(),
                                       ListView(
                                         shrinkWrap: true,
                                         children: [
                                           Obx(() => Visibility(
-                                                visible:
-                                                    accountController.hasCData.value,
+                                                visible: accountController
+                                                    .hasCData.value,
                                                 child: continueWatch(),
                                               )),
                                           Obx(() => Visibility(
-                                                visible:
-                                                    accountController.noData.value,
+                                                visible: accountController
+                                                    .noData.value,
                                                 child: noData(
                                                     "Oops, failed to load data!"),
                                               )),
@@ -461,5 +464,4 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin{
           : const Center(child: Text('No downloads yet')),
     );
   }
-
 }

@@ -34,7 +34,9 @@ class EpisodeController extends GetxController {
       w_title = "",
       w_name = "",
       w_desc = "",
-      vdUrl, dwldLink, epRank;
+      vdUrl,
+      dwldLink,
+      epRank;
   Data epData = Data();
   // List<DownloadEpisodeLink>? dwldList;
   VdResolutionModel? vdResolutionModel;

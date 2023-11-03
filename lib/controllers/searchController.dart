@@ -60,10 +60,10 @@ class Search_Controller extends GetxController {
           if (responseBody["st"] == 200) {
             animeList.clear();
             // if (pgName == "drawer") {
-              // Get.back();
-              // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
-              // searchText.text = '';
-              // showChips.value = false;
+            // Get.back();
+            // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));
+            // searchText.text = '';
+            // showChips.value = false;
             // }
             SearchPodo searchPodo = SearchPodo.fromJson(responseBody);
             if (searchPodo.data!.animeList!.isNotEmpty) {

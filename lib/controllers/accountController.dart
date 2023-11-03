@@ -20,7 +20,9 @@ class AccountController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
 
-  RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs,
+  RxBool noData = false.obs,
+      hasData = false.obs,
+      showLogin = false.obs,
       hasCData = false.obs;
   var email = '', userName = '', dateJoined = '';
 
@@ -67,7 +69,6 @@ class AccountController extends GetxController {
       } else {
         getProfileData();
       }
-
     } catch (e) {
       hideProgress();
       rethrow;

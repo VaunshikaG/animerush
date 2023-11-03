@@ -81,8 +81,7 @@ class Data {
       data['episode_link'] = this.episodeLink!.toJson();
     }
     if (this.downloadEpisodeLink != null) {
-      data['download_episode_link'] =
-          this.downloadEpisodeLink!.toJson();
+      data['download_episode_link'] = this.downloadEpisodeLink!.toJson();
     }
     return data;
   }

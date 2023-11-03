@@ -171,9 +171,9 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                               CrossAxisAlignment.start,
                                           children: [
                                             CustomAppBar3(
-                                              title:
-                                                  epController.epData.episodeTitle ??
-                                                      epController.w_title,
+                                              title: epController
+                                                      .epData.episodeTitle ??
+                                                  epController.w_title,
                                               backBtn: () {
                                                 Get.offAll(() => Details(
                                                     id: widget.aId, epId: ''));
@@ -210,17 +210,22 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                               dwldList: epController.dwldList,
                                             )*/
                                                 ),
-                                            (epController.epData.videoDetails != null)
-                                                ? details() : const SizedBox(height: 0),
+                                            (epController.epData.videoDetails !=
+                                                    null)
+                                                ? details()
+                                                : const SizedBox(height: 0),
                                             dwld(),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 15, vertical: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 10),
                                               child: Text(
                                                 "List of Episodes   :",
                                                 softWrap: true,
                                                 textAlign: TextAlign.left,
-                                                style: appTheme.textTheme.titleMedium,
+                                                style: appTheme
+                                                    .textTheme.titleMedium,
                                               ),
                                             ),
                                             (finalChipCount > 0)
@@ -233,7 +238,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                     : Container()),
                                 Obx(() => Visibility(
                                       visible: epController.noData.value,
-                                      child: noData("Oops, failed to load data!"),
+                                      child:
+                                          noData("Oops, failed to load data!"),
                                     )),
                                 Obx(() => Visibility(
                                       visible: epController.showLogin.value,
@@ -242,16 +248,16 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                           CustomAppBar4(
                                             title: '',
                                             backBtn: () {
-                                              Get.off(() =>
-                                                  Details(id: widget.aId, epId: ''));
+                                              Get.off(() => Details(
+                                                  id: widget.aId, epId: ''));
                                             },
                                           ),
                                           Center(
                                             heightFactor: 13,
                                             child: elevatedButton(
                                               text: "Login →",
-                                              onPressed: () =>
-                                                  Get.offAll(() => const Auth()),
+                                              onPressed: () => Get.offAll(
+                                                  () => const Auth()),
                                             ),
                                           ),
                                         ],
@@ -369,9 +375,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
               size: 20,
             ),
             Text(
-              ' Download Episode : ${epController.epRank.replaceAll('.0', '')
-                  .toString
-                ()}',
+              ' Download Episode : ${epController.epRank.replaceAll('.0', '').toString()}',
               style: appTheme.textTheme.bodySmall,
             ),
           ],
@@ -383,8 +387,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         backgroundColor: appTheme.disabledColor,
         disabledColor: appTheme.disabledColor,
         side: BorderSide.none,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
   }
@@ -566,5 +569,4 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
-
 }

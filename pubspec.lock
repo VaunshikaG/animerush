@@ -344,6 +344,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  notix_inapp_flutter:
+    dependency: "direct main"
+    description:
+      name: notix_inapp_flutter
+      sha256: "3d86a813194a12cba5b0d2ffb5f1b8555c6f09937c6abe4adc749990cbc2e105"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   package_info_plus:
     dependency: "direct main"
     description:

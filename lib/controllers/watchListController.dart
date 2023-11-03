@@ -83,14 +83,16 @@ class WatchListController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     try {
       // _apiProviders.addToListApi().then((value) {
-      _apiProviders.AddToListApi(animeId: animeId, type: type).then((value) async {
+      _apiProviders.AddToListApi(animeId: animeId, type: type)
+          .then((value) async {
         if (value.isNotEmpty) {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 200) {
             if (type.contains('False00')) {
               await watchApi('00');
-              Get.to(() => const BottomBar(currentIndex: 2, checkVersion: false));
+              Get.to(
+                  () => const BottomBar(currentIndex: 2, checkVersion: false));
             }
             CommonResponse commonResponse =
                 CommonResponse.fromJson(responseBody);

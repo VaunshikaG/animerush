@@ -1,4 +1,3 @@
-
 import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class Category extends StatefulWidget {
   State<Category> createState() => _CategoryState();
 }
 
-class _CategoryState extends State<Category>  {
+class _CategoryState extends State<Category> {
   // ScrollController scrollController = ScrollController();
   Search_Controller searchController = Get.put(Search_Controller());
 
@@ -87,7 +86,7 @@ class _CategoryState extends State<Category>  {
                                   ),
                                   ListTile(
                                     leading: (searchController.previousPg ==
-                                        searchController.currentPg)
+                                            searchController.currentPg)
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
                                             onPressed: () {
@@ -97,14 +96,18 @@ class _CategoryState extends State<Category>  {
                                                     val: widget.category,
                                                     genres: '',
                                                     searchKeywords: '',
-                                                    pageId: searchController.previousPg.toString(),
+                                                    pageId: searchController
+                                                        .previousPg
+                                                        .toString(),
                                                     sort: '',
                                                   ),
                                                   context: context);
                                             },
                                             label: Text(
-                                              searchController.previousPg.toString(),
-                                              style: appTheme.textTheme.titleSmall,
+                                              searchController.previousPg
+                                                  .toString(),
+                                              style:
+                                                  appTheme.textTheme.titleSmall,
                                             ),
                                             icon: Icon(
                                               Icons.fast_rewind_outlined,
@@ -114,7 +117,8 @@ class _CategoryState extends State<Category>  {
                                             style: ElevatedButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                               side: BorderSide.none,
-                                              backgroundColor: appTheme.hintColor,
+                                              backgroundColor:
+                                                  appTheme.hintColor,
                                             ),
                                           ),
                                     title: ElevatedButton(
@@ -141,14 +145,18 @@ class _CategoryState extends State<Category>  {
                                                     val: widget.category,
                                                     genres: '',
                                                     searchKeywords: '',
-                                                    pageId: searchController.nextPg.toString(),
+                                                    pageId: searchController
+                                                        .nextPg
+                                                        .toString(),
                                                     sort: '',
                                                   ),
                                                   context: context);
                                             },
                                             label: Text(
-                                              searchController.nextPg.toString(),
-                                              style: appTheme.textTheme.titleSmall,
+                                              searchController.nextPg
+                                                  .toString(),
+                                              style:
+                                                  appTheme.textTheme.titleSmall,
                                             ),
                                             icon: Icon(
                                               Icons.fast_forward_outlined,
@@ -158,7 +166,8 @@ class _CategoryState extends State<Category>  {
                                             style: ElevatedButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                               side: BorderSide.none,
-                                              backgroundColor: appTheme.hintColor,
+                                              backgroundColor:
+                                                  appTheme.hintColor,
                                             ),
                                           ),
                                     dense: true,
@@ -200,5 +209,4 @@ class _CategoryState extends State<Category>  {
       ),
     );
   }
-
 }

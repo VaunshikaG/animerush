@@ -19,7 +19,8 @@ class SimilarList extends StatefulWidget {
   State<SimilarList> createState() => _SimilarListState();
 }
 
-class _SimilarListState extends State<SimilarList> with TickerProviderStateMixin {
+class _SimilarListState extends State<SimilarList>
+    with TickerProviderStateMixin {
   late final AnimationController controller;
   WatchListController watchListController = Get.put(WatchListController());
 

@@ -1,5 +1,5 @@
-
 import 'package:animerush/screens/splash.dart';
+import 'package:animerush/utils/appConst.dart';
 import 'package:animerush/utils/appTheme.dart';
 import 'package:animerush/widgets/customButtons.dart';
 import 'package:flutter/cupertino.dart';

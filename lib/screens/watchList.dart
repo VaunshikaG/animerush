@@ -20,7 +20,7 @@ class WatchList extends StatefulWidget {
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList>  {
+class _WatchListState extends State<WatchList> {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -80,7 +80,8 @@ class _WatchListState extends State<WatchList>  {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         (widget.pg == 'detail')
-                            ? const SizedBox(height: 10) : const SizedBox.shrink(),
+                            ? const SizedBox(height: 10)
+                            : const SizedBox.shrink(),
                         Obx(() => Visibility(
                               visible: watchListController.hasData.value,
                               child: _tabSection(),
@@ -95,7 +96,8 @@ class _WatchListState extends State<WatchList>  {
                                 heightFactor: 13,
                                 child: elevatedButton(
                                   text: "Login →",
-                                  onPressed: () => Get.offAll(() => const Auth()),
+                                  onPressed: () =>
+                                      Get.offAll(() => const Auth()),
                                 ),
                               ),
                             )),
@@ -226,21 +228,22 @@ class _WatchListState extends State<WatchList>  {
 
   Widget wishList() {
     return ListView(
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          (watchListController.dataLength == 0)
-              ? noData("Oops, no data found!")
-              : Padding(
-                padding:
-                EdgeInsets.only(bottom: (widget.pg == 'detail') ? 10 :
-                MediaQuery.of(context).size.height / 10),
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        (watchListController.dataLength == 0)
+            ? noData("Oops, no data found!")
+            : Padding(
+                padding: EdgeInsets.only(
+                    bottom: (widget.pg == 'detail')
+                        ? 10
+                        : MediaQuery.of(context).size.height / 10),
                 child: SimilarList(
-              pg: 'watch',
-              similarData: watchListController.animeList,
-            ),
-          )
-        ],
-      );
+                  pg: 'watch',
+                  similarData: watchListController.animeList,
+                ),
+              )
+      ],
+    );
   }
 }

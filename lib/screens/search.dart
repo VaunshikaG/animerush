@@ -161,7 +161,8 @@ class _SearchState extends State<Search> {
                             color: appTheme.iconTheme.color,
                           ),
                           onTap: () => searchController.isTyping.value = true,
-                          backgroundColor: appTheme.splashColor.withOpacity(0.25),
+                          backgroundColor:
+                              appTheme.splashColor.withOpacity(0.25),
                           suffixInsets: const EdgeInsets.only(right: 15),
                         ),
                   Obx(() => Visibility(
@@ -210,7 +211,8 @@ class _SearchState extends State<Search> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                                    margin: const EdgeInsets.fromLTRB(
+                                        15, 20, 0, 10),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       searchController.displayName,
@@ -227,46 +229,80 @@ class _SearchState extends State<Search> {
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
                                             onPressed: () {
-                                              if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
-                                                if (searchController.isSelected.value == true) {
-                                                  searchController.searchApiCall(
-                                                      pgName: "pagination",
-                                                      searchModel: SearchModel(
-                                                        val: searchController.value1,
-                                                        genres: searchController.value2,
-                                                        searchKeywords: searchController.searchText.text,
-                                                        pageId: searchController.previousPg.toString(),
-                                                        sort: '',
-                                                      ),
-                                                      context: context);
+                                              if (searchController
+                                                      .value1.isNotEmpty ||
+                                                  searchController
+                                                      .value2.isNotEmpty) {
+                                                if (searchController
+                                                        .isSelected.value ==
+                                                    true) {
+                                                  searchController
+                                                      .searchApiCall(
+                                                          pgName: "pagination",
+                                                          searchModel:
+                                                              SearchModel(
+                                                            val:
+                                                                searchController
+                                                                    .value1,
+                                                            genres:
+                                                                searchController
+                                                                    .value2,
+                                                            searchKeywords:
+                                                                searchController
+                                                                    .searchText
+                                                                    .text,
+                                                            pageId:
+                                                                searchController
+                                                                    .previousPg
+                                                                    .toString(),
+                                                            sort: '',
+                                                          ),
+                                                          context: context);
                                                 } else {
-                                                  searchController.searchApiCall(
-                                                      pgName: "pagination",
-                                                      searchModel: SearchModel(
-                                                        val: 'anime',
-                                                        genres: searchController.value2,
-                                                        searchKeywords: searchController.searchText.text,
-                                                        pageId: searchController.previousPg.toString(),
-                                                        sort: '',
-                                                      ),
-                                                      context: context);
+                                                  searchController
+                                                      .searchApiCall(
+                                                          pgName: "pagination",
+                                                          searchModel:
+                                                              SearchModel(
+                                                            val: 'anime',
+                                                            genres:
+                                                                searchController
+                                                                    .value2,
+                                                            searchKeywords:
+                                                                searchController
+                                                                    .searchText
+                                                                    .text,
+                                                            pageId:
+                                                                searchController
+                                                                    .previousPg
+                                                                    .toString(),
+                                                            sort: '',
+                                                          ),
+                                                          context: context);
                                                 }
-                                              } else if (searchController.searchText.text.isNotEmpty) {
+                                              } else if (searchController
+                                                  .searchText.text.isNotEmpty) {
                                                 searchController.searchApiCall(
                                                     pgName: "searchField",
                                                     searchModel: SearchModel(
                                                       val: 'anime',
-                                                      searchKeywords: searchController.searchText.text,
+                                                      searchKeywords:
+                                                          searchController
+                                                              .searchText.text,
                                                       genres: '',
-                                                      pageId: searchController.previousPg.toString(),
+                                                      pageId: searchController
+                                                          .previousPg
+                                                          .toString(),
                                                       sort: '',
                                                     ),
                                                     context: context);
                                               }
                                             },
                                             label: Text(
-                                              searchController.previousPg.toString(),
-                                              style: appTheme.textTheme.titleSmall,
+                                              searchController.previousPg
+                                                  .toString(),
+                                              style:
+                                                  appTheme.textTheme.titleSmall,
                                             ),
                                             icon: Icon(
                                               Icons.fast_rewind_outlined,
@@ -276,7 +312,8 @@ class _SearchState extends State<Search> {
                                             style: ElevatedButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                               side: BorderSide.none,
-                                              backgroundColor: appTheme.hintColor,
+                                              backgroundColor:
+                                                  appTheme.hintColor,
                                             ),
                                           ),
                                     title: ElevatedButton(
@@ -297,55 +334,80 @@ class _SearchState extends State<Search> {
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
                                             onPressed: () {
-                                              if (searchController.value1.isNotEmpty || searchController.value2.isNotEmpty) {
-                                                  if (searchController.isSelected.value == true) {
-                                                    searchController.searchApiCall(
-                                                        pgName: "pagination",
-                                                        searchModel: SearchModel(
-                                                          val: searchController.value1,
-                                                          genres:
-                                                          searchController.value2,
-                                                          searchKeywords:
-                                                          searchController
-                                                              .searchText.text,
-                                                          pageId: searchController
-                                                              .nextPg
-                                                              .toString(),
-                                                          sort: '',
-                                                        ),
-                                                        context: context);
-                                                  } else {
-                                                    searchController.searchApiCall(
-                                                        pgName: "pagination",
-                                                        searchModel: SearchModel(
-                                                          val: 'anime',
-                                                          genres: searchController.value2,
-                                                          searchKeywords:
-                                                          searchController
-                                                              .searchText.text,
-                                                          pageId: searchController
-                                                              .nextPg
-                                                              .toString(),
-                                                          sort: '',
-                                                        ),
-                                                        context: context);
-                                                  }
-                                                } else if (searchController.searchText.text.isNotEmpty) {
+                                              if (searchController
+                                                      .value1.isNotEmpty ||
+                                                  searchController
+                                                      .value2.isNotEmpty) {
+                                                if (searchController
+                                                        .isSelected.value ==
+                                                    true) {
+                                                  searchController
+                                                      .searchApiCall(
+                                                          pgName: "pagination",
+                                                          searchModel:
+                                                              SearchModel(
+                                                            val:
+                                                                searchController
+                                                                    .value1,
+                                                            genres:
+                                                                searchController
+                                                                    .value2,
+                                                            searchKeywords:
+                                                                searchController
+                                                                    .searchText
+                                                                    .text,
+                                                            pageId:
+                                                                searchController
+                                                                    .nextPg
+                                                                    .toString(),
+                                                            sort: '',
+                                                          ),
+                                                          context: context);
+                                                } else {
+                                                  searchController
+                                                      .searchApiCall(
+                                                          pgName: "pagination",
+                                                          searchModel:
+                                                              SearchModel(
+                                                            val: 'anime',
+                                                            genres:
+                                                                searchController
+                                                                    .value2,
+                                                            searchKeywords:
+                                                                searchController
+                                                                    .searchText
+                                                                    .text,
+                                                            pageId:
+                                                                searchController
+                                                                    .nextPg
+                                                                    .toString(),
+                                                            sort: '',
+                                                          ),
+                                                          context: context);
+                                                }
+                                              } else if (searchController
+                                                  .searchText.text.isNotEmpty) {
                                                 searchController.searchApiCall(
                                                     pgName: "searchField",
                                                     searchModel: SearchModel(
                                                       val: 'anime',
-                                                      searchKeywords: searchController.searchText.text,
+                                                      searchKeywords:
+                                                          searchController
+                                                              .searchText.text,
                                                       genres: '',
-                                                      pageId: searchController.nextPg.toString(),
+                                                      pageId: searchController
+                                                          .nextPg
+                                                          .toString(),
                                                       sort: '',
                                                     ),
                                                     context: context);
                                               }
                                             },
                                             label: Text(
-                                              searchController.nextPg.toString(),
-                                              style: appTheme.textTheme.titleSmall,
+                                              searchController.nextPg
+                                                  .toString(),
+                                              style:
+                                                  appTheme.textTheme.titleSmall,
                                             ),
                                             icon: Icon(
                                               Icons.fast_forward_outlined,
@@ -355,7 +417,8 @@ class _SearchState extends State<Search> {
                                             style: ElevatedButton.styleFrom(
                                               padding: EdgeInsets.zero,
                                               side: BorderSide.none,
-                                              backgroundColor: appTheme.hintColor,
+                                              backgroundColor:
+                                                  appTheme.hintColor,
                                             ),
                                           ),
                                     dense: true,

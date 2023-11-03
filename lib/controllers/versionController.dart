@@ -41,7 +41,7 @@ class VersionController extends GetxController {
                 title: "New Update Available",
                 middleText:
                     // "A newer version of app available please update it now.",
-                "Please uninstall current app and download and install the latest app for better experience.",
+                    "Please uninstall current app and download and install the latest app for better experience.",
                 titleStyle: appTheme.textTheme.bodyLarge,
                 middleTextStyle: appTheme.textTheme.labelSmall,
                 confirm: ConstrainedBox(
@@ -79,6 +79,7 @@ class VersionController extends GetxController {
       rethrow;
     }
   }
+
   launchURL(String strUrl) async {
     final url = strUrl;
     try {

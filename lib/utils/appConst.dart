@@ -4,8 +4,10 @@ String web_code = '';
 String description = '';
 
 class AppConst {
-  static const APP_KEY_IRON_SOURCE = "1c00f6115";
-  static const APP_USER_ID = "app_user_id_animerush_00";
+  static const APP_ID = "2298523";
+  static const ZONE_ID = 6538186;
+  static const SERVER_KEY = "AAAA8xefbKU:APA91bExXmTuu-uVW96xWr1zRT2fsUGHEsgE7tBRw_lTxTevSzXRJvK4B9j_N_Bjssgl8JBJvKVpeiqSIQhhRhfjEoPGBhPl09xVmLi-Vs0-17O_Km4oyb8JtOArSkB9FpAwViWZu2On";
+  static const SENDER_ID = "1044073376933";
 
   static const String KEY = "lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc";
   static const String app_url = "https://animerush.in/api";

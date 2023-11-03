@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +36,7 @@ class _BottomBarState extends State<BottomBar> {
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       _selectedTab = widget.currentIndex;
       if (widget.checkVersion == true) {
-       versionController.appVersionApiCall(context, 'bottom');
+        versionController.appVersionApiCall(context, 'bottom');
       }
     });
     super.initState();
@@ -72,7 +71,7 @@ class _BottomBarState extends State<BottomBar> {
         ),
         drawerEdgeDragWidth: 50,
         // endDrawer: const HomeDrawer(),
-        body: SafeArea(child:  _tabs[_selectedTab]),
+        body: SafeArea(child: _tabs[_selectedTab]),
         // extendBody: true,
         bottomNavigationBar: Container(
           color: appTheme.scaffoldBackgroundColor,
@@ -117,5 +116,4 @@ class _BottomBarState extends State<BottomBar> {
       ),
     );
   }
-
 }
