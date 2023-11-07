@@ -52,6 +52,7 @@ class LoginController extends GetxController {
             isLogin.value = false;
             isUserLoggedIn.value = true;
             LoginPodo loginPodo = LoginPodo.fromJson(responseBody);
+            log(loginPodo.data!.jwtToken!.toString());
             prefs.setString(AppConst.token, loginPodo.data!.jwtToken!);
             hideProgress();
             Get.to(() => const BottomBar(currentIndex: 0, checkVersion: false));

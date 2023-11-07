@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/admobController.dart';
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
+import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
@@ -23,6 +29,7 @@ class WatchList extends StatefulWidget {
 class _WatchListState extends State<WatchList> {
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
+  AdmobController admob = AdmobController();
 
   bool showPassword = true;
   ScrollController scrollController = ScrollController();
@@ -32,6 +39,7 @@ class _WatchListState extends State<WatchList> {
   void initState() {
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      admob.loadBanner(this);
       loadData('00');
     });
     super.initState();
@@ -39,8 +47,21 @@ class _WatchListState extends State<WatchList> {
 
   Future<void> loadData(String value) async {
     await showProgress(context, false);
+    final prefs = await SharedPreferences.getInstance();
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
+      if (widget.pg == "detail") {
+        DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
+            ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
+            : null;
+
+        if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
+          prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
+          admob.loadRewardedVd();
+        } else {
+          log('Interstitial loaded within the last 10 mins. Not executing code1.');
+        }
+      }
     });
   }
 
@@ -74,7 +95,10 @@ class _WatchListState extends State<WatchList> {
             child: Stack(
               children: [
                 Container(
-                  // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
+                  margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                      ? EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.071)
+                      : EdgeInsets.zero,
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -105,15 +129,19 @@ class _WatchListState extends State<WatchList> {
                     ),
                   ),
                 ),
-                // Positioned(
-                //   bottom: 0,
-                //   left: 0,
-                //   right: 0,
-                //   child: Container(
-                //     height: MediaQuery.of(context).size.height * 0.06,
-                //     color: Colors.black,
-                //   ),
-                // ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child:
+                      (admob.bannerAd != null && admob.isBannerLoaded == true)
+                          ? SizedBox(
+                              width: admob.bannerAd!.size.width.toDouble(),
+                              height: admob.bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: admob.bannerAd!),
+                            )
+                          : const SizedBox(),
+                ),
               ],
             ),
           ),

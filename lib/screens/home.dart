@@ -5,7 +5,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../controllers/admobController.dart';
 import '../controllers/homeController.dart';
 import '../widgets/loader.dart';
 import '../utils/theme.dart';
@@ -21,6 +23,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   HomeController homeController = Get.put(HomeController());
+  AdmobController admob = AdmobController();
   int activeindex = 0;
 
   bool isInterstitialAvailable = false;
@@ -45,6 +48,7 @@ class _HomeState extends State<Home> {
     await showProgress(context, false);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
+    admob.loadBanner(this);
   }
 
   @override
@@ -63,7 +67,10 @@ class _HomeState extends State<Home> {
             children: [
               Container(
                 height: double.infinity,
-                // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+                margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                    ? EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.071)
+                    : EdgeInsets.zero,
                 child: ListView(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -332,15 +339,18 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              // Positioned(
-              //   bottom: 0,
-              //   left: 0,
-              //   right: 0,
-              //   child: Container(
-              //     height: MediaQuery.of(context).size.height * 0.07,
-              //     color: Colors.black,
-              //   ),
-              // ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                    ? SizedBox(
+                        width: admob.bannerAd!.size.width.toDouble(),
+                        height: admob.bannerAd!.size.height.toDouble(),
+                        child: AdWidget(ad: admob.bannerAd!),
+                      )
+                    : const SizedBox(),
+              ),
             ],
           ),
         ),
@@ -777,5 +787,11 @@ class _HomeState extends State<Home> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    admob.bannerAd?.dispose();
+    super.dispose();
   }
 }

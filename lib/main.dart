@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animerush/screens/splash.dart';
 import 'package:animerush/utils/appConst.dart';
 import 'package:animerush/utils/appTheme.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/versionController.dart';
 
@@ -16,13 +20,15 @@ import 'controllers/versionController.dart';
 //   }
 // }
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: ["58B757A64BD02A967D6059C6172704E3"]);
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    // DeviceOrientation.portraitDown,
   ]);
-  // await FlutterDownloader.initialize(
+  // await FlutterDownloader.initialize(=
   //   debug: true,
   //   ignoreSsl: true,
   // );

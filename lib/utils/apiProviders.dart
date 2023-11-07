@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/rqModels.dart';
@@ -29,6 +30,7 @@ class ApiProviders {
   void statusExp(int statusCode) {
     if (statusCode < 200 || statusCode > 401) {
       hideProgress();
+      debugPrint('$statusCode');
       CustomSnackBar("Error $statusCode while fetching the data.");
       throw Exception("Error while fetching the data");
     }

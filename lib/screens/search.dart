@@ -1,8 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../controllers/admobController.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
+import '../utils/appConst.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
 import '../widgets/noData.dart';
@@ -20,6 +27,7 @@ Search_Controller searchController = Get.put(Search_Controller());
 ScrollController scrollController = ScrollController();
 
 class _SearchState extends State<Search> {
+  AdmobController admob = AdmobController();
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
     {'title': 'TV Series', 'value': 'tv'},
@@ -63,6 +71,7 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     debugPrint(runtimeType.toString());
+    admob.loadBanner(this);
     searchController.value1 = "";
     searchController.categoryType = "";
     searchController.value2 = "";
@@ -81,19 +90,6 @@ class _SearchState extends State<Search> {
     genreNames = genreData
         .map((map) => GenreTitle(map['title'], map['icon'], map['value']))
         .toList();
-
-    // WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-    //     searchController.searchApiCall(
-    //         pgName: "",
-    //         searchModel: SearchModel(
-    //           val: 'anime',
-    //           searchKeywords: '',
-    //           genres: '',
-    //           pageId: '1',
-    //           sort: '',
-    //         ),
-    //         ctx: context);
-    // });
     super.initState();
   }
 
@@ -111,7 +107,10 @@ class _SearchState extends State<Search> {
         child: Stack(
           children: [
             Container(
-              // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+              margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                  ? EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.071)
+                  : EdgeInsets.zero,
               child: ListView(
                 controller: scrollController,
                 shrinkWrap: true,
@@ -126,9 +125,19 @@ class _SearchState extends State<Search> {
                           placeholder: 'Search',
                           placeholderStyle: appTheme.textTheme.titleMedium,
                           keyboardType: TextInputType.text,
-                          onSubmitted: (value) {
+                          onSubmitted: (value) async {
                             searchController.animeList.clear();
+                            final prefs = await SharedPreferences.getInstance();
+                            DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
+                                ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
+                                : null;
 
+                            if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
+                              prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
+                              admob.loadInterstitial();
+                            } else {
+                              log('Interstitial loaded within the last 5 mins. Not executing code1.');
+                            }
                             setState(() {
                               if (value.isNotEmpty) {
                                 searchController.searchApiCall(
@@ -444,15 +453,18 @@ class _SearchState extends State<Search> {
                 ],
               ),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //   child: Container(
-            //     height: MediaQuery.of(context).size.height * 0.07,
-            //     color: Colors.black,
-            //   ),
-            // ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                  ? SizedBox(
+                      width: admob.bannerAd!.size.width.toDouble(),
+                      height: admob.bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: admob.bannerAd!),
+                    )
+                  : const SizedBox(),
+            ),
           ],
         ),
       ),
@@ -476,7 +488,7 @@ class _SearchState extends State<Search> {
               labelStyle: appTheme.textTheme.bodySmall,
               selected: searchController.categoryType.contains(item['title']),
               onSelected: (bool selected) {
-                setState(() {
+                setState(() async {
                   if (selected) {
                     searchController.categoryType = item['title'];
                     if (searchController.categoryType == item['title']) {
@@ -498,6 +510,18 @@ class _SearchState extends State<Search> {
                           searchKeywords: searchController.searchText.text,
                         ),
                         context: context);
+
+                    final prefs = await SharedPreferences.getInstance();
+                    DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
+                        ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
+                        : null;
+
+                    if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
+                      prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
+                      admob.loadInterstitial();
+                    } else {
+                      log('Interstitial loaded within the last 5 mins. Not executing code1.');
+                    }
                   }
                 });
               },
@@ -557,7 +581,7 @@ class _SearchState extends State<Search> {
               labelStyle: appTheme.textTheme.titleSmall,
               selected: searchController.genreType.contains(item['title']),
               onSelected: (bool selected) {
-                setState(() {
+                setState(() async {
                   if (selected) {
                     searchController.genreType = item['title'];
                     if (searchController.genreType == item['title']) {
@@ -586,6 +610,18 @@ class _SearchState extends State<Search> {
                               searchKeywords: searchController.searchText.text,
                             ),
                             context: context);
+                      }
+
+                      final prefs = await SharedPreferences.getInstance();
+                      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
+                          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
+                          : null;
+
+                      if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
+                        prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
+                        admob.loadInterstitial();
+                      } else {
+                        log('Interstitial loaded within the last 5 mins. Not executing code1.');
                       }
                     }
                   } else {
@@ -812,6 +848,12 @@ class _SearchState extends State<Search> {
     }
   }
 */
+
+  @override
+  void dispose() {
+    admob.bannerAd?.dispose();
+    super.dispose();
+  }
 }
 
 //  text chip

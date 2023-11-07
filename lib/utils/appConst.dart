@@ -41,6 +41,7 @@ class AppConst {
   static const int duration = 1800;
   static const String adTimeStamp1 = 'ad_TimeStamp_1';
   static const String adTimeStamp2 = 'ad_TimeStamp_2';
+  static const String adTimeStamp3 = 'ad_TimeStamp_3';
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex =

@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/accountController.dart';
+import '../controllers/admobController.dart';
 import '../utils/appConst.dart';
 import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
@@ -29,6 +31,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   AccountController accountController = Get.put(AccountController());
+  AdmobController admob = AdmobController();
   List<DownloadTask> downloadedTasks = [];
 
   final _formKey6 = GlobalKey<FormState>();
@@ -42,6 +45,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     _controller = TabController(length: 2, vsync: this);
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      admob.loadBanner(this);
       loadData();
     });
     // loadDownloadedTasks();
@@ -53,6 +57,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();
+    final prefs = await SharedPreferences.getInstance();
+    log(prefs.getString(AppConst.adTimeStamp1).toString());
+    log(prefs.getString(AppConst.adTimeStamp2).toString());
+    log(prefs.getString(AppConst.adTimeStamp3).toString());
   }
 
   Future<void> loadDownloadedTasks() async {
@@ -84,7 +92,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
         child: Stack(
           children: [
             Container(
-              // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.071),
+              margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                  ? EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.071)
+                  : EdgeInsets.zero,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -200,15 +211,18 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //   child: Container(
-            //     height: MediaQuery.of(context).size.height * 0.07,
-            //     color: Colors.black,
-            //   ),
-            // ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                  ? SizedBox(
+                width: admob.bannerAd!.size.width.toDouble(),
+                height: admob.bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: admob.bannerAd!),
+              )
+                  : const SizedBox(),
+            ),
           ],
         ),
       ),
@@ -463,5 +477,11 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
             )
           : const Center(child: Text('No downloads yet')),
     );
+  }
+
+  @override
+  void dispose() {
+    admob.bannerAd?.dispose();
+    super.dispose();
   }
 }

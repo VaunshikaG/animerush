@@ -1,10 +1,17 @@
+import 'dart:developer';
+
 import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/admobController.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
+import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/noData.dart';
@@ -20,13 +27,25 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  // ScrollController scrollController = ScrollController();
+  AdmobController admob = AdmobController();
   Search_Controller searchController = Get.put(Search_Controller());
 
   @override
   void initState() {
     debugPrint(runtimeType.toString());
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+      final prefs = await SharedPreferences.getInstance();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
+          : null;
+
+      if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
+        prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
+      admob.loadRewardedVd();
+      } else {
+        log('Interstitial loaded within the last 10 mins. Not executing code1.');
+      }
+      admob.loadBanner(this);
       searchController.searchApiCall(
           pgName: "viewAll",
           searchModel: SearchModel(
@@ -67,7 +86,10 @@ class _CategoryState extends State<Category> {
           child: Stack(
             children: [
               Container(
-                // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
+                margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                    ? EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.071)
+                    : EdgeInsets.zero,
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Column(
@@ -194,19 +216,28 @@ class _CategoryState extends State<Category> {
                   ),
                 ),
               ),
-              // Positioned(
-              //   bottom: 0,
-              //   left: 0,
-              //   right: 0,
-              //   child: Container(
-              //     height: MediaQuery.of(context).size.height * 0.077,
-              //     color: Colors.black,
-              //   ),
-              // ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                    ? SizedBox(
+                  width: admob.bannerAd!.size.width.toDouble(),
+                  height: admob.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: admob.bannerAd!),
+                )
+                    : const SizedBox(),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    admob.bannerAd?.dispose();
+    super.dispose();
   }
 }

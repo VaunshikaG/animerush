@@ -6,7 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:rich_text_view/rich_text_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../controllers/admobController.dart';
 import '../controllers/detailsController.dart';
 import '../controllers/watchListController.dart';
 import '../utils/commonStyle.dart';
@@ -34,6 +37,7 @@ class _DetailsState extends State<Details> {
   DetailsController detailsController = Get.put(DetailsController());
   WatchListController watchListController = Get.put(WatchListController());
   ScrollController scrollController = ScrollController();
+  AdmobController admob = AdmobController();
 
   List<String> options = [
     "Share",
@@ -60,6 +64,7 @@ class _DetailsState extends State<Details> {
   void initState() {
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      admob.loadBanner(this);
       loadData();
     });
     super.initState();
@@ -68,6 +73,18 @@ class _DetailsState extends State<Details> {
   Future<void> loadData() async {
     await showProgress(context, false);
     detailsController.detailsApiCall(animeId: widget.id);
+
+    final prefs = await SharedPreferences.getInstance();
+    DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
+        ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
+        : null;
+
+    if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
+      prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
+      admob.loadInterstitial();
+    } else {
+      log('Interstitial loaded within the last 5 mins. Not executing code1.');
+    }
   }
 
   var top = 0.0;
@@ -129,7 +146,10 @@ class _DetailsState extends State<Details> {
                       child: Stack(
                         children: [
                           Container(
-                            // margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.04),
+                            margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                                ? EdgeInsets.only(
+                                bottom: MediaQuery.of(context).size.height * 0.04)
+                                : EdgeInsets.zero,
                             child: Column(
                               children: [
                                 Obx(() => Visibility(
@@ -464,15 +484,18 @@ class _DetailsState extends State<Details> {
                               ],
                             ),
                           ),
-                          // Positioned(
-                          //   bottom: 0,
-                          //   left: 0,
-                          //   right: 0,
-                          //   child: Container(
-                          //     height: MediaQuery.of(context).size.height * 0.077,
-                          //     color: Colors.black,
-                          //   ),
-                          // ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                                ? SizedBox(
+                              width: admob.bannerAd!.size.width.toDouble(),
+                              height: admob.bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: admob.bannerAd!),
+                            )
+                                : const SizedBox(),
+                          ),
                         ],
                       ),
                     ),
@@ -484,5 +507,11 @@ class _DetailsState extends State<Details> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    admob.bannerAd?.dispose();
+    super.dispose();
   }
 }
