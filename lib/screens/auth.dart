@@ -530,7 +530,7 @@ class _AuthState extends State<Auth> {
                                   RegExp emailRegExp = RegExp(
                                       r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                                   if (value!.isEmpty) {
-                                    return 'Please enter your password';
+                                    return 'Please enter your email';
                                   } else if (!emailRegExp.hasMatch(value)) {
                                     return 'Email is not valid';
                                   }

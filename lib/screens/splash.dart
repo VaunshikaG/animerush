@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:animerush/screens/bottomBar.dart';
@@ -6,6 +7,7 @@ import 'package:animerush/screens/auth.dart';
 import 'package:animerush/utils/appConst.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -37,6 +39,29 @@ class _SplashState extends State<Splash> {
     } else if (prefs.getBool(AppConst.loginStatus) == true) {
       Get.to(() => const BottomBar(currentIndex: 0, checkVersion: true));
     }
+  }
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((updateInfo) {
+      setState(() {
+        if (updateInfo.updateAvailability ==
+            UpdateAvailability.updateAvailable) {
+          if (updateInfo.immediateUpdateAllowed) {
+            InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
+              if (appUpdateResult == AppUpdateResult.success) {}
+            });
+          } else if (updateInfo.flexibleUpdateAllowed) {
+            InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+              if (appUpdateResult == AppUpdateResult.success) {
+                InAppUpdate.completeFlexibleUpdate();
+              }
+            });
+          }
+        }
+      });
+    }).catchError((e) {
+      log("update error: $e");
+    });
   }
 
   @override

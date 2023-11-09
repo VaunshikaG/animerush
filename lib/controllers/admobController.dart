@@ -14,16 +14,19 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 
 class AdmobController {
+  bool isLive = false;
+
+  // banner
   BannerAd? bannerAd;
   bool isBannerLoaded = false;
-  bool displayRealAd = true;
 
-  final adUnitId = 'ca-app-pub-3940256099942544/6300978111';
+  final testBannerId = 'ca-app-pub-3940256099942544/6300978111';
+  final liveBannerId = 'ca-app-pub-7339292071069532/8337357309';
   void loadBanner(State screenState) {
     isBannerLoaded = false;
     bannerAd = BannerAd(
       size: AdSize.banner,
-      adUnitId: adUnitId,
+      adUnitId: isLive ? liveBannerId : testBannerId,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           log('$ad loaded.');
@@ -42,11 +45,13 @@ class AdmobController {
   }
 
 
+  // interstitial
   InterstitialAd? interstitialAd;
-  final adUnitIdInterstitial = 'ca-app-pub-3940256099942544/1033173712';
+  final testInterstitialId = 'ca-app-pub-3940256099942544/1033173712';
+  final liveInterstitialId = 'ca-app-pub-7339292071069532/6919778942';
   void loadInterstitial() {
     InterstitialAd.load(
-        adUnitId: adUnitIdInterstitial,
+        adUnitId: isLive ? liveInterstitialId : testInterstitialId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
@@ -64,10 +69,12 @@ class AdmobController {
   }
 
 
-  final adUnitIdRewardedVd = 'ca-app-pub-3940256099942544/5224354917';
+  // rewarded
+  final testRewardedVdId = 'ca-app-pub-3940256099942544/5224354917';
+  final liveRewardedVdId = 'ca-app-pub-7339292071069532/6520161990';
   void loadRewardedVd() {
     RewardedAd.load(
-        adUnitId: adUnitIdRewardedVd,
+        adUnitId: isLive ? liveRewardedVdId : testRewardedVdId,
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           // Called when an ad is successfully received.
@@ -89,10 +96,12 @@ class AdmobController {
   }
 
 
-  final adUnitIdRewardedInterstitial = 'ca-app-pub-3940256099942544/5354046379';
+  // rewarded interstitial
+  final testRewardedInterstitialId = 'ca-app-pub-3940256099942544/5354046379';
+  final liveRewardedInterstitialId = 'ca-app-pub-7339292071069532/6545294291';
   void loadRewardedInterstitialAd() {
     RewardedInterstitialAd.load(
-        adUnitId: adUnitIdRewardedInterstitial,
+        adUnitId: isLive ? liveRewardedInterstitialId : testRewardedInterstitialId,
         request: const AdRequest(),
         rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
           // Called when an ad is successfully received.
@@ -115,12 +124,14 @@ class AdmobController {
   }
 
 
-  final adUnitIdOpenApp = 'ca-app-pub-3940256099942544/3419835294';
+  // app open
+  final testOpenAppId = 'ca-app-pub-3940256099942544/3419835294';
+  final liveOpenAppId = 'ca-app-pub-7339292071069532/6276619411';
   void loadOpenAppAd() {
     AppOpenAd.load(
-      adUnitId: adUnitIdOpenApp,
+      adUnitId: isLive ? liveOpenAppId : testOpenAppId,
       orientation: AppOpenAd.orientationPortrait,
-      request: AdRequest(),
+      request: const AdRequest(),
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (ad) {
           showOPenAppAd(ad);
