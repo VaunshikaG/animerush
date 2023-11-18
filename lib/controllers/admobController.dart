@@ -14,7 +14,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 
 class AdmobController {
-  bool isLive = false;
+  bool isLive = true;
 
   // banner
   BannerAd? bannerAd;
