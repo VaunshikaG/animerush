@@ -14,6 +14,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/versionController.dart';
+import 'firebase_options.dart';
 
 // class DownloadClass {
 //   static void callback(String id, DownloadTaskStatus status, int progress) {
@@ -23,7 +24,7 @@ import 'controllers/versionController.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   MobileAds.instance.initialize();
   RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: ["58B757A64BD02A967D6059C6172704E3"]);
 

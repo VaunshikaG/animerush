@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBDoabR94eLyW1WkCaUCva9dy4P1gemqOQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1044073376933</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.animerush</string>
+	<key>PROJECT_ID</key>
+	<string>animerush-f82f2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>animerush-f82f2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1044073376933:ios:7242f8a6f848927b1f714c</string>
+</dict>
+</plist>
