@@ -16,7 +16,6 @@ dependencies:
   google_fonts: ^4.0.4
   animate_do: ^3.0.2
   carousel_slider: ^4.2.1
-  anim_search_bar: ^2.0.3
   google_nav_bar: ^5.0.6
   smooth_page_indicator: ^1.1.0
   rich_text_view: ^1.2.0
@@ -30,9 +29,7 @@ dependencies:
   fluttertoast: ^8.2.2
   shared_preferences: ^2.2.0
   get: ^4.6.5
-  flutter_riverpod: ^2.4.0
   url_launcher: ^6.2.1
-  webview_flutter: ^4.4.2
   package_info_plus: any
   flutter_jailbreak_detection: ^1.10.0
   flutter_secure_storage: ^8.1.0
