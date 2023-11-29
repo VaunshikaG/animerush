@@ -27,11 +27,12 @@ class ApiProviders {
     }
   }
 
-  void statusExp(int statusCode) {
-    if (statusCode < 200 || statusCode > 401) {
+  void statusExp(http.Response response) {
+    // log(response.request.toString());
+    // log(response.body);
+    if (response.statusCode < 200 || response.statusCode > 400) {
       hideProgress();
-      debugPrint('$statusCode');
-      CustomSnackBar("Error $statusCode while fetching the data.");
+      CustomSnackBar("Error ${response.statusCode} while fetching the data.");
       throw Exception("Error while fetching the data");
     }
   }
@@ -42,8 +43,7 @@ class ApiProviders {
 
     try {
       return http.get(myUri).then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -62,8 +62,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -82,8 +81,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -102,8 +100,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -127,8 +124,7 @@ class ApiProviders {
         body: requestBody,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -147,8 +143,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -168,8 +163,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -190,8 +184,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) async {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         // Store JSON data
         await HomeStorage().storeHomeData(response.body);
         return response.body;
@@ -222,8 +215,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -252,8 +244,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -277,8 +268,7 @@ class ApiProviders {
         body: model.toJson(),
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -307,8 +297,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -338,8 +327,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -367,8 +355,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         return response.body;
       });
     } catch (e) {
@@ -396,8 +383,7 @@ class ApiProviders {
         body: jsonMap,
       )
           .then((http.Response response) async {
-        final int statusCode = response.statusCode;
-        statusExp(statusCode);
+        statusExp(response);
         // Store JSON data
         await ProfileStorage().storeProfile(response.body);
         return response.body;

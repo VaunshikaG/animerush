@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 String white_logo = '';
 String fevicon = '';
 String web_code = '';
@@ -11,6 +13,7 @@ class AppConst {
 
   static const String KEY = "lkzsejhfdcao87634w76w5ejzzhdgfci37qw64egAzjgxhc";
   static const String app_url = "https://animerush.in/api";
+  static const String app_weburl = "https://animerush.in";
   // static const String app_url = "http://10.0.0.4:9923/api";
 
   static const String verion = "$app_url/website-details/";

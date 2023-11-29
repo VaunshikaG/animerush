@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../model/versionPodo.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
+import '../widgets/launch_url.dart';
 
 class VersionController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
@@ -53,7 +54,7 @@ class VersionController extends GetxController {
                       // Platform.isIOS
                       //     ? launchURL(AppConst.APP_STORE_URL)
                       //     : launchURL(AppConst.PLAY_STORE_URL);
-                      launchURL(versionPodo.data!.apkUrl!);
+                      launchURL(strUrl: versionPodo.data!.apkUrl!);
                       Get.back();
                     },
                   ),
@@ -80,16 +81,4 @@ class VersionController extends GetxController {
     }
   }
 
-  launchURL(String strUrl) async {
-    final url = strUrl;
-    try {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        await launch(url);
-      }
-    } catch (e) {
-      throw 'Could not launch $url';
-    }
-  }
 }

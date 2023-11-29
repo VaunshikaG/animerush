@@ -33,6 +33,7 @@ class Data {
   StreamDetails? streamDetails;
   EpisodeLink? episodeLink;
   DownloadEpisodeLink? downloadEpisodeLink;
+  AllResponce? allResponce;
 
   Data(
       {this.epRank,
@@ -44,7 +45,8 @@ class Data {
       this.webEpisodeUrl,
       this.streamDetails,
       this.episodeLink,
-      this.downloadEpisodeLink});
+      this.downloadEpisodeLink,
+      this.allResponce});
 
   Data.fromJson(Map<String, dynamic> json) {
     epRank = json['ep_rank'];
@@ -62,6 +64,9 @@ class Data {
         : null;
     downloadEpisodeLink = json['download_episode_link'] != null
         ? new DownloadEpisodeLink.fromJson(json['download_episode_link'])
+        : null;
+    allResponce = json['all_responce'] != null
+        ? new AllResponce.fromJson(json['all_responce'])
         : null;
   }
 
@@ -82,6 +87,9 @@ class Data {
     }
     if (this.downloadEpisodeLink != null) {
       data['download_episode_link'] = this.downloadEpisodeLink!.toJson();
+    }
+    if (this.allResponce != null) {
+      data['all_responce'] = this.allResponce!.toJson();
     }
     return data;
   }
@@ -156,6 +164,39 @@ class DownloadEpisodeLink {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    return data;
+  }
+}
+
+class AllResponce {
+  String? embdLink;
+  String? streamsbLink;
+  String? xstreamcdnLink;
+  String? doodstreamLink;
+  String? downloadLink;
+
+  AllResponce(
+      {this.embdLink,
+        this.streamsbLink,
+        this.xstreamcdnLink,
+        this.doodstreamLink,
+        this.downloadLink});
+
+  AllResponce.fromJson(Map<String, dynamic> json) {
+    embdLink = json['embd_link'];
+    streamsbLink = json['streamsb_link'];
+    xstreamcdnLink = json['xstreamcdn_link'];
+    doodstreamLink = json['doodstream_link'];
+    downloadLink = json['download_link'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['embd_link'] = this.embdLink;
+    data['streamsb_link'] = this.streamsbLink;
+    data['xstreamcdn_link'] = this.xstreamcdnLink;
+    data['doodstream_link'] = this.doodstreamLink;
+    data['download_link'] = this.downloadLink;
     return data;
   }
 }

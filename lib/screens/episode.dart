@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 import 'package:better_player/better_player.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
@@ -19,6 +20,8 @@ import '../controllers/episodeController.dart';
 import '../model/detailsPodo.dart';
 import '../utils/appConst.dart';
 import '../widgets/customButtons.dart';
+import '../widgets/customSnackbar.dart';
+import '../widgets/launch_url.dart';
 import '../widgets/loader.dart';
 import '../utils/theme.dart';
 import '../widgets/customAppBar.dart';
@@ -196,7 +199,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                             CustomAppBar3(
                                               title: epController
                                                       .epData.episodeTitle ??
-                                                  epController.w_title,
+                                                  epController.w_title!,
                                               backBtn: () {
                                                 Get.offAll(() => Details(
                                                     id: widget.aId, epId: ''));
@@ -209,18 +212,15 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                                     ));
                                               },
                                             ),
-                                            Obx(() => epController.loading.value
-                                                    ? const CircularProgressIndicator()
-                                                    : AspectRatio(
-                                                        aspectRatio: 16 / 9,
-                                                        child: BetterPlayer(
-                                                          controller: epController
-                                                              .betterPlayerController,
-                                                          key: epController
-                                                              .betterPlayerKey,
-                                                        ),
-                                                      )
-                                                /*Player(
+                                            Obx(() {
+                                              if (!epController.loading.value && epController.vdUrl!.isEmpty) {
+                                                Timer(const Duration(seconds: 2), () {
+                                                  launchURL(strUrl: epController.playerUrl!);
+                                                });
+                                              }
+                                              return player();
+                                            }),
+                                            /*Player(
                                               url: epController.vdUrl ??
                                                   epController
                                                       .epData.episodeLink!.file,
@@ -232,12 +232,11 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                                   "https://animerush.in/media/image/no_poster.jpg",
                                               dwldList: epController.dwldList,
                                             )*/
-                                                ),
-                                            (epController.epData.videoDetails !=
-                                                    null)
+                                            (epController.epData.videoDetails != null)
                                                 ? details()
                                                 : const SizedBox(height: 0),
-                                            dwld(),
+                                            epController.dwldLink!.isNotEmpty
+                                            ? dwld() : const SizedBox(height: 0),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -312,6 +311,60 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  Widget player() {
+    final appTheme = Theme.of(context);
+
+    return epController.loading.value
+        ? const CircularProgressIndicator()
+        : epController.vdUrl!.isNotEmpty
+            ? AspectRatio(
+                aspectRatio: 16 / 9,
+                child: BetterPlayer(
+                  controller: epController.betterPlayerController,
+                  key: epController.betterPlayerKey,
+                ),
+              )
+            : Container(
+                height: 300,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: appTheme.splashColor,
+                  image: DecorationImage(
+                    image: const AssetImage("assets/img/error.jpg"),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                    onError: (error, stackTrace) => Image.asset(
+                      "assets/img/error.jpg",
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/img/err.jpg",
+                          fit: BoxFit.contain,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: CustomTheme.grey3,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 15,
+                  ),
+                  child: Text(
+                    "Unhandled Exception",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        backgroundColor: CustomTheme.grey3),
+                  ),
+                ),
+              );
   }
 
   Widget details() {
@@ -401,7 +454,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
               size: 20,
             ),
             Text(
-              ' Download Episode : ${epController.epRank.replaceAll('.0', '').toString()}',
+              ' Download Episode : ${epController.epRank!.replaceAll('.0', '').toString()}',
               style: appTheme.textTheme.bodySmall,
             ),
           ],
@@ -419,12 +472,20 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
             admob.loadRewardedVd();
             Timer(const Duration(seconds: 15), () {
               hideProgress();
-              launchURL(epController.dwldLink);
+              if (epController.dwldLink!.isNotEmpty) {
+                launchURL(strUrl: epController.dwldLink!);
+              } else {
+                CustomSnackBar("Download link not available.");
+              }
             });
           } else {
             log('Interstitial loaded within the last 10 mins. Not executing code1.');
-          hideProgress();
-            launchURL(epController.dwldLink);
+            hideProgress();
+            if (epController.dwldLink!.isNotEmpty) {
+              launchURL(strUrl: epController.dwldLink!);
+            } else {
+              CustomSnackBar("Download link not available.");
+            }
           }
         },
         backgroundColor: appTheme.disabledColor,
@@ -433,19 +494,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
     );
-  }
-
-  launchURL(String strUrl) async {
-    final url = strUrl;
-    try {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        await launch(url);
-      }
-    } catch (e) {
-      throw 'Could not launch $url';
-    }
   }
 
   Widget episodes() {
