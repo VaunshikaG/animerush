@@ -1,5 +1,3 @@
-import 'package:url_launcher/url_launcher.dart';
-
 String white_logo = '';
 String fevicon = '';
 String web_code = '';
@@ -7,7 +5,14 @@ String description = '';
 
 class AppConst {
   static const APP_ID = "2298523";
-  static const ZONE_ID = 6538186;
+  static const ZONE_ID_1 = 6538186;
+  static const ZONE_ID_2 = 6537854;
+  static const ZONE_ID_3 = 6706254;
+  static const ZONE_ID_4 = 6706256;
+  static const ZONE_ID_5 = 6706260;
+  static const ZONE_ID_6 = 6706263;
+  static const ZONE_ID_7 = 6706264;
+  static const ZONE_ID_8 = 6706266;
   static const SERVER_KEY = "AAAA8xefbKU:APA91bExXmTuu-uVW96xWr1zRT2fsUGHEsgE7tBRw_lTxTevSzXRJvK4B9j_N_Bjssgl8JBJvKVpeiqSIQhhRhfjEoPGBhPl09xVmLi-Vs0-17O_Km4oyb8JtOArSkB9FpAwViWZu2On";
   static const SENDER_ID = "1044073376933";
 
@@ -45,6 +50,11 @@ class AppConst {
   static const String adTimeStamp1 = 'ad_TimeStamp_1';
   static const String adTimeStamp2 = 'ad_TimeStamp_2';
   static const String adTimeStamp3 = 'ad_TimeStamp_3';
+  static const String adTimeStamp4 = 'ad_TimeStamp_4';
+  static const String adTimeStamp5 = 'ad_TimeStamp_5';
+  static const String adTimeStamp6 = 'ad_TimeStamp_6';
+  static const String adTimeStamp7 = 'ad_TimeStamp_7';
+  static const String adTimeStamp8 = 'ad_TimeStamp_8';
 
   static RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static RegExp passwordRegex =

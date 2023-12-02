@@ -7,7 +7,6 @@ import 'package:animerush/screens/auth.dart';
 import 'package:animerush/utils/appConst.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:in_app_update/in_app_update.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
@@ -42,26 +41,26 @@ class _SplashState extends State<Splash> {
   }
 
   Future<void> checkForUpdate() async {
-    InAppUpdate.checkForUpdate().then((updateInfo) {
-      setState(() {
-        if (updateInfo.updateAvailability ==
-            UpdateAvailability.updateAvailable) {
-          if (updateInfo.immediateUpdateAllowed) {
-            InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
-              if (appUpdateResult == AppUpdateResult.success) {}
-            });
-          } else if (updateInfo.flexibleUpdateAllowed) {
-            InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
-              if (appUpdateResult == AppUpdateResult.success) {
-                InAppUpdate.completeFlexibleUpdate();
-              }
-            });
-          }
-        }
-      });
-    }).catchError((e) {
-      log("update error: $e");
-    });
+    // InAppUpdate.checkForUpdate().then((updateInfo) {
+    //   setState(() {
+    //     if (updateInfo.updateAvailability ==
+    //         UpdateAvailability.updateAvailable) {
+    //       if (updateInfo.immediateUpdateAllowed) {
+    //         InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
+    //           if (appUpdateResult == AppUpdateResult.success) {}
+    //         });
+    //       } else if (updateInfo.flexibleUpdateAllowed) {
+    //         InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+    //           if (appUpdateResult == AppUpdateResult.success) {
+    //             InAppUpdate.completeFlexibleUpdate();
+    //           }
+    //         });
+    //       }
+    //     }
+    //   });
+    // }).catchError((e) {
+    //   log("update error: $e");
+    // });
   }
 
   @override

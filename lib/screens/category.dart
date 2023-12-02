@@ -4,11 +4,9 @@ import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:intl/intl.dart';
+import 'package:notix_inapp_flutter/notix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controllers/admobController.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
 import '../utils/appConst.dart';
@@ -27,25 +25,12 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  AdmobController admob = AdmobController();
   Search_Controller searchController = Get.put(Search_Controller());
 
   @override
   void initState() {
     debugPrint(runtimeType.toString());
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
-      final prefs = await SharedPreferences.getInstance();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
-          : null;
-
-      if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
-        prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
-      admob.loadRewardedVd();
-      } else {
-        log('Interstitial loaded within the last 10 mins. Not executing code1.');
-      }
-      admob.loadBanner(this);
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       searchController.searchApiCall(
           pgName: "viewAll",
           searchModel: SearchModel(
@@ -58,6 +43,30 @@ class _CategoryState extends State<Category> {
           context: context);
     });
     super.initState();
+  }
+
+  InterstitialData? interstitialData;
+  Future<void> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_5);
+      loader.startLoading();
+      interstitialData = await loader.next();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp5)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp5)!)
+          : null;
+
+      if (lastClicked == null ||
+          DateTime.now().difference(lastClicked) >=
+              const Duration(minutes: 5)) {
+        prefs.setString(AppConst.adTimeStamp5, DateTime.now().toString());
+        Notix.Interstitial.show(interstitialData!);
+      } else {
+        log('Interstitial loaded within the last 5 mins. Not executing code1.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -86,10 +95,10 @@ class _CategoryState extends State<Category> {
           child: Stack(
             children: [
               Container(
-                margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                    ? EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.071)
-                    : EdgeInsets.zero,
+                // margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                //     ? EdgeInsets.only(
+                //     bottom: MediaQuery.of(context).size.height * 0.071)
+                //     : EdgeInsets.zero,
                 child: SingleChildScrollView(
                   controller: scrollController,
                   child: Column(
@@ -112,6 +121,7 @@ class _CategoryState extends State<Category> {
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
                                             onPressed: () {
+                                              ads();
                                               searchController.searchApiCall(
                                                   pgName: "viewAll",
                                                   searchModel: SearchModel(
@@ -161,6 +171,7 @@ class _CategoryState extends State<Category> {
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
                                             onPressed: () {
+                                              ads();
                                               searchController.searchApiCall(
                                                   pgName: "viewAll",
                                                   searchModel: SearchModel(
@@ -216,17 +227,18 @@ class _CategoryState extends State<Category> {
                   ),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                    ? SizedBox(
-                  width: admob.bannerAd!.size.width.toDouble(),
-                  height: admob.bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: admob.bannerAd!),
-                )
-                    : const SizedBox(),
+                child:
+                // (admob.bannerAd != null && admob.isBannerLoaded == true)
+                //     ? SizedBox(
+                //   width: admob.bannerAd!.size.width.toDouble(),
+                //   height: admob.bannerAd!.size.height.toDouble(),
+                //   child: AdWidget(ad: admob.bannerAd!),
+                // ) :
+                SizedBox(),
               ),
             ],
           ),
@@ -237,7 +249,6 @@ class _CategoryState extends State<Category> {
 
   @override
   void dispose() {
-    admob.bannerAd?.dispose();
     super.dispose();
   }
 }

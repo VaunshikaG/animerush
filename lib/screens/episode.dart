@@ -9,12 +9,10 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:notix_inapp_flutter/notix.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../controllers/admobController.dart';
 import '../controllers/dwldController.dart';
 import '../controllers/episodeController.dart';
 import '../model/detailsPodo.dart';
@@ -50,7 +48,6 @@ class Episode extends StatefulWidget {
 class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
   DwldController dwldController = DwldController();
   EpisodeController epController = Get.put(EpisodeController());
-  AdmobController admob = AdmobController();
 
   List<EpDetails> chunkList = <EpDetails>[];
   bool hasRemainingEp = false;
@@ -81,6 +78,30 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     super.initState();
   }
 
+  InterstitialData? interstitialData;
+  Future<void> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_7);
+      loader.startLoading();
+      interstitialData = await loader.next();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp7)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp7)!)
+          : null;
+
+      if (lastClicked == null ||
+          DateTime.now().difference(lastClicked) >=
+              const Duration(minutes: 5)) {
+        prefs.setString(AppConst.adTimeStamp7, DateTime.now().toString());
+        Notix.Interstitial.show(interstitialData!);
+      } else {
+        log('Interstitial loaded within the last 5 mins. Not executing code1.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @pragma('vm:entry-point')
   static void downloadCallback(String id, int status, int progress) {
     final SendPort send =
@@ -97,18 +118,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         epController.episodeApiCall(epId: widget.epDetails[0].id.toString());
       } else if (widget.pg == 'details' && widget.epId!.isNotEmpty) {
         epController.episodeApiCall(epId: widget.epId.toString());
-      }
-
-      final prefs = await SharedPreferences.getInstance();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp2)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp2)!)
-          : null;
-
-      if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
-        prefs.setString(AppConst.adTimeStamp2, DateTime.now().toString());
-        admob.loadRewardedInterstitialAd();
-      } else {
-        log('Interstitial loaded within the last 10 mins. Not executing code1.');
       }
 
       for (int i = 0; i < widget.epDetails.length; i++) {
@@ -143,7 +152,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     finalChipCount = totalChipCount + (hasRemainingEp ? 1 : 0);
     // log('final : $finalChipCount');
 
-    admob.loadBanner(this);
   }
 
   String getEpisodeRange(int index) {
@@ -183,10 +191,10 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                       child: Stack(
                         children: [
                           Container(
-                            margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                                ? EdgeInsets.only(
-                                bottom: MediaQuery.of(context).size.height * 0.071)
-                                : EdgeInsets.zero,
+                            // margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                            //     ? EdgeInsets.only(
+                            //     bottom: MediaQuery.of(context).size.height * 0.071)
+                            //     : EdgeInsets.zero,
                             child: Column(
                               children: [
                                 Obx(() => (epController.showPg.value == true)
@@ -288,17 +296,18 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                               ],
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            child: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                                ? SizedBox(
-                              width: admob.bannerAd!.size.width.toDouble(),
-                              height: admob.bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: admob.bannerAd!),
-                            )
-                                : const SizedBox(),
+                            child:
+                            // (admob.bannerAd != null && admob.isBannerLoaded == true)
+                            //     ? SizedBox(
+                            //   width: admob.bannerAd!.size.width.toDouble(),
+                            //   height: admob.bannerAd!.size.height.toDouble(),
+                            //   child: AdWidget(ad: admob.bannerAd!),
+                            // ) :
+                            SizedBox(),
                           ),
                         ],
                       ),
@@ -461,31 +470,13 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         ),
         labelStyle: appTheme.textTheme.titleSmall,
         onPressed: () async {
+          ads();
           await showProgress(context, false);
-          final prefs = await SharedPreferences.getInstance();
-          DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
-              ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
-              : null;
-
-          if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
-            prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
-            admob.loadRewardedVd();
-            Timer(const Duration(seconds: 15), () {
-              hideProgress();
-              if (epController.dwldLink!.isNotEmpty) {
-                launchURL(strUrl: epController.dwldLink!);
-              } else {
-                CustomSnackBar("Download link not available.");
-              }
-            });
+          hideProgress();
+          if (epController.dwldLink!.isNotEmpty) {
+            launchURL(strUrl: epController.dwldLink!);
           } else {
-            log('Interstitial loaded within the last 10 mins. Not executing code1.');
-            hideProgress();
-            if (epController.dwldLink!.isNotEmpty) {
-              launchURL(strUrl: epController.dwldLink!);
-            } else {
-              CustomSnackBar("Download link not available.");
-            }
+            CustomSnackBar("Download link not available.");
           }
         },
         backgroundColor: appTheme.disabledColor,
@@ -517,6 +508,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                       child: ActionChip(
                         onPressed: () async {
                           setState(() {
+                            ads();
                             rangeIndex = index;
                             selectedIndex = 99999999;
                             getEpisodeRange(index);
@@ -528,17 +520,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                                   int.parse(start) - 1, int.parse(end));
                             }
                           });
-                            final prefs = await SharedPreferences.getInstance();
-                            DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
-                                ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
-                                : null;
-
-                            if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
-                              prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
-                              admob.loadRewardedVd();
-                            } else {
-                              log('Interstitial loaded within the last 10 mins. Not executing code1.');
-                            }
                         },
                         side: BorderSide.none,
                         disabledColor: appTheme.colorScheme.secondary,
@@ -579,21 +560,8 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
             itemBuilder: (context, index) {
               return ActionChip(
                 onPressed: () async {
-                  admob.bannerAd?.dispose();
+                  ads();
                   await showProgress(context, false);
-                  final prefs = await SharedPreferences.getInstance();
-                  DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp2)
-                      ? DateTime.parse(prefs.getString(AppConst.adTimeStamp2)!)
-                      : null;
-
-                  if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 10)) {
-                    prefs.setString(AppConst.adTimeStamp2, DateTime.now().toString());
-                    admob.loadRewardedInterstitialAd();
-                  } else {
-                    log('Interstitial loaded within the last 10 mins. Not executing code1.');
-                  }
-
-                  admob.loadBanner(this);
                   selectedIndex = index;
                   epController.betterPlayerController.dispose();
                   epController.betterPlayerController.clearCache();
@@ -680,7 +648,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    admob.bannerAd?.dispose();
     epController.betterPlayerController.clearCache();
     epController.betterPlayerController.dispose();
     // IsolateNameServer.removePortNameMapping('downloader_send_port');

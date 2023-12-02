@@ -12,12 +12,6 @@
 @import better_player;
 #endif
 
-#if __has_include(<firebase_core/FLTFirebaseCorePlugin.h>)
-#import <firebase_core/FLTFirebaseCorePlugin.h>
-#else
-@import firebase_core;
-#endif
-
 #if __has_include(<flutter_downloader/FlutterDownloaderPlugin.h>)
 #import <flutter_downloader/FlutterDownloaderPlugin.h>
 #else
@@ -42,10 +36,10 @@
 @import fluttertoast;
 #endif
 
-#if __has_include(<google_mobile_ads/FLTGoogleMobileAdsPlugin.h>)
-#import <google_mobile_ads/FLTGoogleMobileAdsPlugin.h>
+#if __has_include(<notix_inapp_flutter/NotixInappFlutterPlugin.h>)
+#import <notix_inapp_flutter/NotixInappFlutterPlugin.h>
 #else
-@import google_mobile_ads;
+@import notix_inapp_flutter;
 #endif
 
 #if __has_include(<package_info_plus/FLTPackageInfoPlusPlugin.h>)
@@ -84,29 +78,21 @@
 @import wakelock;
 #endif
 
-#if __has_include(<webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>)
-#import <webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>
-#else
-@import webview_flutter_wkwebview;
-#endif
-
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [BetterPlayerPlugin registerWithRegistrar:[registry registrarForPlugin:@"BetterPlayerPlugin"]];
-  [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FlutterDownloaderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterDownloaderPlugin"]];
   [FlutterJailbreakDetectionPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterJailbreakDetectionPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
-  [FLTGoogleMobileAdsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMobileAdsPlugin"]];
+  [NotixInappFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"NotixInappFlutterPlugin"]];
   [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
   [WakelockPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlugin"]];
-  [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
 }
 
 @end

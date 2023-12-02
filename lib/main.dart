@@ -1,20 +1,15 @@
 import 'dart:developer';
 
 import 'package:animerush/screens/splash.dart';
-import 'package:animerush/utils/appConst.dart';
 import 'package:animerush/utils/appTheme.dart';
 import 'package:animerush/widgets/customButtons.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/versionController.dart';
-import 'firebase_options.dart';
 
 // class DownloadClass {
 //   static void callback(String id, DownloadTaskStatus status, int progress) {
@@ -24,10 +19,6 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  MobileAds.instance.initialize();
-  // RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: ["58B757A64BD02A967D6059C6172704E3"]);
-
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

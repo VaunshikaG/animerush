@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:notix_inapp_flutter/notix.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/accountController.dart';
-import '../controllers/admobController.dart';
 import '../utils/appConst.dart';
 import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
@@ -31,7 +30,6 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
   AccountController accountController = Get.put(AccountController());
-  AdmobController admob = AdmobController();
   List<DownloadTask> downloadedTasks = [];
 
   final _formKey6 = GlobalKey<FormState>();
@@ -45,11 +43,34 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     _controller = TabController(length: 2, vsync: this);
     debugPrint(runtimeType.toString());
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-      admob.loadBanner(this);
       loadData();
     });
     // loadDownloadedTasks();
     super.initState();
+  }
+
+  InterstitialData? interstitialData;
+  Future<void> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_4);
+      loader.startLoading();
+      interstitialData = await loader.next();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp4)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp4)!)
+          : null;
+
+      if (lastClicked == null ||
+          DateTime.now().difference(lastClicked) >=
+              const Duration(minutes: 5)) {
+        prefs.setString(AppConst.adTimeStamp4, DateTime.now().toString());
+        Notix.Interstitial.show(interstitialData!);
+      } else {
+        log('Interstitial loaded within the last 5 mins. Not executing code1.');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> loadData() async {
@@ -57,10 +78,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();
-    final prefs = await SharedPreferences.getInstance();
-    log(prefs.getString(AppConst.adTimeStamp1).toString());
-    log(prefs.getString(AppConst.adTimeStamp2).toString());
-    log(prefs.getString(AppConst.adTimeStamp3).toString());
   }
 
   Future<void> loadDownloadedTasks() async {
@@ -92,10 +109,10 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
         child: Stack(
           children: [
             Container(
-              margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                  ? EdgeInsets.only(
-                      bottom: MediaQuery.of(context).size.height * 0.071)
-                  : EdgeInsets.zero,
+              // margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+              //     ? EdgeInsets.only(
+              //         bottom: MediaQuery.of(context).size.height * 0.071)
+              //     : EdgeInsets.zero,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -115,6 +132,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                                     labelPadding: const EdgeInsets.symmetric(
                                         horizontal: 5),
                                     onTap: (index) async {
+                                      ads();
                                       if (index == 1) {
                                         await showProgress(context, false);
                                         accountController.continueApi();
@@ -211,17 +229,18 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                  ? SizedBox(
-                width: admob.bannerAd!.size.width.toDouble(),
-                height: admob.bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: admob.bannerAd!),
-              )
-                  : const SizedBox(),
+              child:
+              // (admob.bannerAd != null && admob.isBannerLoaded == true)
+              //     ? SizedBox(
+              //   width: admob.bannerAd!.size.width.toDouble(),
+              //   height: admob.bannerAd!.size.height.toDouble(),
+              //   child: AdWidget(ad: admob.bannerAd!),
+              // ) :
+              SizedBox(),
             ),
           ],
         ),
@@ -481,7 +500,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    admob.bannerAd?.dispose();
     super.dispose();
   }
 }

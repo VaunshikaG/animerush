@@ -33,9 +33,7 @@ dependencies:
   package_info_plus: any
   flutter_jailbreak_detection: ^1.10.0
   flutter_secure_storage: ^8.1.0
-  google_mobile_ads: ^3.0.0
-  in_app_update: ^4.2.2
-  firebase_core: ^2.21.0
+  notix_inapp_flutter: ^0.1.82
 
 
 dev_dependencies:
