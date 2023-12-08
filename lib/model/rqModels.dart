@@ -58,7 +58,7 @@ class OtpVerfiyModel {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': otp!.trim(),
+      'otp': otp!.trim(),
       'email': email!.trim(),
       "web_code": "AnimeRush",
     };
