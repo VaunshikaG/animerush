@@ -37,6 +37,7 @@ class AppConst {
   static const String FONT = "Quicksand";
   static const String loginStatus = "false";
 
+  static const String deviceId = "device_id";
   static const String userName = "user_name";
   static const String email = "email";
   static const String token = "token";

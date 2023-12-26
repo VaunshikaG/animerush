@@ -173,9 +173,14 @@ class ApiProviders {
   }
 
   Future<String> homeApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.home);
 
-    Map<String, String> jsonMap = {'key': AppConst.KEY};
+    Map<String, String> jsonMap = {
+      'key': AppConst.KEY,
+      // 'device_id': deviceId,
+    };
 
     try {
       return http
@@ -198,11 +203,13 @@ class ApiProviders {
   Future<String> DetailsApi({required String animeId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.details);
 
     Map<String, String> jsonMap = {
       'key': AppConst.KEY,
       'id': animeId,
+      'device_id': deviceId,
     };
 
     try {
@@ -226,12 +233,14 @@ class ApiProviders {
 
   Future<String> EpisodeApi({required String episodeId}) async {
     final prefs = await SharedPreferences.getInstance();
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     final token = prefs.getString(AppConst.token) ?? "";
     Uri myUri = Uri.parse(AppConst.episode);
 
     Map<String, String> jsonMap = {
       'key': AppConst.KEY,
       'id': episodeId,
+      'device_id': deviceId,
     };
 
     try {
@@ -280,11 +289,13 @@ class ApiProviders {
   Future<String> WatchListApi({required String type}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.userFun);
 
     Map<String, dynamic> jsonMap = {
       'function_name': 'watch_list',
       'type': type,
+      'device_id': deviceId,
     };
 
     try {
@@ -310,11 +321,13 @@ class ApiProviders {
       {required String type, required String animeId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.addWatch);
 
     Map<String, dynamic> jsonMap = {
       'anime': animeId,
       'type': type,
+      'device_id': deviceId,
     };
 
     try {
@@ -339,10 +352,12 @@ class ApiProviders {
   Future<String> ContinueApi() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.userFun);
 
     Map<String, dynamic> jsonMap = {
       'function_name': 'continue_watching',
+      'device_id': deviceId,
     };
 
     try {
@@ -367,10 +382,12 @@ class ApiProviders {
   Future<String> ProfileApi() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString(AppConst.token) ?? "";
+    final deviceId = prefs.getString(AppConst.deviceId) ?? "";
     Uri myUri = Uri.parse(AppConst.userFun);
 
     Map<String, dynamic> jsonMap = {
       'function_name': 'profile_details',
+      'device_id': deviceId,
     };
 
     try {

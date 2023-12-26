@@ -28,7 +28,8 @@ class _SplashState extends State<Splash> {
   }
 
   Future<void> navigatePg() async {
-    versionController.appVersionApiCall(context, 'splash');
+    versionController.getDeviceId();
+    // versionController.appVersionApiCall(context, 'splash');
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(AppConst.loginStatus) == null) {
       prefs.setBool(AppConst.loginStatus, false);
