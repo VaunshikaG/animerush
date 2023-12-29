@@ -4,7 +4,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
 <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
    <application
        android:label="AnimeRush"
@@ -32,10 +31,6 @@
                <category android:name="android.intent.category.LAUNCHER"/>
            </intent-filter>
        </activity>
-
-       <meta-data
-           android:name="com.google.android.gms.ads.APPLICATION_ID"
-           android:value="ca-app-pub-7339292071069532~8426601619" />
 
        <meta-data
            android:name="flutterEmbedding"
