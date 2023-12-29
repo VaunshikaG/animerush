@@ -42,6 +42,7 @@ class LoginController extends GetxController {
       LoginModel loginModel = LoginModel(
         username: userNameController.text,
         password: passwordController.text,
+        deviceId: prefs.getString(AppConst.deviceId),
       );
       _apiProviders.loginApi(model: loginModel).then((value) {
         if (value.isNotEmpty) {
@@ -83,6 +84,7 @@ class LoginController extends GetxController {
         username: userNameController.text,
         email: emailController.text,
         password: passwordController.text,
+        deviceId: prefs.getString(AppConst.deviceId),
       );
       _apiProviders.signUpApi(model: signUpModel).then((value) {
         if (value.isNotEmpty) {
@@ -123,6 +125,7 @@ class LoginController extends GetxController {
       OtpVerfiyModel otpVerfiyModel = OtpVerfiyModel(
         email: prefs.getString(AppConst.email),
         otp: otpController.text,
+        deviceId: prefs.getString(AppConst.deviceId),
       );
       _apiProviders.otpVerfiyApi(model: otpVerfiyModel).then((value) {
         if (value.isNotEmpty) {
@@ -195,6 +198,7 @@ class LoginController extends GetxController {
         otp: prefs.getString(AppConst.otp),
         email: prefs.getString(AppConst.email),
         password: passwordController.text,
+        deviceId: prefs.getString(AppConst.deviceId),
       );
       _apiProviders.changePasswordApi(model: changePasswordModel).then((value) {
         if (value.isNotEmpty) {

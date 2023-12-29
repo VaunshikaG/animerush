@@ -30,10 +30,12 @@ class AccountController extends GetxController {
   int dataLength = 0;
 
   Future<void> profilePasswordApi() async {
+    final prefs = await SharedPreferences.getInstance();
     try {
       ProfilePasswordModel passwordModel = ProfilePasswordModel(
         currentPassword: passwordController.text,
         newPassword: newPasswordController.text,
+        deviceId: prefs.getString(AppConst.deviceId),
       );
       _apiProviders.profilePasswordApi(model: passwordModel).then((value) {
         if (value.isNotEmpty) {

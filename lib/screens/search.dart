@@ -3,10 +3,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:intl/intl.dart';
+import 'package:notix_inapp_flutter/notix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controllers/admobController.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
 import '../utils/appConst.dart';
@@ -27,7 +25,6 @@ Search_Controller searchController = Get.put(Search_Controller());
 ScrollController scrollController = ScrollController();
 
 class _SearchState extends State<Search> {
-  AdmobController admob = AdmobController();
   List<Map<String, dynamic>> categoryData = [
     {'title': 'Movies', 'value': 'movies'},
     {'title': 'TV Series', 'value': 'tv'},
@@ -71,7 +68,6 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     debugPrint(runtimeType.toString());
-    admob.loadBanner(this);
     searchController.value1 = "";
     searchController.categoryType = "";
     searchController.value2 = "";
@@ -93,6 +89,30 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
+  InterstitialData? interstitialData;
+  Future<void> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_2);
+      loader.startLoading();
+      interstitialData = await loader.next();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp2)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp2)!)
+          : null;
+
+      if (lastClicked == null ||
+          DateTime.now().difference(lastClicked) >=
+              const Duration(minutes: 5)) {
+        prefs.setString(AppConst.adTimeStamp2, DateTime.now().toString());
+        Notix.Interstitial.show(interstitialData!);
+      } else {
+        log('Interstitial loaded within the last 5 mins. Not executing code1.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
@@ -107,10 +127,10 @@ class _SearchState extends State<Search> {
         child: Stack(
           children: [
             Container(
-              margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                  ? EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.071)
-                  : EdgeInsets.zero,
+              // margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+              //     ? EdgeInsets.only(
+              //     bottom: MediaQuery.of(context).size.height * 0.071)
+              //     : EdgeInsets.zero,
               child: ListView(
                 controller: scrollController,
                 shrinkWrap: true,
@@ -126,18 +146,9 @@ class _SearchState extends State<Search> {
                           placeholderStyle: appTheme.textTheme.titleMedium,
                           keyboardType: TextInputType.text,
                           onSubmitted: (value) async {
-                            searchController.animeList.clear();
                             final prefs = await SharedPreferences.getInstance();
-                            DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
-                                ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
-                                : null;
-
-                            if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
-                              prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
-                              admob.loadInterstitial();
-                            } else {
-                              log('Interstitial loaded within the last 5 mins. Not executing code1.');
-                            }
+                            ads();
+                            searchController.animeList.clear();
                             setState(() {
                               if (value.isNotEmpty) {
                                 searchController.searchApiCall(
@@ -148,6 +159,7 @@ class _SearchState extends State<Search> {
                                       genres: '',
                                       pageId: '1',
                                       sort: '',
+                                      deviceId: prefs.getString(AppConst.deviceId),
                                     ),
                                     context: context);
                               }
@@ -237,7 +249,8 @@ class _SearchState extends State<Search> {
                                             searchController.currentPg)
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async {
+                                              final prefs = await SharedPreferences.getInstance();
                                               if (searchController
                                                       .value1.isNotEmpty ||
                                                   searchController
@@ -265,6 +278,7 @@ class _SearchState extends State<Search> {
                                                                     .previousPg
                                                                     .toString(),
                                                             sort: '',
+                                                                deviceId: prefs.getString(AppConst.deviceId),
                                                           ),
                                                           context: context);
                                                 } else {
@@ -286,6 +300,7 @@ class _SearchState extends State<Search> {
                                                                     .previousPg
                                                                     .toString(),
                                                             sort: '',
+                                                                deviceId: prefs.getString(AppConst.deviceId),
                                                           ),
                                                           context: context);
                                                 }
@@ -303,6 +318,7 @@ class _SearchState extends State<Search> {
                                                           .previousPg
                                                           .toString(),
                                                       sort: '',
+                                                      deviceId: prefs.getString(AppConst.deviceId),
                                                     ),
                                                     context: context);
                                               }
@@ -342,7 +358,8 @@ class _SearchState extends State<Search> {
                                             searchController.currentPg)
                                         ? const SizedBox.shrink()
                                         : ElevatedButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async {
+                                              final prefs = await SharedPreferences.getInstance();
                                               if (searchController
                                                       .value1.isNotEmpty ||
                                                   searchController
@@ -370,6 +387,7 @@ class _SearchState extends State<Search> {
                                                                     .nextPg
                                                                     .toString(),
                                                             sort: '',
+                                                                deviceId: prefs.getString(AppConst.deviceId),
                                                           ),
                                                           context: context);
                                                 } else {
@@ -391,6 +409,7 @@ class _SearchState extends State<Search> {
                                                                     .nextPg
                                                                     .toString(),
                                                             sort: '',
+                                                                deviceId: prefs.getString(AppConst.deviceId),
                                                           ),
                                                           context: context);
                                                 }
@@ -408,6 +427,7 @@ class _SearchState extends State<Search> {
                                                           .nextPg
                                                           .toString(),
                                                       sort: '',
+                                                      deviceId: prefs.getString(AppConst.deviceId),
                                                     ),
                                                     context: context);
                                               }
@@ -453,17 +473,18 @@ class _SearchState extends State<Search> {
                 ],
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                  ? SizedBox(
-                      width: admob.bannerAd!.size.width.toDouble(),
-                      height: admob.bannerAd!.size.height.toDouble(),
-                      child: AdWidget(ad: admob.bannerAd!),
-                    )
-                  : const SizedBox(),
+              child:
+              // (admob.bannerAd != null && admob.isBannerLoaded == true)
+              //     ? SizedBox(
+              //   width: admob.bannerAd!.size.width.toDouble(),
+              //   height: admob.bannerAd!.size.height.toDouble(),
+              //   child: AdWidget(ad: admob.bannerAd!),
+              // ) :
+              SizedBox(),
             ),
           ],
         ),
@@ -487,8 +508,10 @@ class _SearchState extends State<Search> {
               label: Text(item['title']),
               labelStyle: appTheme.textTheme.bodySmall,
               selected: searchController.categoryType.contains(item['title']),
-              onSelected: (bool selected) {
-                setState(() async {
+              onSelected: (bool selected) async {
+                final prefs = await SharedPreferences.getInstance();
+                setState(() {
+                  ads();
                   if (selected) {
                     searchController.categoryType = item['title'];
                     if (searchController.categoryType == item['title']) {
@@ -508,20 +531,9 @@ class _SearchState extends State<Search> {
                           pageId: '1',
                           sort: '',
                           searchKeywords: searchController.searchText.text,
+                          deviceId: prefs.getString(AppConst.deviceId),
                         ),
                         context: context);
-
-                    final prefs = await SharedPreferences.getInstance();
-                    DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
-                        ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
-                        : null;
-
-                    if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
-                      prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
-                      admob.loadInterstitial();
-                    } else {
-                      log('Interstitial loaded within the last 5 mins. Not executing code1.');
-                    }
                   }
                 });
               },
@@ -580,8 +592,10 @@ class _SearchState extends State<Search> {
               ),
               labelStyle: appTheme.textTheme.titleSmall,
               selected: searchController.genreType.contains(item['title']),
-              onSelected: (bool selected) {
-                setState(() async {
+              onSelected: (bool selected) async {
+                final prefs = await SharedPreferences.getInstance();
+                setState(() {
+                  ads();
                   if (selected) {
                     searchController.genreType = item['title'];
                     if (searchController.genreType == item['title']) {
@@ -597,6 +611,7 @@ class _SearchState extends State<Search> {
                               pageId: '1',
                               sort: '',
                               searchKeywords: searchController.searchText.text,
+                              deviceId: prefs.getString(AppConst.deviceId),
                             ),
                             context: context);
                       } else {
@@ -608,20 +623,9 @@ class _SearchState extends State<Search> {
                               pageId: '1',
                               sort: '',
                               searchKeywords: searchController.searchText.text,
+                              deviceId: prefs.getString(AppConst.deviceId),
                             ),
                             context: context);
-                      }
-
-                      final prefs = await SharedPreferences.getInstance();
-                      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
-                          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
-                          : null;
-
-                      if (lastClicked == null || DateTime.now().difference(lastClicked) >= const Duration(minutes: 5)) {
-                        prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
-                        admob.loadInterstitial();
-                      } else {
-                        log('Interstitial loaded within the last 5 mins. Not executing code1.');
                       }
                     }
                   } else {
@@ -659,7 +663,8 @@ class _SearchState extends State<Search> {
             softWrap: true,
           ),
           selected: searchController.genreType.contains(item.title),
-          onSelected: (bool selected) {
+          onSelected: (bool selected) async {
+            final prefs = await SharedPreferences.getInstance();
             setState(() {
               if (selected) {
                 searchController.genreType = item.title;
@@ -678,6 +683,7 @@ class _SearchState extends State<Search> {
                     pageId: '1',
                     sort: '',
                     searchKeywords: '',
+                    deviceId: prefs.getString(AppConst.deviceId),
                   ),
                   context: context);
             });
@@ -731,6 +737,7 @@ class _SearchState extends State<Search> {
           labelStyle: appTheme.textTheme.titleSmall,
           selected: searchController.genreType.contains(item.title),
           onSelected: (bool selected) async {
+            final prefs = await SharedPreferences.getInstance();
             await showProgress(context, false);
             setState(() {
               if (selected) {
@@ -750,6 +757,7 @@ class _SearchState extends State<Search> {
                     pageId: '1',
                     sort: '',
                     searchKeywords: '',
+                    deviceId: prefs.getString(AppConst.deviceId),
                   ),
                   context: context);
             });
@@ -851,7 +859,6 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    admob.bannerAd?.dispose();
     super.dispose();
   }
 }

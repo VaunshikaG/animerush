@@ -3,12 +3,14 @@ class SignUpModel {
   String? email;
   String? password;
   String? webCode;
+  String? deviceId;
 
   SignUpModel({
     this.username,
     this.email,
     this.password,
     this.webCode,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
@@ -16,6 +18,7 @@ class SignUpModel {
       'username': username!.trim(),
       'email': email!.trim(),
       'password': password!.trim(),
+      'device_id': deviceId,
       "web_code": "AnimeRush",
     };
 
@@ -27,17 +30,20 @@ class LoginModel {
   String? username;
   String? password;
   String? webCode;
+  String? deviceId;
 
   LoginModel({
     this.username,
     this.password,
     this.webCode,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'username': username!.trim(),
       'password': password!.trim(),
+      'device_id': deviceId,
       "web_code": "AnimeRush",
     };
 
@@ -49,17 +55,20 @@ class OtpVerfiyModel {
   String? otp;
   String? email;
   String? webCode;
+  String? deviceId;
 
   OtpVerfiyModel({
     this.otp,
     this.email,
     this.webCode,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
-      'username': otp!.trim(),
+      'otp': otp!.trim(),
       'email': email!.trim(),
+      'device_id': deviceId,
       "web_code": "AnimeRush",
     };
 
@@ -72,12 +81,14 @@ class ChangePasswordModel {
   String? email;
   String? password;
   String? webCode;
+  String? deviceId;
 
   ChangePasswordModel({
     this.otp,
     this.email,
     this.password,
     this.webCode,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
@@ -85,6 +96,7 @@ class ChangePasswordModel {
       'otp': otp!.trim(),
       'email': email!.trim(),
       'password': password!.trim(),
+      'device_id': deviceId,
       "web_code": "AnimeRush",
     };
 
@@ -99,6 +111,7 @@ class SearchModel {
   String? pageId;
   String? sort;
   String? genres;
+  String? deviceId;
 
   SearchModel({
     this.key,
@@ -107,6 +120,7 @@ class SearchModel {
     this.pageId,
     this.sort,
     this.genres,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
@@ -117,6 +131,7 @@ class SearchModel {
       'page_id': pageId,
       'sort': sort,
       'genres': genres,
+      'device_id': deviceId,
     };
 
     return map;
@@ -127,11 +142,13 @@ class ProfilePasswordModel {
   String? functionName;
   String? currentPassword;
   String? newPassword;
+  String? deviceId;
 
   ProfilePasswordModel({
     this.functionName,
     this.currentPassword,
     this.newPassword,
+    this.deviceId,
   });
 
   Map<String, dynamic> toJson() {
@@ -139,6 +156,7 @@ class ProfilePasswordModel {
       'function_name': 'change-password',
       'current_password': currentPassword!.trim(),
       'new_password': newPassword!.trim(),
+      'device_id': deviceId,
     };
 
     return map;

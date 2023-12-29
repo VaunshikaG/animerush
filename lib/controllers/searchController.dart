@@ -30,7 +30,6 @@ class Search_Controller extends GetxController {
       isListLoading = false.obs,
       isPageLoading = true.obs,
       isSelected = false.obs;
-  SearchModel? searchModel;
   List<String> searchHistory = [];
   List<AnimeList> animeList = [];
   List<SimilarModel> list = [];

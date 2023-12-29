@@ -5,10 +5,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:notix_inapp_flutter/notix.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../controllers/admobController.dart';
 import '../controllers/homeController.dart';
+import '../utils/appConst.dart';
 import '../widgets/loader.dart';
 import '../utils/theme.dart';
 import '../widgets/noData.dart';
@@ -23,7 +24,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   HomeController homeController = Get.put(HomeController());
-  AdmobController admob = AdmobController();
   int activeindex = 0;
 
   bool isInterstitialAvailable = false;
@@ -44,11 +44,34 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  InterstitialData? interstitialData;
+  Future<void> ads() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_1);
+      loader.startLoading();
+      interstitialData = await loader.next();
+      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
+          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
+          : null;
+
+      if (lastClicked == null ||
+          DateTime.now().difference(lastClicked) >=
+              const Duration(minutes: 5)) {
+        prefs.setString(AppConst.adTimeStamp1, DateTime.now().toString());
+        Notix.Interstitial.show(interstitialData!);
+      } else {
+        log('Interstitial loaded within the last 5 mins. Not executing code1.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> loadData() async {
     await showProgress(context, false);
     // Future.delayed(Duration(seconds: 1), () {});
     homeController.homeApiCall();
-    admob.loadBanner(this);
   }
 
   @override
@@ -67,10 +90,10 @@ class _HomeState extends State<Home> {
             children: [
               Container(
                 height: double.infinity,
-                margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                    ? EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.071)
-                    : EdgeInsets.zero,
+                // margin: (admob.bannerAd != null && admob.isBannerLoaded == true)
+                //     ? EdgeInsets.only(
+                //     bottom: MediaQuery.of(context).size.height * 0.071)
+                //     : EdgeInsets.zero,
                 child: ListView(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
@@ -94,6 +117,7 @@ class _HomeState extends State<Home> {
                                               .toString();
                                       return GestureDetector(
                                         onTap: () {
+                                          ads();
                                           Get.off(() => Details(
                                               id: homeController
                                                   .spotlightData[index].id
@@ -339,17 +363,18 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              Positioned(
+              const Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (admob.bannerAd != null && admob.isBannerLoaded == true)
-                    ? SizedBox(
-                        width: admob.bannerAd!.size.width.toDouble(),
-                        height: admob.bannerAd!.size.height.toDouble(),
-                        child: AdWidget(ad: admob.bannerAd!),
-                      )
-                    : const SizedBox(),
+                child:
+                // (admob.bannerAd != null && admob.isBannerLoaded == true)
+                //     ? SizedBox(
+                //   width: admob.bannerAd!.size.width.toDouble(),
+                //   height: admob.bannerAd!.size.height.toDouble(),
+                //   child: AdWidget(ad: admob.bannerAd!),
+                // ) :
+                SizedBox(),
               ),
             ],
           ),
@@ -375,6 +400,7 @@ class _HomeState extends State<Home> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
+                    ads();
                     Get.off(() => Details(
                         id: homeController.topData[index].id.toString()));
                   },
@@ -498,6 +524,7 @@ class _HomeState extends State<Home> {
           }
           return ListTile(
             onTap: () {
+              ads();
               Get.off(() =>
                   Details(id: homeController.specialData[index].id.toString()));
             },
@@ -580,6 +607,7 @@ class _HomeState extends State<Home> {
           }
           return ListTile(
             onTap: () {
+              ads();
               Get.off(() =>
                   Details(id: homeController.moviesData[index].id.toString()));
             },
@@ -659,6 +687,7 @@ class _HomeState extends State<Home> {
           }
           return ListTile(
             onTap: () {
+              ads();
               Get.off(() =>
                   Details(id: homeController.onasData[index].id.toString()));
             },
@@ -737,6 +766,7 @@ class _HomeState extends State<Home> {
           }
           return ListTile(
             onTap: () {
+              ads();
               Get.off(() =>
                   Details(id: homeController.ovasData[index].id.toString()));
             },
@@ -791,7 +821,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    admob.bannerAd?.dispose();
     super.dispose();
   }
 }
