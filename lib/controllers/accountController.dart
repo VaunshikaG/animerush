@@ -13,9 +13,11 @@ import '../utils/appConst.dart';
 import '../utils/localStorge.dart';
 import '../widgets/customSnackbar.dart';
 import '../widgets/loader.dart';
+import 'adsController.dart';
 
 class AccountController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
+  AdsController adsController = AdsController();
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
@@ -84,6 +86,7 @@ class AccountController extends GetxController {
     if (retrievedProfileData.toString().isNotEmpty) {
       var responseBody = json.decode(retrievedProfileData.toString());
       if (responseBody["st"] == 100) {
+        adsController.ads();
         ProfilePodo profilePodo = ProfilePodo.fromJson(responseBody);
         email = profilePodo.data!.email.toString();
         userName = profilePodo.data!.realUsername.toString();
@@ -114,6 +117,7 @@ class AccountController extends GetxController {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 100) {
+            adsController.ads();
             ContinueWatchPodo continueWatchPodo =
                 ContinueWatchPodo.fromJson(responseBody);
             dataLength = continueList.length;

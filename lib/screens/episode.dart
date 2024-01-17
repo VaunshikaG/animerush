@@ -78,30 +78,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     super.initState();
   }
 
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_7);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp7)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp7)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp7, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @pragma('vm:entry-point')
   static void downloadCallback(String id, int status, int progress) {
     final SendPort send =
@@ -470,7 +446,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
         ),
         labelStyle: appTheme.textTheme.titleSmall,
         onPressed: () async {
-          ads();
           await showProgress(context, false);
           hideProgress();
           if (epController.dwldLink!.isNotEmpty) {
@@ -508,7 +483,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
                       child: ActionChip(
                         onPressed: () async {
                           setState(() {
-                            ads();
                             rangeIndex = index;
                             selectedIndex = 99999999;
                             getEpisodeRange(index);
@@ -560,7 +534,6 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
             itemBuilder: (context, index) {
               return ActionChip(
                 onPressed: () async {
-                  ads();
                   await showProgress(context, false);
                   selectedIndex = index;
                   epController.betterPlayerController.dispose();

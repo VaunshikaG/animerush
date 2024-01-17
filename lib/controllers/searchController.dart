@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -17,11 +15,13 @@ import '../screens/search.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
 import '../widgets/loader.dart';
+import 'adsController.dart';
 
 class Search_Controller extends GetxController {
   final GlobalKey<ScaffoldState>? scaffoldKey = GlobalKey<ScaffoldState>();
 
   final ApiProviders _apiProviders = ApiProviders();
+  AdsController adsController = AdsController();
   RxBool isTyping = false.obs,
       noData = false.obs,
       hasData = false.obs,
@@ -58,6 +58,9 @@ class Search_Controller extends GetxController {
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
             animeList.clear();
+            if(pgName == "viewAll" || pgName == "searchField" || pgName == "chips") {
+              adsController.ads();
+            }
             // if (pgName == "drawer") {
             // Get.back();
             // Get.off(() => const BottomBar(currentIndex: 1, checkVersion: false));

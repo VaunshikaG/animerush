@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/adsController.dart';
 import '../controllers/watchListController.dart';
 import '../screens/details.dart';
 import '../utils/appConst.dart';
@@ -24,6 +21,7 @@ class SimilarList extends StatefulWidget {
 class _SimilarListState extends State<SimilarList>
     with TickerProviderStateMixin {
   late final AnimationController controller;
+  AdsController adsController = AdsController();
   WatchListController watchListController = Get.put(WatchListController());
 
   @override
@@ -34,30 +32,6 @@ class _SimilarListState extends State<SimilarList>
     );
     debugPrint(runtimeType.toString());
     super.initState();
-  }
-
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_8);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp8)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp8)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp8, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -128,7 +102,7 @@ class _SimilarListState extends State<SimilarList>
           animation: controller,
           child: GestureDetector(
             onTap: () {
-              ads();
+              adsController.ads();
               if (widget.pg == 'continue') {
                 Get.offAll(() => Details(id: similarList.anime.id.toString()));
               } else {
@@ -176,7 +150,6 @@ class _SimilarListState extends State<SimilarList>
                                       size: 20,
                                     ),
                                     onPressed: () async {
-                                      ads();
                                       if (widget.pg == 'watch') {
                                         await showProgress(context, false);
                                         watchListController.addToListApi(

@@ -5,8 +5,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 import '../model/rqModels.dart';
 import '../widgets/customSnackbar.dart';
 import 'appConst.dart';
@@ -27,10 +29,17 @@ class ApiProviders {
     }
   }
 
-  void statusExp(http.Response response) {
+  Future<void> statusExp(http.Response response) async {
+    final prefs = await SharedPreferences.getInstance();
     // log(response.request.toString());
     // log(response.body);
-    if (response.statusCode < 200 || response.statusCode > 400) {
+    if (response.statusCode == 401) {
+      hideProgress();
+      CustomSnackBar("Signature has expired.");
+      prefs.setInt(AppConst.apiStatusCode, response.statusCode);
+      // await prefs.clear();
+      // Get.offAll(() => const MyApp());
+    } else if (response.statusCode < 200 || response.statusCode > 400) {
       hideProgress();
       CustomSnackBar("Error ${response.statusCode} while fetching the data.");
       throw Exception("Error while fetching the data");
@@ -218,6 +227,7 @@ class ApiProviders {
         myUri,
         headers: <String, String>{
           'Authorization': 'JWT $token',
+          // 'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTM4MDg2MzUsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.xtW9idfOK_JYrMoDPQ2UH9fqbTxPfd1-BPlnky04_fA',
         },
         body: jsonMap,
       )
@@ -401,7 +411,6 @@ class ApiProviders {
       )
           .then((http.Response response) async {
         statusExp(response);
-        // Store JSON data
         await ProfileStorage().storeProfile(response.body);
         return response.body;
       });

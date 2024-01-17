@@ -42,12 +42,6 @@
 @import fluttertoast;
 #endif
 
-#if __has_include(<google_mobile_ads/FLTGoogleMobileAdsPlugin.h>)
-#import <google_mobile_ads/FLTGoogleMobileAdsPlugin.h>
-#else
-@import google_mobile_ads;
-#endif
-
 #if __has_include(<notix_inapp_flutter/NotixInappFlutterPlugin.h>)
 #import <notix_inapp_flutter/NotixInappFlutterPlugin.h>
 #else
@@ -90,12 +84,6 @@
 @import wakelock;
 #endif
 
-#if __has_include(<webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>)
-#import <webview_flutter_wkwebview/FLTWebViewFlutterPlugin.h>
-#else
-@import webview_flutter_wkwebview;
-#endif
-
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
@@ -105,7 +93,6 @@
   [FlutterJailbreakDetectionPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterJailbreakDetectionPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
-  [FLTGoogleMobileAdsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMobileAdsPlugin"]];
   [NotixInappFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"NotixInappFlutterPlugin"]];
   [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
@@ -113,7 +100,6 @@
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
   [WakelockPlugin registerWithRegistrar:[registry registrarForPlugin:@"WakelockPlugin"]];
-  [FLTWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTWebViewFlutterPlugin"]];
 }
 
 @end

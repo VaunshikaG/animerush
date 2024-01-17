@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
-import '../utils/appConst.dart';
 import '../widgets/customAppBar.dart';
 import '../widgets/customButtons.dart';
 import '../widgets/loader.dart';
@@ -40,30 +36,6 @@ class _WatchListState extends State<WatchList> {
       loadData('00');
     });
     super.initState();
-  }
-
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_3);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp3)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp3)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp3, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   Future<void> loadData(String value) async {
@@ -174,7 +146,6 @@ class _WatchListState extends State<WatchList> {
               isScrollable: true,
               onTap: (index) {
                 setState(() {
-                  ads();
                   watchListController.animeList.clear();
                   if (index == 0) {
                     loadData('00');

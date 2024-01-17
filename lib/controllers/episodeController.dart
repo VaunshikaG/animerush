@@ -1,5 +1,3 @@
-// ignore_for_file: unused_import
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -20,10 +18,12 @@ import '../utils/appConst.dart';
 import '../utils/theme.dart';
 import '../widgets/customSnackbar.dart';
 import '../widgets/loader.dart';
+import 'adsController.dart';
 import 'dwldController.dart';
 
 class EpisodeController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
+  AdsController adsController = AdsController();
 
   RxBool noData = false.obs,
       hasData = false.obs,
@@ -58,6 +58,7 @@ class EpisodeController extends GetxController {
           hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
+            adsController.ads();
             EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
             epData = epDetailPodo.data!;
             epRank = epData.epRank.toString();

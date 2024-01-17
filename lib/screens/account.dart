@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,30 +46,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
     });
     // loadDownloadedTasks();
     super.initState();
-  }
-
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_4);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp4)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp4)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp4, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   Future<void> loadData() async {
@@ -132,7 +107,6 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
                                     labelPadding: const EdgeInsets.symmetric(
                                         horizontal: 5),
                                     onTap: (index) async {
-                                      ads();
                                       if (index == 1) {
                                         await showProgress(context, false);
                                         accountController.continueApi();

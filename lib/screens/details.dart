@@ -6,9 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/detailsController.dart';
 import '../controllers/watchListController.dart';
 import '../utils/commonStyle.dart';
@@ -65,30 +63,6 @@ class _DetailsState extends State<Details> {
       loadData();
     });
     super.initState();
-  }
-
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_6);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp6)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp6)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp6, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   Future<void> loadData() async {
@@ -296,7 +270,6 @@ class _DetailsState extends State<Details> {
                                                           .textTheme.labelSmall,
                                                     ),
                                                     onPressed: () async {
-                                                      ads();
                                                       if (widget.epId != "") {
                                                         Get.off(() => Episode(
                                                               pg: 'details',
@@ -330,7 +303,6 @@ class _DetailsState extends State<Details> {
                                                   PopupMenuButton(
                                                     onSelected: (String value) {
                                                       setState(() {
-                                                        ads();
                                                         watchListController
                                                             .addToListApi(
                                                           animeId: widget.id!,

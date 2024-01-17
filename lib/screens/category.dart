@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:animerush/screens/bottomBar.dart';
 import 'package:animerush/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/searchController.dart';
@@ -49,30 +46,6 @@ class _CategoryState extends State<Category> {
           deviceId: prefs.getString(AppConst.deviceId),
         ),
         context: context);
-  }
-
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_5);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp5)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp5)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp5, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -128,7 +101,6 @@ class _CategoryState extends State<Category> {
                                         : ElevatedButton.icon(
                                             onPressed: () async {
                                               final prefs = await SharedPreferences.getInstance();
-                                              ads();
                                               searchController.searchApiCall(
                                                   pgName: "viewAll",
                                                   searchModel: SearchModel(
@@ -180,7 +152,6 @@ class _CategoryState extends State<Category> {
                                         : ElevatedButton.icon(
                                             onPressed: () async {
                                               final prefs = await SharedPreferences.getInstance();
-                                              ads();
                                               searchController.searchApiCall(
                                                   pgName: "viewAll",
                                                   searchModel: SearchModel(

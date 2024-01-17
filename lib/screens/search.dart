@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/searchController.dart';
 import '../model/rqModels.dart';
@@ -89,30 +86,6 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
-  InterstitialData? interstitialData;
-  Future<void> ads() async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_2);
-      loader.startLoading();
-      interstitialData = await loader.next();
-      DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp2)
-          ? DateTime.parse(prefs.getString(AppConst.adTimeStamp2)!)
-          : null;
-
-      if (lastClicked == null ||
-          DateTime.now().difference(lastClicked) >=
-              const Duration(minutes: 5)) {
-        prefs.setString(AppConst.adTimeStamp2, DateTime.now().toString());
-        Notix.Interstitial.show(interstitialData!);
-      } else {
-        log('Interstitial loaded within the last 5 mins. Not executing code1.');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final appTheme = Theme.of(context);
@@ -147,7 +120,6 @@ class _SearchState extends State<Search> {
                           keyboardType: TextInputType.text,
                           onSubmitted: (value) async {
                             final prefs = await SharedPreferences.getInstance();
-                            ads();
                             searchController.animeList.clear();
                             setState(() {
                               if (value.isNotEmpty) {
@@ -511,7 +483,6 @@ class _SearchState extends State<Search> {
               onSelected: (bool selected) async {
                 final prefs = await SharedPreferences.getInstance();
                 setState(() {
-                  ads();
                   if (selected) {
                     searchController.categoryType = item['title'];
                     if (searchController.categoryType == item['title']) {
@@ -595,7 +566,6 @@ class _SearchState extends State<Search> {
               onSelected: (bool selected) async {
                 final prefs = await SharedPreferences.getInstance();
                 setState(() {
-                  ads();
                   if (selected) {
                     searchController.genreType = item['title'];
                     if (searchController.genreType == item['title']) {

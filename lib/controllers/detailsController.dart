@@ -8,9 +8,11 @@ import '../model/similarModel.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
 import '../widgets/loader.dart';
+import 'adsController.dart';
 
 class DetailsController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
+  AdsController adsController = AdsController();
 
   RxBool noData = false.obs,
       hasData = false.obs,
@@ -49,6 +51,7 @@ class DetailsController extends GetxController {
           hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
+            adsController.ads();
             DetailsPodo detailsPodo = DetailsPodo.fromJson(responseBody);
             hasData.value = true;
             detailsData = detailsPodo.data;
