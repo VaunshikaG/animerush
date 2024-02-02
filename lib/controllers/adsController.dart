@@ -11,13 +11,13 @@ class AdsController {
   Future<void> ads() async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_1);
-      loader.startLoading();
-      interstitialData = await loader.next();
       DateTime? lastClicked = prefs.containsKey(AppConst.adTimeStamp1)
           ? DateTime.parse(prefs.getString(AppConst.adTimeStamp1)!)
           : null;
 
+      var loader = await Notix.Interstitial.createLoader(AppConst.ZONE_ID_1);
+      loader.startLoading();
+      interstitialData = await loader.next();
       if (lastClicked == null ||
           DateTime.now().difference(lastClicked) >=
               const Duration(minutes: 2)) {

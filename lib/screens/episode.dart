@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -9,10 +8,9 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:notix_inapp_flutter/notix.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../controllers/adsController.dart';
 import '../controllers/dwldController.dart';
 import '../controllers/episodeController.dart';
 import '../model/detailsPodo.dart';
@@ -46,6 +44,7 @@ class Episode extends StatefulWidget {
 }
 
 class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
+  AdsController adsController = AdsController();
   DwldController dwldController = DwldController();
   EpisodeController epController = Get.put(EpisodeController());
 
@@ -89,6 +88,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
     await showProgress(context, false);
     epController.hasData.value = false;
     epController.noData.value = false;
+    adsController.ads();
     Future.delayed(const Duration(seconds: 0), () async {
       if (widget.pg == 'details' && widget.epId == null || widget.epId == '') {
         epController.episodeApiCall(epId: widget.epDetails[0].id.toString());
@@ -535,6 +535,7 @@ class _EpisodeState extends State<Episode> with WidgetsBindingObserver {
               return ActionChip(
                 onPressed: () async {
                   await showProgress(context, false);
+                  adsController.ads();
                   selectedIndex = index;
                   epController.betterPlayerController.dispose();
                   epController.betterPlayerController.clearCache();

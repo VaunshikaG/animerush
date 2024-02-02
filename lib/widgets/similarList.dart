@@ -26,6 +26,9 @@ class _SimilarListState extends State<SimilarList>
 
   @override
   void initState() {
+    // if (widget.pg == 'continue') {
+    //   adsController.ads();
+    // }
     controller = AnimationController(
       duration: const Duration(milliseconds: AppConst.duration),
       vsync: this,
@@ -152,6 +155,7 @@ class _SimilarListState extends State<SimilarList>
                                     onPressed: () async {
                                       if (widget.pg == 'watch') {
                                         await showProgress(context, false);
+                                        adsController.ads();
                                         watchListController.addToListApi(
                                           animeId: similarList.id.toString(),
                                           type: 'False00',
@@ -310,6 +314,7 @@ class _SimilarListState extends State<SimilarList>
                 onHorizontalDragEnd: (DragEndDetails) {
                   setState(() {
                     if (widget.pg == 'detail') {
+                      adsController.ads();
                       watchListController.addToListApi(
                         animeId: similarList.id.toString(),
                         type: 'False00',

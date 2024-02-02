@@ -1,29 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/detailsPodo.dart';
 import '../model/epDetailPodo.dart';
 import '../model/vdResolutionModel.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
 import '../utils/theme.dart';
-import '../widgets/customSnackbar.dart';
 import '../widgets/loader.dart';
-import 'adsController.dart';
-import 'dwldController.dart';
 
 class EpisodeController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
-  AdsController adsController = AdsController();
 
   RxBool noData = false.obs,
       hasData = false.obs,
@@ -58,7 +49,6 @@ class EpisodeController extends GetxController {
           hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody["st"] == 200) {
-            adsController.ads();
             EpDetailPodo epDetailPodo = EpDetailPodo.fromJson(responseBody);
             epData = epDetailPodo.data!;
             epRank = epData.epRank.toString();

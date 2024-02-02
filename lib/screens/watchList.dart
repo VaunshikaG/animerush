@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/adsController.dart';
 import '../controllers/loginController.dart';
 import '../controllers/watchListController.dart';
 import '../widgets/customAppBar.dart';
@@ -22,6 +22,7 @@ class WatchList extends StatefulWidget {
 }
 
 class _WatchListState extends State<WatchList> {
+  AdsController adsController = AdsController();
   WatchListController watchListController = Get.put(WatchListController());
   LoginController loginController = Get.put(LoginController());
 
@@ -40,7 +41,7 @@ class _WatchListState extends State<WatchList> {
 
   Future<void> loadData(String value) async {
     await showProgress(context, false);
-    final prefs = await SharedPreferences.getInstance();
+    adsController.ads();
     Future.delayed(const Duration(seconds: 1), () {
       watchListController.watchApi(value);
       if (widget.pg == "detail") {}

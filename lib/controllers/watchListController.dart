@@ -12,11 +12,9 @@ import '../screens/bottomBar.dart';
 import '../utils/apiProviders.dart';
 import '../utils/appConst.dart';
 import '../widgets/customSnackbar.dart';
-import 'adsController.dart';
 
 class WatchListController extends GetxController {
   final ApiProviders _apiProviders = ApiProviders();
-  AdsController adsController = AdsController();
   RxBool noData = false.obs, hasData = false.obs, showLogin = false.obs;
 
   TextEditingController userNameController = TextEditingController();
@@ -38,7 +36,6 @@ class WatchListController extends GetxController {
           hasData.value = false;
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
-            adsController.ads();
             WatchListPodo watchListPodo = WatchListPodo.fromJson(responseBody);
             for (int i = 0; i < watchListPodo.data!.length; i++) {
               dataLength = watchListPodo.data!.length;
@@ -92,7 +89,6 @@ class WatchListController extends GetxController {
           var responseBody = json.decode(value);
           hideProgress();
           if (responseBody['st'] == 200) {
-            adsController.ads();
             if (type.contains('False00')) {
               await watchApi('00');
               Get.to(

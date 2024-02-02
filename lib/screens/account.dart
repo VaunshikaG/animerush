@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/accountController.dart';
+import '../controllers/adsController.dart';
 import '../utils/appConst.dart';
 import '../utils/commonStyle.dart';
 import '../utils/theme.dart';
@@ -28,6 +29,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
+  AdsController adsController = AdsController();
   AccountController accountController = Get.put(AccountController());
   List<DownloadTask> downloadedTasks = [];
 
@@ -50,6 +52,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
 
   Future<void> loadData() async {
     await showProgress(context, false);
+    adsController.ads();
     WidgetsFlutterBinding.ensureInitialized();
     packageInfo = await PackageInfo.fromPlatform();
     accountController.profileApi();

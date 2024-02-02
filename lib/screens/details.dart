@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rich_text_view/rich_text_view.dart';
+import '../controllers/adsController.dart';
 import '../controllers/detailsController.dart';
 import '../controllers/watchListController.dart';
 import '../utils/commonStyle.dart';
@@ -31,6 +32,7 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+  AdsController adsController = AdsController();
   DetailsController detailsController = Get.put(DetailsController());
   WatchListController watchListController = Get.put(WatchListController());
   ScrollController scrollController = ScrollController();
@@ -67,6 +69,7 @@ class _DetailsState extends State<Details> {
 
   Future<void> loadData() async {
     await showProgress(context, false);
+    adsController.ads();
     detailsController.detailsApiCall(animeId: widget.id);
   }
 
@@ -303,6 +306,7 @@ class _DetailsState extends State<Details> {
                                                   PopupMenuButton(
                                                     onSelected: (String value) {
                                                       setState(() {
+                                                        adsController.ads();
                                                         watchListController
                                                             .addToListApi(
                                                           animeId: widget.id!,
