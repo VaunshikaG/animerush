@@ -33,6 +33,7 @@ class ApiProviders {
     final prefs = await SharedPreferences.getInstance();
     // log(response.request.toString());
     // log(response.body);
+    hideProgress();
     if (response.statusCode == 401) {
       hideProgress();
       CustomSnackBar("Signature has expired.");
@@ -146,8 +147,7 @@ class ApiProviders {
     Uri myUri = Uri.parse(AppConst.changePassword);
 
     try {
-      return http
-          .post(
+      return http.post(
         myUri,
         body: model.toJson(),
       )
@@ -163,12 +163,14 @@ class ApiProviders {
 
   Future<String> profilePasswordApi(
       {required ProfilePasswordModel model}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(AppConst.token) ?? "";
     Uri myUri = Uri.parse(AppConst.userFun);
 
     try {
-      return http
-          .post(
+      return http.post(
         myUri,
+        headers: <String, String>{'Authorization': 'JWT $token'},
         body: model.toJson(),
       )
           .then((http.Response response) {
@@ -225,10 +227,7 @@ class ApiProviders {
       return http
           .post(
         myUri,
-        headers: <String, String>{
-          'Authorization': 'JWT $token',
-          // 'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6IkFuaW1lUnVzaF92YXVuc2hpa2EiLCJleHAiOjE2OTM4MDg2MzUsImVtYWlsIjoidmF1bnNoaWthZ29nYXJrYXJAZ21haWwuY29tIn0.xtW9idfOK_JYrMoDPQ2UH9fqbTxPfd1-BPlnky04_fA',
-        },
+        headers: <String, String>{'Authorization': 'JWT $token'},
         body: jsonMap,
       )
           .then((http.Response response) {

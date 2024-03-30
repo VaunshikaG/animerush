@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class DetailsPodo {
   int? st;
   String? msg;
@@ -88,7 +90,7 @@ class DetailsData {
     id = json['id'];
     name = json['name'];
     japaneseName = json['japanese_name'];
-    synonyms = json['synonyms'];
+    synonyms = utf8.decode(json['synonyms'].codeUnits);
     englishName = json['english_name'];
     thumbnail = json['thumbnail'];
     image = json['image'];
@@ -148,7 +150,7 @@ class DetailsData {
     data['id'] = this.id;
     data['name'] = this.name;
     data['japanese_name'] = this.japaneseName;
-    data['synonyms'] = this.synonyms;
+    data['synonyms'] = utf8.encode(this.synonyms!);
     data['english_name'] = this.englishName;
     data['thumbnail'] = this.thumbnail;
     data['image'] = this.image;

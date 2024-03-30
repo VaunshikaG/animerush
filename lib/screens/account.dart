@@ -255,6 +255,7 @@ class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               child: ExpansionTile(
+                controller: accountController.expansionTileController,
                 leading: Icon(
                   Icons.key,
                   color: appTheme.iconTheme.color,

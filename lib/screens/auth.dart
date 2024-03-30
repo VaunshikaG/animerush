@@ -144,8 +144,7 @@ class _AuthState extends State<Auth> {
                                 text: 'Login',
                                 onPressed: () async {
                                   if (_formKey1.currentState!.validate()) {
-                                    if (!FocusScope.of(context)
-                                        .hasPrimaryFocus) {
+                                    if (!FocusScope.of(context).hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
                                     }
                                     _formKey1.currentState!.save();
@@ -167,8 +166,7 @@ class _AuthState extends State<Auth> {
                                     text: 'Register',
                                     onPressed: () {
                                       setState(() {
-                                        if (!FocusScope.of(context)
-                                            .hasPrimaryFocus) {
+                                        if (!FocusScope.of(context).hasPrimaryFocus) {
                                           FocusScope.of(context).unfocus();
                                         }
                                         loginController.isLogin.value = false;
@@ -602,14 +600,13 @@ class _AuthState extends State<Auth> {
                               elevatedButton(
                                 text: 'Register',
                                 onPressed: () async {
-                                  if (_formKey1.currentState!.validate()) {
-                                    if (!FocusScope.of(context)
-                                        .hasPrimaryFocus) {
+                                  if (_formKey2.currentState!.validate()) {
+                                    if (!FocusScope.of(context).hasPrimaryFocus) {
                                       FocusScope.of(context).unfocus();
-                                      _formKey1.currentState!.save();
-                                      await showProgress(context, false);
-                                      loginController.signUpApi();
                                     }
+                                    _formKey2.currentState!.save();
+                                    await showProgress(context, true);
+                                    loginController.signUpApi();
                                   }
                                 },
                               ),

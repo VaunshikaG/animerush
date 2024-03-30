@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +45,8 @@ class DetailsController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     // _apiProviders.detailsApi().then((value) {
     _apiProviders.DetailsApi(animeId: animeId!).then((value) {
+      print(animeId);
+      print(prefs.getString(AppConst.token));
       try {
         if (value.isNotEmpty) {
           hasData.value = false;
@@ -59,7 +62,6 @@ class DetailsController extends GetxController {
             desc = detailsPodo.data!.descriptionClear ?? "-";
             year = detailsPodo.data!.airedYear ?? "-";
             otherName = detailsPodo.data!.synonyms ?? "-";
-            print(otherName);
             ep = detailsPodo.data!.episodesTillNow ?? "-";
             duration = detailsPodo.data!.duration ?? "-";
             views = detailsPodo.data!.views.toString();
@@ -134,7 +136,7 @@ class DetailsController extends GetxController {
               lang = "-";
             }
 
-            details.add(detailsPodo.data!.synonyms.toString());
+            details.add(detailsPodo.data!.synonyms!);
             details.add(lang!);
             details.add("$duration min");
             details.add(ep!);

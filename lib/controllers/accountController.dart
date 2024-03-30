@@ -19,6 +19,7 @@ class AccountController extends GetxController {
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
+  ExpansionTileController expansionTileController = ExpansionTileController();
 
   RxBool noData = false.obs,
       hasData = false.obs,
@@ -42,6 +43,7 @@ class AccountController extends GetxController {
           var responseBody = json.decode(value);
           if (responseBody['st'] == 100) {
             // CommonResponse commonResponse = CommonResponse.fromJson(responseBody);
+            expansionTileController.collapse();
             newPasswordController.clear();
             passwordController.clear();
             CustomSnackBar(responseBody['msg']);
