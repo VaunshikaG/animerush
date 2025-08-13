@@ -1,21 +1,22 @@
 # animerush
 
-A Flutter application project.
+Developed a cross-platform anime streaming app with advanced search and download functionality using Flutter. Utilized RESTful APIs to fetch and display content, and designed a visually appealing UI with modern material design principles.
 
 ---
 
-## Description
+## App Screenshots
 
-This project is a starting point for a Flutter application named **animerush**. It provides a basic setup to build and expand your Flutter app.
+<!-- You can use plain Markdown for images side by side, but for 6 images in a row, HTML is more reliable on GitHub. Reference the screenshots as: screenshots/1.png, screenshots/2.png, ..., screenshots/6.png --> <p align="center"> <img src="screenshots/1.png" width="130"> <img src="screenshots/2.png" width="130"> <img src="screenshots/3.png" width="130"> <img src="screenshots/4.png" width="130"> <img src="screenshots/5.png" width="130"> <img src="screenshots/6.png" width="130"> </p>
 
 ---
 
 ## Features
 
-- Flutter app foundation
-- Ready for Android and iOS development
-- Uses Flutter's latest stable SDK
-- Organized for further development
+- Cross-platform mobile app for Android and iOS
+- Advanced anime search and download
+- RESTful API integration for dynamic content
+- Secure modern UI with material design
+- Optimized for performance and responsive layout
 
 ---
 
